@@ -373,50 +373,29 @@
       
         
           
-            <h1 id="docker命令"><a href="#docker命令" class="headerlink" title="docker命令"></a>docker命令</h1><h2 id="docker-pull"><a href="#docker-pull" class="headerlink" title="docker pull"></a>docker pull</h2><ul>
-<li>docker pull mysql:5.6<ul>
-<li>拉取mysql镜像，版本是5.6</li>
-</ul>
-</li>
-</ul>
-<h2 id="docker-ps"><a href="#docker-ps" class="headerlink" title="docker ps"></a>docker ps</h2><ul>
-<li><p>列出所有在运行的容器信息<br><img src="http://ww1.sinaimg.cn/large/dbf344a4ly1gacqxc6dxfj22iq04ytav.jpg" alt="hello"></p>
-</li>
-<li><p>docker ps -n 5</p>
-<ul>
-<li>列出最近创建的5个容器信息</li>
-</ul>
-</li>
-<li><p>docker ps -f 根据条件过滤,默认是正在运行的，加上-a会显示所有符合条件单的，包括未运行的。</p>
-<ul>
-<li>docker ps -f ancestor=mysql  根据镜像过滤</li>
-<li>docker ps -f status=running  根据状态过滤</li>
-<li>docker ps -f name=mysql 根据名称过滤</li>
-<li>docker ps -f label=a 根据标签过滤</li>
-<li>docker ps -f before=容器id 根据启动顺序过滤</li>
-</ul>
-</li>
-</ul>
-<h2 id="docker-run"><a href="#docker-run" class="headerlink" title="docker run"></a>docker run</h2><ul>
-<li>docker run -p 3316:3306 –name mysql -e MYSQL_ROOT_PASSWORD=123456 -d mysql:5.6<ul>
-<li>–name：为容器指定名称</li>
-<li>-p：指定端口映射，格式为（主机端口:容器端口）</li>
-<li>-e：设置环境变量</li>
-<li>-d：后台运行容器，并返回容器ID</li>
-</ul>
-</li>
-</ul>
-<h2 id="docker-start"><a href="#docker-start" class="headerlink" title="docker start"></a>docker start</h2><ul>
-<li>启动容器</li>
-</ul>
-<h2 id="docker-stop"><a href="#docker-stop" class="headerlink" title="docker stop"></a>docker stop</h2><ul>
-<li>停止容器</li>
-</ul>
-<h2 id="docker-restart"><a href="#docker-restart" class="headerlink" title="docker restart"></a>docker restart</h2><ul>
-<li>重启容器</li>
-</ul>
+          docker命令docker pull
+docker pull mysql:5.6
+拉取mysql镜像，版本是5.6
 
-          
+
+
+docker ps
+列出所有在运行的容器信息
+
+docker ps -n 5
+
+列出最近创建的5个容器信息
+
+
+docker ps -f 根据条件过滤,默认是正在运行的，加上-
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/12/25/2019-12-25-docker%E5%91%BD%E4%BB%A4/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -553,84 +532,34 @@
       
         
           
-            <h1 id="spring事务传播机制"><a href="#spring事务传播机制" class="headerlink" title="spring事务传播机制"></a>spring事务传播机制</h1><blockquote>
-<p>spring事务传播机制分别有哪几种</p>
-</blockquote>
-<ol>
-<li>REQUIRED</li>
-</ol>
-<ul>
-<li>如果有事务, 那么加入事务, 没有的话新建一个(默认情况下)。</li>
-</ul>
-<ol start="2">
-<li>NOT_SUPPORTED</li>
-</ol>
-<ul>
-<li>不为这个方法开启事务，相当于没有事务。</li>
-</ul>
-<ol start="3">
-<li>REQUIRES_NEW</li>
-</ol>
-<ul>
-<li>不管是否存在事务,都创建一个新的事务,原来的挂起,新的执行完毕,继续执行老的事务。</li>
-</ul>
-<ol start="4">
-<li>MANDATORY</li>
-</ol>
-<ul>
-<li>必须在一个已有的事务中执行,否则抛出异常。</li>
-</ul>
-<ol start="5">
-<li>NEVER</li>
-</ol>
-<ul>
-<li>必须在一个没有事务的方法中执行,否则抛出异常(与Propagation.MANDATORY相反)。</li>
-</ul>
-<ol start="6">
-<li>SUPPORTS</li>
-</ol>
-<ul>
-<li>如果其他bean调用这个方法,在其他bean中声明事务,那就用事务.如果其他bean没有声明事务,那就不用事务。</li>
-</ul>
-<ol start="7">
-<li>NESTED</li>
-</ol>
-<ul>
-<li>如果当前存在事务，则在嵌套事务内执行。如果当前没有事务，则执行与REQUIRED类似的操作。</li>
-</ul>
-<blockquote>
-<p>假设方法a调用方法b,两个方法分别加上事务不同的传播机制。看会发生什么。</p>
-</blockquote>
-<h2 id="REQUIRED"><a href="#REQUIRED" class="headerlink" title="REQUIRED"></a>REQUIRED</h2><ul>
-<li>两个都是REQUIRED机制，b方法发现a已经有事务了，就不再新建事务了，加入a事务。</li>
-<li>a使用NOT_SUPPORTED,b使用REQUIRED,b方法发现a没有事务，会自己新建一个事务。</li>
-</ul>
-<h2 id="NOT-SUPPORTED"><a href="#NOT-SUPPORTED" class="headerlink" title="NOT_SUPPORTED"></a>NOT_SUPPORTED</h2><ul>
-<li>这个相当于没有Spring事务，每条执行语句单独执行，单独提交。</li>
-</ul>
-<h2 id="REQUIRES-NEW"><a href="#REQUIRES-NEW" class="headerlink" title="REQUIRES_NEW"></a>REQUIRES_NEW</h2><ul>
-<li>a使用REQUIRED，b使用REQUIRES_NEW，b会新建一个独立事务，a的事务挂起，b的事务先提交，然后a的事务执行再提交。</li>
-<li>外层事务的回滚不影响REQUIRES_NEW事务的执行，即a事务回滚，b事务不会回滚，不受影响。</li>
-</ul>
-<h2 id="MANDATORY"><a href="#MANDATORY" class="headerlink" title="MANDATORY"></a>MANDATORY</h2><ul>
-<li>a使用NOT_SUPPORTED,b使用MANDATORY，会发生错误。</li>
-<li>MANDATORY必须在已有的事务中执行。</li>
-</ul>
-<h2 id="NEVER"><a href="#NEVER" class="headerlink" title="NEVER"></a>NEVER</h2><ul>
-<li>a使用REQUIRED,b使用NEVER，即a使用事务，b使用NEVER传播机制会发生错误。</li>
-<li>因为b使用了NEVER机制，必须在一个没有事务的方法中执行，否则报错。</li>
-</ul>
-<h2 id="SUPPORTS"><a href="#SUPPORTS" class="headerlink" title="SUPPORTS"></a>SUPPORTS</h2><ul>
-<li>a使用REQUIRED，b使用SUPPORTS,b会复用a的事务。</li>
-<li>a使用NOT_SUPPORTED，b使用SUPPORTS,b便不会使用事务。</li>
-<li>是否使用事务取决于调用方法是否有事务，如果有则直接用，如果没有则不使用事务。</li>
-</ul>
-<h2 id="NESTED"><a href="#NESTED" class="headerlink" title="NESTED"></a>NESTED</h2><ul>
-<li>a使用REQUIRED，b使用NESTED,b直接在a事务的基础上创建一个嵌套事务，本质上还是同一个事务，做一次提交。</li>
-<li>a使用NOT_SUPPORTED，b使用NESTED，b直接创建一个新的事务，单独提交。</li>
-</ul>
+          spring事务传播机制
+spring事务传播机制分别有哪几种
 
-          
+
+REQUIRED
+
+
+如果有事务, 那么加入事务, 没有的话新建一个(默认情况下)。
+
+
+NOT_SUPPORTED
+
+
+不为这个方法开启事务，相当于没有事务。
+
+
+REQUIRES_NEW
+
+
+不管是否存在事务,都创建一个新的事务
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/12/24/2019-12-24-spring%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E6%9C%BA%E5%88%B6/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -767,21 +696,18 @@
       
         
           
-            <h1 id="工作中遇到的事务传播的问题"><a href="#工作中遇到的事务传播的问题" class="headerlink" title="工作中遇到的事务传播的问题"></a>工作中遇到的事务传播的问题</h1><ul>
-<li><p>问题描述：在一个事务中查询一个之前创建的数据行为空，查mysql这个数据行是存在的。</p>
-</li>
-<li><p>经debug之后知道创建数据行的操作调用的新的类里的方法，该方法新起了一个REQUIRES_NEW事务。因为REQUIRES_NEW新建的事务是独立于当前事务的，又因为数据库默认隔离级别是可重复读，所以在当前事务查询REQUIRES_NEW新建的独立事务中新建的数据行，是看不到变化的。所以查询结果是null。</p>
-</li>
-<li><p>解决方法：需要查询的新建数据行的方法也在一个REQUIRES_NEW事务中，这样能保证查询到数据。</p>
-</li>
-</ul>
-<blockquote>
-<p>下面分别介绍下spring事务传播机制和mysql事务隔离级别</p>
-</blockquote>
-<h2 id="spring事务传播机制"><a href="#spring事务传播机制" class="headerlink" title="spring事务传播机制"></a>spring事务传播机制</h2><p>见另一篇<a href="https://sugar-foxs.github.io/2019/12/24/spring%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E6%9C%BA%E5%88%B6/" target="_blank" rel="noopener">spring事务传播机制</a></p>
-<h2 id="mysql事务隔离级别"><a href="#mysql事务隔离级别" class="headerlink" title="mysql事务隔离级别"></a>mysql事务隔离级别</h2><p>见另一篇<a href="">mysql事务隔离级别</a></p>
+          工作中遇到的事务传播的问题
+问题描述：在一个事务中查询一个之前创建的数据行为空，查mysql这个数据行是存在的。
 
-          
+经debug之后知道创建数据行的操作调用的新的类里的方法，该方法新起了一个REQUIRES_NEW事务。因为REQUIRES_NEW新建的事务是独立于当前事务的，又因为数据库默认隔离级
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/12/24/2019-12-24-%E5%B7%A5%E4%BD%9C%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E7%9A%84%E9%97%AE%E9%A2%98/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -918,59 +844,22 @@
       
         
           
-            <h2 id="1-可回收对象判定"><a href="#1-可回收对象判定" class="headerlink" title="1. 可回收对象判定"></a>1. 可回收对象判定</h2><ul>
-<li>引用计数器<ul>
-<li>为每个对象维护一个引用计数器，当对象被引用，计数器值就加1；引用失效时，计数器值就减1，当计数器的值为0时，此对象就是可回收对象。</li>
-<li>缺点：会有循环引用问题，导致两个本来可以回收的对象回收不了。</li>
-</ul>
-</li>
-<li>可达性分析<ul>
-<li>选取GC Roots,判断对象是否存在到任意GC Roots的引用链，没有则是可回收对象。</li>
-<li>可作为GC Roots的有：虚拟机栈中引用的对象，方法区中类静态属性引用的对象，方法区中常量引用的对象，本地方法区JNI引用的对象。</li>
-<li>因为这些都是当前存活对象。其他的比如被classloader加载的class对象，monitor的对象，被JVM持有的对象也可能是GC Roots对象。</li>
-</ul>
-</li>
-</ul>
-<h2 id="2-垃圾回收"><a href="#2-垃圾回收" class="headerlink" title="2. 垃圾回收"></a>2. 垃圾回收</h2><h3 id="2-1-回收算法介绍及其优缺点"><a href="#2-1-回收算法介绍及其优缺点" class="headerlink" title="2.1 回收算法介绍及其优缺点"></a>2.1 回收算法介绍及其优缺点</h3><ul>
-<li><p>标记清理算法</p>
-<ul>
-<li>标记完可回收对象后进行清理</li>
-<li>缺点：内存碎片</li>
-</ul>
-</li>
-<li><p>复制算法</p>
-<ul>
-<li>eden区和两个survrior区，默认比例为8：1，初始对象储存在eden区和其中一个survrior区中，当eden区内存满了的时候，会进行Minor GC,将存回对象放入另一个空闲survior区，如果放不下，会通过年老代进行分配担保，将对象存入年老代，如果年老代也烦不下，会进行一次Full GC.</li>
-<li>缺点：在对象存活率高的情况下，效率会降低</li>
-</ul>
-</li>
-<li><p>标记整理算法</p>
-<ul>
-<li>标记完可回收对象后将存活对象向一边移动，清理可回收对象，解决了标记清理的内存碎片问题</li>
-<li>缺点：需要进行移动，吞吐量较低</li>
-</ul>
-</li>
-</ul>
-<h3 id="2-2-垃圾回收器"><a href="#2-2-垃圾回收器" class="headerlink" title="2.2 垃圾回收器"></a>2.2 垃圾回收器</h3><blockquote>
-<p>待补充</p>
-</blockquote>
-<ul>
-<li>CMS</li>
-<li>G1</li>
-</ul>
-<h2 id="3-Minor-GC-和Full-GC的触发条件"><a href="#3-Minor-GC-和Full-GC的触发条件" class="headerlink" title="3. Minor GC 和Full GC的触发条件"></a>3. Minor GC 和Full GC的触发条件</h2><ul>
-<li>Minor GC在eden区没有足够空间分配时触发</li>
-<li>Full GC触发：老年代空间不足的时候<ul>
-<li>老年代最大可用连续空间 &gt; 新生代所有对象总空间</li>
-<li>历次晋升到老年代的对象平均大小 &gt; 老年代的最大可用连续内存</li>
-<li>System.gc</li>
-<li>方法区空间不足</li>
-<li>担保失败后也会进行Full GC</li>
-</ul>
-</li>
-</ul>
+          1. 可回收对象判定
+引用计数器
+为每个对象维护一个引用计数器，当对象被引用，计数器值就加1；引用失效时，计数器值就减1，当计数器的值为0时，此对象就是可回收对象。
+缺点：会有循环引用问题，导致两个本来可以回收的对象回收不了。
 
-          
+
+可达性分析
+选取GC Roots,判断对象是否存在到任意GC Roo
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/03/01/2019-03-01-java%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1107,66 +996,20 @@
       
         
           
-            <h1 id="Checkpoint"><a href="#Checkpoint" class="headerlink" title="Checkpoint"></a>Checkpoint</h1><blockquote>
-<p>Flink 容错机制的核心就是持续创建分布式数据流及其状态的一致快照。Flink的checkpoint 是通过分布式快照实现的,所以在flink中这两个词是一个意思。</p>
-</blockquote>
-<ul>
-<li>checkpoint用来保证任务的错误恢复。任务失败可以从最新的checkpoint恢复。</li>
-<li>checkpoint机制需要一个可靠的可以回放数据的数据源(kafka,RabbitMQ,HDFS…)和一个存放state的持久存储（HDFS,S3…）。</li>
-</ul>
-<h2 id="1-checkpointConfig"><a href="#1-checkpointConfig" class="headerlink" title="1. checkpointConfig"></a>1. checkpointConfig</h2><ul>
-<li><p>通过调用StreamExecutionEnvironment.enableCheckpointing(internal，mode)启用checkpoint。 internal默认是-1，表示checkpoint不开启，mode默认是EXACTLY_ONCE模式。</p>
-</li>
-<li><p>可设置checkpoint timeout,超过这个时间checkpoint没有成功，checkpoint终止。默认10分钟。</p>
-</li>
-<li><p>可设置checkpoint失败任务是否也失败，默认是true。</p>
-</li>
-<li><p>可设置同时进行的checkpoint数量，默认为1。</p>
-</li>
-</ul>
-<h2 id="2-barrier"><a href="#2-barrier" class="headerlink" title="2. barrier"></a>2. barrier</h2><ul>
-<li>将barrier插入到数据流中，作为数据流的一部分和数据一起向下流动。Barrier 不会干扰正常数据，数据流严格有序。一个 barrier 把数据流分割成两部分：一部分进入到当前快照，另一部分进入下一个快照。每一个 barrier 都带有快照 ID，并且 barrier 之前的数据都进入了此快照。Barrier 不会干扰数据流处理，所以非常轻量。多个不同快照的多个 barrier 会在流中同时出现，即多个快照可能同时创建。</li>
-<li>Barrier 在数据源端插入，当 snapshot n 的 barrier 插入后，系统会记录当前 snapshot 位置值 n (用Sn表示)。例如，在 Apache Kafka 中，这个变量表示某个分区中最后一条数据的偏移量。这个位置值 Sn 会被发送到一个称为 checkpoint coordinator 的模块。</li>
-<li>然后 barrier 继续往下流动，当一个 operator 从其输入流接收到所有标识 snapshot n 的 barrier 时，它会向其所有输出流插入一个标识 snapshot n 的 barrier。当 sink operator （DAG 流的终点）从其输入流接收到所有 barrier n 时，它向 the checkpoint coordinator 确认 snapshot n 已完成。当所有 sink 都确认了这个快照，快照就被标识为完成。</li>
-</ul>
-<h2 id="3-如何触发checkpoint？"><a href="#3-如何触发checkpoint？" class="headerlink" title="3. 如何触发checkpoint？"></a>3. 如何触发checkpoint？</h2><ul>
-<li>在生成EcecutionGraph过程中会注册状态监听器CheckpointCoordinatorDeActivator，负责监听job状态，job变为运行状态时，执行startCheckpointScheduler方法定时执行ScheduledTrigger，ScheduledTrigger中执行的是triggerCheckpoint方法。</li>
-<li>在进行一些条件检查之后，首先会构造出一个PendingCheckpoint实例，然后再放到队列里，只有当jobmanager收到SinkTask发来的checkpoint保存成功的消息后，这个PendingCheckpoint才会变成CompletedCheckpoint，这才代表一次checkpoint保存操作真正的完成了。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">final PendingCheckpoint checkpoint &#x3D; </span><br><span class="line">new PendingCheckpoint(</span><br><span class="line">    job,</span><br><span class="line">    checkpointID,</span><br><span class="line">    timestamp,</span><br><span class="line">    ackTasks,</span><br><span class="line">    props,</span><br><span class="line">    checkpointStorageLocation,</span><br><span class="line">    executor);</span><br><span class="line"></span><br><span class="line">if (statsTracker !&#x3D; null) &#123;</span><br><span class="line">    PendingCheckpointStats callback &#x3D; statsTracker.reportPendingCheckpoint(</span><br><span class="line">        checkpointID,</span><br><span class="line">        timestamp,</span><br><span class="line">        props);</span><br><span class="line"></span><br><span class="line">    checkpoint.setStatsCallback(callback);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-再往下看，最重要的方法是向executions发送保存checkpoint的消息，通知taskmanager进行本地的checkpoint保存。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; send the messages to the tasks that trigger their checkpoint</span><br><span class="line">for (Execution execution: executions) &#123;</span><br><span class="line">    execution.triggerCheckpoint(checkpointID, timestamp, checkpointOptions);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-下面看看executions从哪来,下面这段代码在PendingCheckpoint生成之前执行：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Execution[] executions &#x3D; new Execution[tasksToTrigger.length];</span><br><span class="line">for (int i &#x3D; 0; i &lt; tasksToTrigger.length; i++) &#123;</span><br><span class="line">    Execution ee &#x3D; tasksToTrigger[i].getCurrentExecutionAttempt();</span><br><span class="line">    if (ee &#x3D;&#x3D; null) &#123;</span><br><span class="line">        LOG.info(&quot;Checkpoint triggering task &#123;&#125; of job &#123;&#125; is not being executed at the moment. Aborting checkpoint.&quot;,</span><br><span class="line">                tasksToTrigger[i].getTaskNameWithSubtaskIndex(),</span><br><span class="line">                job);</span><br><span class="line">        return new CheckpointTriggerResult(CheckpointDeclineReason.NOT_ALL_REQUIRED_TASKS_RUNNING);</span><br><span class="line">    &#125; else if (ee.getState() &#x3D;&#x3D; ExecutionState.RUNNING) &#123;</span><br><span class="line">        executions[i] &#x3D; ee;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        LOG.info(&quot;Checkpoint triggering task &#123;&#125; of job &#123;&#125; is not in state &#123;&#125; but &#123;&#125; instead. Aborting checkpoint.&quot;,</span><br><span class="line">                tasksToTrigger[i].getTaskNameWithSubtaskIndex(),</span><br><span class="line">                job,</span><br><span class="line">                ExecutionState.RUNNING,</span><br><span class="line">                ee.getState());</span><br><span class="line">        return new CheckpointTriggerResult(CheckpointDeclineReason.NOT_ALL_REQUIRED_TASKS_RUNNING);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-可以看到execution中的元素都是从tasksToTrigger中获得，那t<br>asksToTrigger是什么呢？可以追溯到ExecutionGraph中：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ExecutionVertex[] tasksToTrigger &#x3D; collectExecutionVertices(verticesToTrigger);</span><br></pre></td></tr></table></figure>
-看了下collectExecutionVertices方法，并没有说明来源，继续看verticesToTrigger从哪里来，追溯到StreamingJobGraphGenerator中：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">for (JobVertex vertex : jobVertices.values()) &#123;</span><br><span class="line">			if (vertex.isInputVertex()) &#123;</span><br><span class="line">				triggerVertices.add(vertex.getID());</span><br><span class="line">			&#125;</span><br><span class="line">			commitVertices.add(vertex.getID());</span><br><span class="line">			ackVertices.add(vertex.getID());</span><br><span class="line">		&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public boolean isInputVertex() &#123;</span><br><span class="line">		return this.inputs.isEmpty();</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-就是说triggerVertices是那些没有输入的节点，即数据源。</li>
-<li>综上，配置了checkpoint，job状态监听器在监听到状态为running时，会开启定时器，定时向TaskManager发送TriggerCheckpoint消息。</li>
-</ul>
-<p>下面看看TaskManager收到TriggerCheckpoint消息之后如何处理<br>。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">case message: TriggerCheckpoint &#x3D;&gt;</span><br><span class="line">    val taskExecutionId &#x3D; message.getTaskExecutionId</span><br><span class="line">    val checkpointId &#x3D; message.getCheckpointId</span><br><span class="line">    val timestamp &#x3D; message.getTimestamp</span><br><span class="line">    val checkpointOptions &#x3D; message.getCheckpointOptions</span><br><span class="line"></span><br><span class="line">    log.debug(s&quot;Receiver TriggerCheckpoint $checkpointId@$timestamp for $taskExecutionId.&quot;)</span><br><span class="line"></span><br><span class="line">    val task &#x3D; runningTasks.get(taskExecutionId)</span><br><span class="line">    if (task !&#x3D; null) &#123;</span><br><span class="line">        task.triggerCheckpointBarrier(checkpointId, timestamp, checkpointOptions)</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        log.debug(s&quot;TaskManager received a checkpoint request for unknown task $taskExecutionId.&quot;)</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>关键在triggerCheckpointBarrier方法，方法中最核心的是这个方法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">boolean success &#x3D; invokable.triggerCheckpoint(checkpointMetaData, checkpointOptions);</span><br></pre></td></tr></table></figure>
-<p>因为之前已经知道消息是发往数据源task的，所以在所有triggerCheckpoint实现中看下SourceStreamTask的,最终追溯到StreamTask的performCheckpoint方法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">private boolean performCheckpoint(</span><br><span class="line">        CheckpointMetaData checkpointMetaData,</span><br><span class="line">        CheckpointOptions checkpointOptions,</span><br><span class="line">        CheckpointMetrics checkpointMetrics) throws Exception &#123;</span><br><span class="line">    synchronized (lock) &#123;</span><br><span class="line">        if (isRunning) &#123;</span><br><span class="line">            </span><br><span class="line">            &#x2F;&#x2F; 第一步：为checkpoint做一些准备工作，默认什么都不做</span><br><span class="line">            operatorChain.prepareSnapshotPreBarrier(checkpointMetaData.getCheckpointId());</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F; 第二步：向下游广播发送checkpoint barrier</span><br><span class="line">            operatorChain.broadcastCheckpointBarrier(</span><br><span class="line">                    checkpointMetaData.getCheckpointId(),</span><br><span class="line">                    checkpointMetaData.getTimestamp(),</span><br><span class="line">                    checkpointOptions);</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F; 第三步：异步存储状态快照</span><br><span class="line">            checkpointState(checkpointMetaData, checkpointOptions, checkpointMetrics);</span><br><span class="line">            return true;</span><br><span class="line">        &#125;</span><br><span class="line">        else &#123;</span><br><span class="line">            。。。任务不是运行状态，不触发checkpoint，向下游广播取消checkpoint的消息。</span><br><span class="line">            return false;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>其实下游每个task收到checkpoint barrier都会执行上述操作。</p>
-<ul>
-<li>异步储存快照</li>
-</ul>
-<p>进入checkpointState方法，追溯至executeCheckpointing方法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">public void executeCheckpointing() throws Exception &#123;</span><br><span class="line">        startSyncPartNano &#x3D; System.nanoTime();</span><br><span class="line">        try &#123;</span><br><span class="line">            for (StreamOperator&lt;?&gt; op : allOperators) &#123;</span><br><span class="line">                checkpointStreamOperator(op);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            startAsyncPartNano &#x3D; System.nanoTime();</span><br><span class="line"></span><br><span class="line">            checkpointMetrics.setSyncDurationMillis((startAsyncPartNano - startSyncPartNano) &#x2F; 1_000_000);</span><br><span class="line"></span><br><span class="line">            AsyncCheckpointRunnable asyncCheckpointRunnable &#x3D; new AsyncCheckpointRunnable(</span><br><span class="line">                owner,</span><br><span class="line">                operatorSnapshotsInProgress,</span><br><span class="line">                checkpointMetaData,</span><br><span class="line">                checkpointMetrics,</span><br><span class="line">                startAsyncPartNano);</span><br><span class="line"></span><br><span class="line">            owner.cancelables.registerCloseable(asyncCheckpointRunnable);</span><br><span class="line">            owner.asyncOperationsThreadPool.submit(asyncCheckpointRunnable);</span><br><span class="line">        &#125; catch (Exception ex) &#123;</span><br><span class="line">            ...</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>对task中所有operator执行checkpointStreamOperator方法，这个方法是opertor存储快照的地方。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">private void checkpointStreamOperator(StreamOperator&lt;?&gt; op) throws Exception &#123;</span><br><span class="line">			if (null !&#x3D; op) &#123;</span><br><span class="line">				OperatorSnapshotFutures snapshotInProgress &#x3D; op.snapshotState(</span><br><span class="line">						checkpointMetaData.getCheckpointId(),</span><br><span class="line">						checkpointMetaData.getTimestamp(),</span><br><span class="line">						checkpointOptions,</span><br><span class="line">						storageLocation);</span><br><span class="line">				operatorSnapshotsInProgress.put(op.getOperatorID(), snapshotInProgress);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br></pre></td></tr></table></figure></li>
-<li><p>接着看snapshotState方法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">public final OperatorSnapshotFutures snapshotState(long checkpointId, long timestamp, CheckpointOptions checkpointOptions,</span><br><span class="line">			CheckpointStreamFactory factory) throws Exception &#123;</span><br><span class="line"></span><br><span class="line">		KeyGroupRange keyGroupRange &#x3D; null !&#x3D; keyedStateBackend ?</span><br><span class="line">				keyedStateBackend.getKeyGroupRange() : KeyGroupRange.EMPTY_KEY_GROUP_RANGE;</span><br><span class="line"></span><br><span class="line">		OperatorSnapshotFutures snapshotInProgress &#x3D; new OperatorSnapshotFutures();</span><br><span class="line"></span><br><span class="line">		try (StateSnapshotContextSynchronousImpl snapshotContext &#x3D; new StateSnapshotContextSynchronousImpl(</span><br><span class="line">				checkpointId,</span><br><span class="line">				timestamp,</span><br><span class="line">				factory,</span><br><span class="line">				keyGroupRange,</span><br><span class="line">				getContainingTask().getCancelables())) &#123;</span><br><span class="line"></span><br><span class="line">			snapshotState(snapshotContext);</span><br><span class="line">            </span><br><span class="line">			snapshotInProgress.setKeyedStateRawFuture(snapshotContext.getKeyedStateStreamFuture());</span><br><span class="line">			snapshotInProgress.setOperatorStateRawFuture(snapshotContext.getOperatorStateStreamFuture());</span><br><span class="line">            &#x2F;&#x2F;这里调用operator的snapshot异步方法</span><br><span class="line">			if (null !&#x3D; operatorStateBackend) &#123;</span><br><span class="line">				snapshotInProgress.setOperatorStateManagedFuture(</span><br><span class="line">					operatorStateBackend.snapshot(checkpointId, timestamp, factory, checkpointOptions));</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">			if (null !&#x3D; keyedStateBackend) &#123;</span><br><span class="line">				snapshotInProgress.setKeyedStateManagedFuture(</span><br><span class="line">					keyedStateBackend.snapshot(checkpointId, timestamp, factory, checkpointOptions));</span><br><span class="line">			&#125;</span><br><span class="line">		&#125; </span><br><span class="line">		return snapshotInProgress;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-<p>operatorStateBackend是保存状态的介质，Flink中提供了三种不同的存储介质:heap，hdfs，rockdb。将Future加入到snapshotInProgress中，全部完成后执行AsyncCheckpointRunnable。</p>
-</li>
-<li><p>AsyncCheckpointRunnable线程的run方法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">public void run() &#123;</span><br><span class="line">    FileSystemSafetyNet.initializeSafetyNetForThread();</span><br><span class="line">    try &#123;</span><br><span class="line"></span><br><span class="line">        TaskStateSnapshot jobManagerTaskOperatorSubtaskStates &#x3D;</span><br><span class="line">            new TaskStateSnapshot(operatorSnapshotsInProgress.size());</span><br><span class="line"></span><br><span class="line">        TaskStateSnapshot localTaskOperatorSubtaskStates &#x3D;</span><br><span class="line">            new TaskStateSnapshot(operatorSnapshotsInProgress.size());</span><br><span class="line">        </span><br><span class="line">        for (Map.Entry&lt;OperatorID, OperatorSnapshotFutures&gt; entry : operatorSnapshotsInProgress.entrySet()) &#123;</span><br><span class="line"></span><br><span class="line">            OperatorID operatorID &#x3D; entry.getKey();</span><br><span class="line">            OperatorSnapshotFutures snapshotInProgress &#x3D; entry.getValue();</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F; finalize the async part of all by executing all snapshot runnables</span><br><span class="line">            OperatorSnapshotFinalizer finalizedSnapshots &#x3D;</span><br><span class="line">                new OperatorSnapshotFinalizer(snapshotInProgress);</span><br><span class="line"></span><br><span class="line">            jobManagerTaskOperatorSubtaskStates.putSubtaskStateByOperatorID(</span><br><span class="line">                operatorID,</span><br><span class="line">                finalizedSnapshots.getJobManagerOwnedState());</span><br><span class="line"></span><br><span class="line">            localTaskOperatorSubtaskStates.putSubtaskStateByOperatorID(</span><br><span class="line">                operatorID,</span><br><span class="line">                finalizedSnapshots.getTaskLocalState());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        final long asyncEndNanos &#x3D; System.nanoTime();</span><br><span class="line">        final long asyncDurationMillis &#x3D; (asyncEndNanos - asyncStartNanos) &#x2F; 1_000_000L;</span><br><span class="line">        &#x2F;&#x2F; checkpoint 完成时间</span><br><span class="line">        checkpointMetrics.setAsyncDurationMillis(asyncDurationMillis);</span><br><span class="line">        &#x2F;&#x2F; checkpoint完成后，通知jobmanager checkpoint完成</span><br><span class="line">        if (asyncCheckpointState.compareAndSet(CheckpointingOperation.AsyncCheckpointState.RUNNING,</span><br><span class="line">            CheckpointingOperation.AsyncCheckpointState.COMPLETED)) &#123;</span><br><span class="line">            reportCompletedSnapshotStates(</span><br><span class="line">                jobManagerTaskOperatorSubtaskStates,</span><br><span class="line">                localTaskOperatorSubtaskStates,</span><br><span class="line">                asyncDurationMillis);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            LOG....</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>reportCompletedSnapshotStates方法，在存储完state之后会通过CheckpointResponder发送消息给jobmanager告知checkpoint完成。jobmanager在所有task都通知了同一个id的checkpoint完成之后才会算这个checkpoint完成。</p>
-</li>
-</ul>
+          Checkpoint
+Flink 容错机制的核心就是持续创建分布式数据流及其状态的一致快照。Flink的checkpoint 是通过分布式快照实现的,所以在flink中这两个词是一个意思。
 
-          
+
+checkpoint用来保证任务的错误恢复。任务失败可以从最新的checkpoint恢复。
+checkpo
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/02/26/2019-02-26-Flink%E4%B9%8BCheckpoint/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1303,137 +1146,20 @@
       
         
           
-            <h2 id="Jobmanager处理SubmitJob"><a href="#Jobmanager处理SubmitJob" class="headerlink" title="Jobmanager处理SubmitJob"></a>Jobmanager处理SubmitJob</h2><p>先将submitJob的主要步骤总结写在开头，然后一步步分析。</p>
-<ul>
-<li>1，通过JobGraph生成ExecutionGraph;</li>
-<li>2，恢复状态CheckpointedState，或者Savepoint;</li>
-<li>3，提交Execution给Scheduler进行调度；<ul>
-<li>3.1 获取ExecutionGraph中所有vertice，并为其分配slot资源;</li>
-<li>3.2 通知TaskManager，将每个vertice部署在分配好的资源中。</li>
-</ul>
-</li>
-</ul>
-<p>下面一步一步分析：</p>
-<h3 id="1，通过JobGraph生成ExecutionGraph"><a href="#1，通过JobGraph生成ExecutionGraph" class="headerlink" title="1，通过JobGraph生成ExecutionGraph"></a>1，<strong>通过JobGraph生成ExecutionGraph</strong></h3><ul>
-<li>jobManager接收到SubmitJob消息后，生成了一个jobInfo对象装载job信息，然后调用submitJob方法。</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">case SubmitJob(jobGraph, listeningBehaviour) &#x3D;&gt;</span><br><span class="line">      val client &#x3D; sender()</span><br><span class="line">      val jobInfo &#x3D; new JobInfo(client, listeningBehaviour, System.currentTimeMillis(),</span><br><span class="line">        jobGraph.getSessionTimeout)</span><br><span class="line">      submitJob(jobGraph, jobInfo)</span><br></pre></td></tr></table></figure>
+          Jobmanager处理SubmitJob先将submitJob的主要步骤总结写在开头，然后一步步分析。
 
-<ul>
-<li>深入submitJob方法，首先判断jobGraph是否为空，如果为空，返回JobResultFailure消息；</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">if (jobGraph &#x3D;&#x3D; null) &#123;</span><br><span class="line">      jobInfo.notifyClients(</span><br><span class="line">        decorateMessage(JobResultFailure(</span><br><span class="line">          new SerializedThrowable(</span><br><span class="line">            new JobSubmissionException(null, &quot;JobGraph must not be null.&quot;)))))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+1，通过JobGraph生成ExecutionGraph;
+2，恢复状态CheckpointedState，或者Savepoint;
+3，提交Execution给Scheduler进行调度；
 
-<ul>
-<li>接着向类库缓存管理器注册该Job相关的库文件、类路径；必须确保该步骤在第一步执行，因为后续产生任何异常可以确保上传的类库和Jar等成功从类库缓存管理器移除。</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">libraryCacheManager.registerJob(</span><br><span class="line">            jobGraph.getJobID, jobGraph.getUserJarBlobKeys, jobGraph.getClasspaths)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>接下来是获得用户代码的类加载器classLoader以及发生失败时的重启策略restartStrategy；</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">val userCodeLoader &#x3D; libraryCacheManager.getClassLoader(jobGraph.getJobID)</span><br><span class="line">...</span><br><span class="line">val restartStrategy &#x3D;</span><br><span class="line">    Option(jobGraph.getSerializedExecutionConfig()</span><br><span class="line">        .deserializeValue(userCodeLoader)</span><br><span class="line">        .getRestartStrategy())</span><br><span class="line">        .map(RestartStrategyFactory.createRestartStrategy)</span><br><span class="line">        .filter(p &#x3D;&gt; p !&#x3D; null) match &#123;</span><br><span class="line">        case Some(strategy) &#x3D;&gt; strategy</span><br><span class="line">        case None &#x3D;&gt; restartStrategyFactory.createRestartStrategy()</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>接着，获取ExecutionGraph对象的实例。首先尝试从缓存中查找，如果缓存中存在则直接返回，否则直接创建然后加入缓存；</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">val registerNewGraph &#x3D; currentJobs.get(jobGraph.getJobID) match &#123;</span><br><span class="line">    case Some((graph, currentJobInfo)) &#x3D;&gt;</span><br><span class="line">    	executionGraph &#x3D; graph</span><br><span class="line">    	currentJobInfo.setLastActive()</span><br><span class="line">    	false</span><br><span class="line">    case None &#x3D;&gt;</span><br><span class="line">    	true</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">val allocationTimeout: Long &#x3D; flinkConfiguration.getLong(</span><br><span class="line">	JobManagerOptions.SLOT_REQUEST_TIMEOUT)</span><br><span class="line"></span><br><span class="line">val resultPartitionLocationTrackerProxy: ResultPartitionLocationTrackerProxy &#x3D;</span><br><span class="line">	new ResultPartitionLocationTrackerProxy(flinkConfiguration)</span><br><span class="line"></span><br><span class="line">executionGraph &#x3D; ExecutionGraphBuilder.buildGraph(</span><br><span class="line">    executionGraph,</span><br><span class="line">    jobGraph,</span><br><span class="line">    flinkConfiguration,</span><br><span class="line">    futureExecutor,</span><br><span class="line">    ioExecutor,</span><br><span class="line">    scheduler,</span><br><span class="line">    userCodeLoader,</span><br><span class="line">    checkpointRecoveryFactory,</span><br><span class="line">    Time.of(timeout.length, timeout.unit),</span><br><span class="line">    restartStrategy,</span><br><span class="line">    jobMetrics,</span><br><span class="line">    numSlots,</span><br><span class="line">    blobServer,</span><br><span class="line">    resultPartitionLocationTrackerProxy,</span><br><span class="line">    Time.milliseconds(allocationTimeout),</span><br><span class="line">    log.logger)</span><br><span class="line">...</span><br><span class="line">&#x2F;&#x2F;加入缓存</span><br><span class="line">if (registerNewGraph) &#123;</span><br><span class="line">   currentJobs.put(jobGraph.getJobID, (executionGraph, jobInfo))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>接着根据配置生成带有graphManagerPlugin的graphManager（<strong>后面需要用到这个</strong>），和operationLogManager；</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">val conf &#x3D; new Configuration(jobGraph.getJobConfiguration)</span><br><span class="line">conf.addAll(jobGraph.getSchedulingConfiguration)</span><br><span class="line">val graphManagerPlugin &#x3D; GraphManagerPluginFactory.createGraphManagerPlugin(</span><br><span class="line">	jobGraph.getSchedulingConfiguration, userCodeLoader)</span><br><span class="line">val operationLogManager &#x3D; new OperationLogManager(</span><br><span class="line">	OperationLogStoreLoader.loadOperationLogStore(jobGraph.getJobID(), conf))</span><br><span class="line">val graphManager &#x3D;</span><br><span class="line">	new GraphManager(graphManagerPlugin, null, operationLogManager, executionGraph)</span><br><span class="line">graphManager.open(jobGraph, new SchedulingConfig(conf, userCodeLoader))</span><br><span class="line">executionGraph.setGraphManager(graphManager)</span><br><span class="line">operationLogManager.start()</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>注册Job状态变化的事件回调给jobmanager自己;</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">executionGraph.registerJobStatusListener(</span><br><span class="line">          new StatusListenerMessenger(self, leaderSessionID.orNull))</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>注册整个job状态变化事件回调和单个task状态变化回调给client；</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">jobInfo.clients foreach &#123;</span><br><span class="line">    &#x2F;&#x2F; the sender wants to be notified about state changes</span><br><span class="line">    case (client, ListeningBehaviour.EXECUTION_RESULT_AND_STATE_CHANGES) &#x3D;&gt;</span><br><span class="line">    	val listener  &#x3D; new StatusListenerMessenger(client, leaderSessionID.orNull)</span><br><span class="line">    	executionGraph.registerExecutionListener(listener)</span><br><span class="line">    	executionGraph.registerJobStatusListener(listener)</span><br><span class="line">    case _ &#x3D;&gt; &#x2F;&#x2F; do nothing</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>生成executionGraph细节在另一个文章中分析，获取executionGraph之后，如何提交job？继续看；</li>
-</ul>
-<h3 id="2，恢复状态CheckpointedState，或者Savepoint"><a href="#2，恢复状态CheckpointedState，或者Savepoint" class="headerlink" title="2，恢复状态CheckpointedState，或者Savepoint"></a>2，<strong>恢复状态CheckpointedState，或者Savepoint</strong></h3><ul>
-<li>如果是恢复的job，从最新的checkpoint中恢复；</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if (isRecovery) &#123;</span><br><span class="line">    &#x2F;&#x2F; this is a recovery of a master failure (this master takes over)</span><br><span class="line">    executionGraph.restoreLatestCheckpointedState(false, false)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>或者获取savepoint配置，如果配置了savepoint，便从savepoint中恢复；</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">val savepointSettings &#x3D; jobGraph.getSavepointRestoreSettings</span><br><span class="line">if (savepointSettings.restoreSavepoint()) &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        val savepointPath &#x3D; savepointSettings.getRestorePath()</span><br><span class="line">        val allowNonRestored &#x3D; savepointSettings.allowNonRestoredState()</span><br><span class="line">        val resumeFromLatestCheckpoint &#x3D; savepointSettings.resumeFromLatestCheckpoint()</span><br><span class="line"></span><br><span class="line">        executionGraph.getCheckpointCoordinator.restoreSavepoint(</span><br><span class="line">            savepointPath,</span><br><span class="line">            allowNonRestored,</span><br><span class="line">            resumeFromLatestCheckpoint,</span><br><span class="line">            executionGraph.getAllVertices,</span><br><span class="line">            executionGraph.getUserClassLoader</span><br><span class="line">        )</span><br><span class="line">    &#125; catch &#123;</span><br><span class="line">    	...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>然后通知client任务提交成功消息，至此job提交成功，但是job还没启动，继续看；</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">jobInfo.notifyClients(</span><br><span class="line">	decorateMessage(JobSubmitSuccess(jobGraph.getJobID)))</span><br></pre></td></tr></table></figure>
-
-<h3 id="3，提交Execution给Scheduler进行调度"><a href="#3，提交Execution给Scheduler进行调度" class="headerlink" title="3，提交Execution给Scheduler进行调度"></a>3，<strong>提交Execution给Scheduler进行调度</strong></h3><h4 id="3-1，获取ExecutionGraph中所有vertice，并为其分配slot资源"><a href="#3-1，获取ExecutionGraph中所有vertice，并为其分配slot资源" class="headerlink" title="3.1，获取ExecutionGraph中所有vertice，并为其分配slot资源"></a>3.1，<strong>获取ExecutionGraph中所有vertice，并为其分配slot资源</strong></h4><ul>
-<li>先判断jobmanager是否是leader,如果是leader,执行scheduleForExecution方法进行调度；否则删除job。</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">if (leaderSessionID.isDefined &amp;&amp;</span><br><span class="line">    leaderElectionService.hasLeadership(leaderSessionID.get)) &#123;</span><br><span class="line">    executionGraph.scheduleForExecution()</span><br><span class="line">&#125; else &#123;</span><br><span class="line">	self ! decorateMessage(RemoveJob(jobId, removeJobFromStateBackend &#x3D; false))</span><br><span class="line">	log.warn(s&quot;Submitted job $jobId, but not leader. The other leader needs to recover &quot; +</span><br><span class="line">	&quot;this. I am not scheduling the job for execution.&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>接着看下scheduleForExecution是如何调度的。</li>
-<li>如果状态成功从created转变成running,则调用GraphManager开始调度。</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if (transitionState(JobStatus.CREATED, JobStatus.RUNNING)) &#123;</span><br><span class="line">	graphManager.startScheduling();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>GraphManager内部其实是使用了graphManagerPlugin的onSchedulingStarted方法；</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public void startScheduling() &#123;</span><br><span class="line">		LOG.info(&quot;Start scheduling execution graph with graph manager plugin: &#123;&#125;&quot;,</span><br><span class="line">			graphManagerPlugin.getClass().getName());</span><br><span class="line">		graphManagerPlugin.onSchedulingStarted();</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>flink实现了三种GraphManagerPlugin：EagerSchedulingPlugin，RunningUnitGraphManagerPlugin，StepwiseSchedulingPlugin。</strong></p>
-<ul>
-<li>EagerSchedulingPlugin，调度开始后，启动所有顶点；</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public void onSchedulingStarted() &#123;</span><br><span class="line">	final List&lt;ExecutionVertexID&gt; verticesToSchedule &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">	for (JobVertex vertex : jobGraph.getVerticesSortedTopologicallyFromSources()) &#123;</span><br><span class="line">		for (int i &#x3D; 0; i &lt; vertex.getParallelism(); i++) &#123;</span><br><span class="line">			verticesToSchedule.add(new ExecutionVertexID(vertex.getID(), i));</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	scheduler.scheduleExecutionVertices(verticesToSchedule);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>RunningUnitGraphManagerPlugin，根据runningUnit安排作业；</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public void onSchedulingStarted() &#123;</span><br><span class="line">	runningUnitMap.values().stream()</span><br><span class="line">    	.filter(LogicalJobVertexRunningUnit::allDependReady)</span><br><span class="line">        .forEach(this::addToScheduleQueue);</span><br><span class="line">    checkScheduleNewRunningUnit();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>StepwiseSchedulingPlugin，首先启动源顶点，并根据其可消耗输入启动下游顶点；</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public void onSchedulingStarted() &#123;</span><br><span class="line">	final List&lt;ExecutionVertexID&gt; verticesToSchedule &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">    for (JobVertex vertex : jobGraph.getVerticesSortedTopologicallyFromSources()) &#123;</span><br><span class="line">    	if (vertex.isInputVertex()) &#123;</span><br><span class="line">    		for (int i &#x3D; 0; i &lt; vertex.getParallelism(); i++) &#123;</span><br><span class="line">    			verticesToSchedule.add(new ExecutionVertexID(vertex.getID(), i));</span><br><span class="line">    		&#125;</span><br><span class="line">    	&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    scheduleOneByOne(verticesToSchedule);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>上面三种plugin不同是调度vertice的顺序，但是vertice调度方法是一样的，最终都是调用ExecutionGraphVertexScheduler的scheduleExecutionVertices方法；</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public class ExecutionGraphVertexScheduler implements VertexScheduler &#123;</span><br><span class="line">    public void scheduleExecutionVertices(Collection&lt;ExecutionVertexID&gt; 			         verticesToSchedule) &#123;</span><br><span class="line">        synchronized (executionVerticesToBeScheduled) &#123;</span><br><span class="line">            if (isReconciling) &#123;</span><br><span class="line">                executionVerticesToBeScheduled.add(verticesToSchedule);</span><br><span class="line">                return;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        executionGraph.scheduleVertices(verticesToSchedule);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>继续深入scheduleVertices方法，该方法是在调度之前检查vertice健康状态，如果都没问题，则调用schedule(vertices)方法；</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">public void scheduleVertices(Collection&lt;ExecutionVertexID&gt; verticesToSchedule) &#123;</span><br><span class="line"></span><br><span class="line">		try &#123;</span><br><span class="line">			。。。</span><br><span class="line"></span><br><span class="line">			final CompletableFuture&lt;Void&gt; schedulingFuture &#x3D; schedule(vertices);</span><br><span class="line"></span><br><span class="line">			if (state &#x3D;&#x3D; JobStatus.RUNNING &amp;&amp; currentGlobalModVersion &#x3D;&#x3D; globalModVersion) &#123;</span><br><span class="line">				schedulingFutures.put(schedulingFuture, schedulingFuture);</span><br><span class="line">				schedulingFuture.whenCompleteAsync(</span><br><span class="line">						(Void ignored, Throwable throwable) -&gt; &#123;</span><br><span class="line">							schedulingFutures.remove(schedulingFuture);</span><br><span class="line">						&#125;,</span><br><span class="line">						futureExecutor);</span><br><span class="line">			&#125; else &#123;</span><br><span class="line">				schedulingFuture.cancel(false);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125; catch (Throwable t) &#123;</span><br><span class="line">			。。。</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>深入schedule(vertices)方法，这是真正调度vertices的方法,看看具体做了什么。</p>
-<ul>
-<li>为每个vertice准备调度的资源：ScheduledUnit，SlotProfile</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">checkState(state &#x3D;&#x3D; JobStatus.RUNNING, &quot;job is not running currently&quot;);</span><br><span class="line">		final boolean queued &#x3D; allowQueuedScheduling;</span><br><span class="line">		List&lt;SlotRequestId&gt; slotRequestIds &#x3D; new ArrayList&lt;&gt;(vertices.size());</span><br><span class="line">		List&lt;ScheduledUnit&gt; scheduledUnits &#x3D; new ArrayList&lt;&gt;(vertices.size());</span><br><span class="line">		List&lt;SlotProfile&gt; slotProfiles &#x3D; new ArrayList&lt;&gt;(vertices.size());</span><br><span class="line">		List&lt;Execution&gt; scheduledExecutions &#x3D; new ArrayList&lt;&gt;(vertices.size());</span><br><span class="line">        &#x2F;&#x2F;为每个vertice准备调度的资源</span><br><span class="line">		for (ExecutionVertex ev : vertices) &#123;</span><br><span class="line">			final Execution exec &#x3D; ev.getCurrentExecutionAttempt();</span><br><span class="line">			try &#123;</span><br><span class="line">				Tuple2&lt;ScheduledUnit, SlotProfile&gt; scheduleUnitAndSlotProfile &#x3D; exec.enterScheduledAndPrepareSchedulingResources();</span><br><span class="line">				slotRequestIds.add(new SlotRequestId());</span><br><span class="line">				scheduledUnits.add(scheduleUnitAndSlotProfile.f0);</span><br><span class="line">				slotProfiles.add(scheduleUnitAndSlotProfile.f1);</span><br><span class="line">				scheduledExecutions.add(exec);</span><br><span class="line">			&#125; catch (IllegalExecutionStateException e) &#123;</span><br><span class="line">				LOG.info(&quot;The execution &#123;&#125; may be already scheduled by other thread.&quot;, ev.getTaskNameWithSubtaskIndex(), e);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>分配slot</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">List&lt;CompletableFuture&lt;LogicalSlot&gt;&gt; allocationFutures &#x3D;</span><br><span class="line">				slotProvider.allocateSlots(slotRequestIds, scheduledUnits, queued, slotProfiles, allocationTimeout);</span><br><span class="line">		List&lt;CompletableFuture&lt;Void&gt;&gt; assignFutures &#x3D; new ArrayList&lt;&gt;(slotRequestIds.size());</span><br><span class="line">		for (int i &#x3D; 0; i &lt; allocationFutures.size(); i++) &#123;</span><br><span class="line">			final int index &#x3D; i;</span><br><span class="line">			allocationFutures.get(i).whenComplete(</span><br><span class="line">					(ignore, throwable) -&gt; &#123;</span><br><span class="line">						if (throwable !&#x3D; null) &#123;</span><br><span class="line">							slotProvider.cancelSlotRequest(</span><br><span class="line">									slotRequestIds.get(index),</span><br><span class="line">									scheduledUnits.get(index).getSlotSharingGroupId(),</span><br><span class="line">									scheduledUnits.get(index).getCoLocationConstraint(),</span><br><span class="line">									throwable);</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">			);</span><br><span class="line">			assignFutures.add(allocationFutures.get(i).thenAccept(</span><br><span class="line">					(LogicalSlot logicalSlot) -&gt; &#123;</span><br><span class="line">						if </span><br><span class="line">						&#x2F;&#x2F;</span><br><span class="line">						(!scheduledExecutions.get(index).tryAssignResource(logicalSlot)) &#123;</span><br><span class="line">							&#x2F;&#x2F; release the slot</span><br><span class="line">							Exception e &#x3D; new FlinkException(&quot;Could not assign logical slot to execution &quot; + scheduledExecutions.get(index) + &#39;.&#39;);</span><br><span class="line">							logicalSlot.releaseSlot(e);</span><br><span class="line">							throw new CompletionException(e);</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;)</span><br><span class="line">			);</span><br><span class="line">		&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>所有的slot分配完成才算完成，有一个失败便算失败。所有slot分配成功之后，异步执行所有Exceution的deploy方法。</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">CompletableFuture&lt;Void&gt; currentSchedulingFuture &#x3D; allAssignFutures</span><br><span class="line">    .异常处理</span><br><span class="line">    .handleAsync(</span><br><span class="line">    (Collection&lt;Void&gt; ignored, Throwable throwable) -&gt; &#123;</span><br><span class="line">    	if (throwable !&#x3D; null) &#123;</span><br><span class="line">    		throw new CompletionException(throwable);</span><br><span class="line">    	&#125; else &#123;</span><br><span class="line">    		boolean hasFailure &#x3D; false;</span><br><span class="line">    		for (int i &#x3D; 0; i &lt;  scheduledExecutions.size(); i++) &#123;</span><br><span class="line">    			try &#123;</span><br><span class="line">    				scheduledExecutions.get(i).deploy();</span><br><span class="line">    			&#125; catch (Exception e) &#123;</span><br><span class="line">    				hasFailure &#x3D; true;</span><br><span class="line">    				scheduledExecutions.get(i).markFailed(e);</span><br><span class="line">    		&#125;</span><br><span class="line">    	&#125;</span><br><span class="line">        if (hasFailure) &#123;</span><br><span class="line">            throw new CompletionException(</span><br><span class="line">            new FlinkException(&quot;Fail to deploy some executions.&quot;));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return null;</span><br><span class="line">&#125;, futureExecutor);</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<h4 id="3-2，通知TaskManager，将每个vertice部署在分配好的资源中"><a href="#3-2，通知TaskManager，将每个vertice部署在分配好的资源中" class="headerlink" title="3.2，通知TaskManager，将每个vertice部署在分配好的资源中"></a>3.2，<strong>通知TaskManager，将每个vertice部署在分配好的资源中</strong></h4><p>下面深入deploy方法，deploy负责将Execution部署到先前分配好的资源上，提交task到taskManagerGateway，然后由taskManagerGateway转发给Taskmanager。TaskManager如何处理SubmitTask消息之后分析。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">public void deploy() throws JobException &#123;</span><br><span class="line">		...一系列检查保证slot可用</span><br><span class="line">		executor.execute(</span><br><span class="line">			() -&gt; &#123;</span><br><span class="line">				try &#123;</span><br><span class="line">					final TaskDeploymentDescriptor deployment &#x3D; vertex.createDeploymentDescriptor(</span><br><span class="line">							attemptId,</span><br><span class="line">							slot,</span><br><span class="line">							taskRestore,</span><br><span class="line">							attemptNumber);</span><br><span class="line"></span><br><span class="line">					&#x2F;&#x2F; null taskRestore to let it be GC&#39;ed</span><br><span class="line">					taskRestore &#x3D; null;</span><br><span class="line"></span><br><span class="line">					final TaskManagerGateway taskManagerGateway &#x3D; slot.getTaskManagerGateway();</span><br><span class="line">					&#x2F;&#x2F;提交task到taskManagerGateway，然后由taskManagerGateway转发给Taskmanager</span><br><span class="line">					final CompletableFuture&lt;Acknowledge&gt; submitResultFuture &#x3D; taskManagerGateway.submitTask(deployment, rpcTimeout);</span><br><span class="line"></span><br><span class="line">					...</span><br><span class="line">				&#125; catch (Throwable t) &#123;</span><br><span class="line">					markFailed(t);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		);</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-          
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/02/25/2019-02-25-Jobmanager%E5%A4%84%E7%90%86%E6%B6%88%E6%81%AF--SubmitJob%E6%B6%88%E6%81%AF/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1570,30 +1296,16 @@
       
         
           
-            <h1 id="volatile"><a href="#volatile" class="headerlink" title="volatile"></a>volatile</h1><blockquote>
-<p>volatile关键字能够保证变量的可见性，这就先要了解Java内存模型，Java内存模型是所有线程有一个共享的主内存，每个线程都有自己的工作内存，工作内存里都会保存一份共享变量的副本，对变量修改都是修改本线程的变量副本，然后刷新到主内存，但是刷新的时间是不确定的。volatile修饰了变量之后，每个线程修改变量副本之后都会立即刷新到主内存，读取这个变量也会强制从主内存读取最新值。所以volatile保证了变量的可见性。</p>
-</blockquote>
-<ol>
-<li>在什么场景下能够使用volatile保证线程安全？</li>
-</ol>
-<p>因为volatile能够保证可见性，有序性，不能保证原子性，所以在保证原子性的场景下使用volatile能实现线程安全。符合下面两条规则的场景：</p>
-<ul>
-<li><p>1，运算结果并不依赖变量的当前值，或者能够确保只有单一的线程修改变量的值。</p>
-</li>
-<li><p>2，变量不需要与其他的状态变量共同参与不变约束。</p>
-</li>
-</ul>
-<p>否则要使用synchronized，Lock，原子类来保证原子性。因为锁保证了原子性，可见性，有序性，所以是线程安全的。</p>
-<ol start="2">
-<li>虚拟机层面是如何保证立即可见的呢？</li>
-</ol>
-<p>对volatile修饰的变量赋值后，多执行了一个带lock前缀的空操作，这个操作相当于一个内存屏障，内存屏障能够在多个CPU访问同一块内存时保证一致性。lock前缀的作用是使得本CPU的Cache写入了内存，该写入动作也会引起别的CPU或者别的内核无效化其Cache,这种操作相当于对Cache中的变量做了一次“store”“write”操作，将变量从工作内存同步回主内存，所以通过这样一个空操作，可以让volatile变量的修改对其他CPU立即可见。</p>
-<ol start="3">
-<li>如何保证有序性的呢？</li>
-</ol>
-<p>volatile本身具有禁止指令重排序语义，因为指令重排序无法越过内存屏障。</p>
-
-          
+          volatile
+volatile关键字能够保证变量的可见性，这就先要了解Java内存模型，Java内存模型是所有线程有一个共享的主内存，每个线程都有自己的工作内存，工作内存里都会保存一份共享变量的副本，对变量修改都是修改本线程的变量副本，然后刷新到主内存，但是刷新的时间是不确定的。volatile
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/07/29/2017-07-29-volatile/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1730,86 +1442,18 @@
       
         
           
-            <blockquote>
-<p>首先先弄清两个概念:并发和并行.<br>并行指两个及多个事件实际意义的同时进行,而并发是宏观上的并行,其实一个cpu上还是顺序执行,只是cpu通过调度算法快速的切换不同事件执行,达到看似多个事件同时进行的效果.说白了并发是为了提高效率接近并行的执行效果.而实现并发的手段是多进程或多线程.</p>
-</blockquote>
-<p>本文主要从线程的产生，状态，同步，通信，安全等方面介绍java中的多线程:</p>
-<h2 id="一-线程产生"><a href="#一-线程产生" class="headerlink" title="一 线程产生"></a>一 线程产生</h2><ol>
-<li>继承Thread类</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span></span>&#123;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span></span>&#123;</span><br><span class="line">       MyThread t1 =<span class="keyword">new</span> MyThread();</span><br><span class="line">       t2.start();</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="comment">//TODO</span></span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>实现Runnable接口,也是使用Thread来执行这个任务</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span></span>&#123;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span></span>&#123;</span><br><span class="line">        MyRunnable r = <span class="keyword">new</span> MyRunnable();</span><br><span class="line">        Thread t1 = <span class="keyword">new</span> Thread(r); t1.start(); </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyRunnable</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123; </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123; </span><br><span class="line">        <span class="comment">//TODO </span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ol start="3">
-<li>实现Callable接口 ,任务完成后可返回结果,但前两种方法不行</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span></span>&#123;</span><br><span class="line">    MyCallable c = <span class="keyword">new</span> MyCallable();</span><br><span class="line">    FutureTask&lt;Integer&gt; result = <span class="keyword">new</span> FutureTask&lt;Integer&gt;(c); <span class="comment">//FutureTask类既实现了Runnable接口,也实现了Future&lt;V&gt;接口</span></span><br><span class="line">    <span class="keyword">new</span> Thread(result).start();  <span class="comment">//启动线程</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Integer sum = result.get();</span><br><span class="line">        System.out.println(sum);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (InterruptedException | ExecutionException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyCallable</span> <span class="keyword">implements</span> <span class="title">Callable</span>&lt;<span class="title">Integer</span>&gt;</span>&#123;</span><br><span class="line">      <span class="function"><span class="keyword">public</span> Integer <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">              <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">      &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>之后会详细介绍Callable,Future,FutureTask</p>
-<h2 id="二-线程状态"><a href="#二-线程状态" class="headerlink" title="二 线程状态"></a>二 线程状态</h2><ol>
-<li><p>新状态：线程对象已经创建，还没有在其上调用start()方法。</p>
-</li>
-<li><p>可运行状态：当线程有资格运行，但调度程序还没有把它选定为运行线程时线程所处的状态。当start()方法调用时，线程首先进入可运行状态。在线程运行之后或者从阻塞、等待或睡眠状态回来后，也返回到可运行状态。</p>
-</li>
-<li><p>运行状态：线程调度程序从可运行池中选择一个线程作为当前线程时线程所处的状态。这也是线程进入运行状态的唯一一种方式。</p>
-</li>
-<li><p>等待/阻塞/睡眠状态：这是线程有资格运行时它所处的状态。实际上这个三状态组合为一种，其共同点是：线程仍旧是活的，但是当前没有条件运行。换句话说，它是可运行的，但是如果某件事件出现，他可能返回到可运行状态。</p>
-</li>
-<li><p>死亡态：当线程的run()方法完成时就认为它死去。这个线程对象也许是活的，但是，它已经不是一个单独执行的线程。线程一旦死亡，就不能复生。 如果在一个死去的线程上调用start()方法，会抛出java.lang.IllegalThreadStateException异常。</p>
-</li>
-</ol>
-<h2 id="三-线程同步"><a href="#三-线程同步" class="headerlink" title="三 线程同步"></a>三 线程同步</h2><ol>
-<li>互斥同步</li>
-</ol>
-<ul>
-<li>1.使用synchronized修饰方法或语句块</li>
-</ul>
-<p>synchronized是一个内置锁的加锁机制，当某个方法加上synchronized关键字后，就表明要获得该内置锁才能执行，但并不能阻止其他线程访问不需要获得该内置锁的方法。</p>
-<p>synchronized可以加在方法上，也可以直接加在对象上，从而保证一段代码只能有一个线程在运行，保证线程的同步。</p>
-<ul>
-<li><p>synchronized加在不同方法上有什么不同？</p>
-<ul>
-<li><p>如果synchronized加在一个类的普通方法上，那么相当于synchronized(this)。是一个对象锁。</p>
-</li>
-<li><p>如果synchronized加载一个类的静态方法上，那么相当于synchronized(Class对象)。是一个类锁，一个类只有一个类锁。</p>
-</li>
-</ul>
-</li>
-<li><p>2.使用显式锁ReentrantLock</p>
-<ul>
-<li>这里是<a href="https://blog.csdn.net/u013014724/article/details/76098517" target="_blank" rel="noopener">synchronized和ReentrantLock的比较</a></li>
-</ul>
-</li>
-</ul>
-<ol start="2">
-<li>非阻塞同步</li>
-</ol>
-<ul>
-<li>使用CAS算法</li>
-</ul>
-<h2 id="四-线程通信"><a href="#四-线程通信" class="headerlink" title="四 线程通信"></a>四 线程通信</h2><ol>
-<li><p>wait和notify机制</p>
-</li>
-<li><p>Condition的等待/通知机制:await,signal,signalAll</p>
-</li>
-</ol>
-<h2 id="五-线程安全"><a href="#五-线程安全" class="headerlink" title="五 线程安全"></a>五 线程安全</h2><blockquote>
-<p>为了并发执行程序，提高执行效率，使用多线程编程，而多线程编程就会涉及到安全问题，比如多个线程访问共享的可变数据的问题。<br>如果你的代码所在的进程中有多个线程在同时运行，而这些线程可能会同时运行这段代码。如果每次运行结果和单线程运行的结果是一样的，而且其他的变量的值也和预期的是一样的，就是线程安全的。</p>
-</blockquote>
-<ul>
-<li>但是如果不安全，如何实现线程安全呢？</li>
-</ul>
-<ol>
-<li><p>通过上面的线程同步的方法</p>
-</li>
-<li><p>使用本地线程存储ThreadLocal</p>
-</li>
-</ol>
-
           
+首先先弄清两个概念:并发和并行.并行指两个及多个事件实际意义的同时进行,而并发是宏观上的并行,其实一个cpu上还是顺序执行,只是cpu通过调度算法快速的切换不同事件执行,达到看似多个事件同时进行的效果.说白了并发是为了提高效率接近并行的执行效果.而实现并发的手段是多进程或多线程.
+
+本文主要从线程
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/06/16/2017-06-16-java%E5%A4%9A%E7%BA%BF%E7%A8%8B/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
