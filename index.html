@@ -336,25 +336,6 @@
           
 
           
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Words count in article&#58;</span>
-                
-                <span title="Words count in article">
-                  
-                </span>
-              
-
-              
-
-              
-            </div>
-          
 
           
 
@@ -383,11 +364,6 @@ docker ps
 列出所有在运行的容器信息
 
 docker ps -n 5
-
-列出最近创建的5个容器信息
-
-
-docker ps -f 根据条件过滤,默认是正在运行的，加上-
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -495,25 +471,6 @@ docker ps -f 根据条件过滤,默认是正在运行的，加上-
           
 
           
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Words count in article&#58;</span>
-                
-                <span title="Words count in article">
-                  
-                </span>
-              
-
-              
-
-              
-            </div>
-          
 
           
 
@@ -545,13 +502,7 @@ REQUIRED
 NOT_SUPPORTED
 
 
-不为这个方法开启事务，相当于没有事务。
-
-
-REQUIRES_NEW
-
-
-不管是否存在事务,都创建一个新的事务
+不为这个方
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -659,25 +610,6 @@ REQUIRES_NEW
           
 
           
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Words count in article&#58;</span>
-                
-                <span title="Words count in article">
-                  
-                </span>
-              
-
-              
-
-              
-            </div>
-          
 
           
 
@@ -699,7 +631,7 @@ REQUIRES_NEW
           工作中遇到的事务传播的问题
 问题描述：在一个事务中查询一个之前创建的数据行为空，查mysql这个数据行是存在的。
 
-经debug之后知道创建数据行的操作调用的新的类里的方法，该方法新起了一个REQUIRES_NEW事务。因为REQUIRES_NEW新建的事务是独立于当前事务的，又因为数据库默认隔离级
+经debug之后知道创建数据行的操作调用的新的类里的方法，该方法新起了一个REQUI
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -807,25 +739,6 @@ REQUIRES_NEW
           
 
           
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Words count in article&#58;</span>
-                
-                <span title="Words count in article">
-                  
-                </span>
-              
-
-              
-
-              
-            </div>
-          
 
           
 
@@ -847,11 +760,7 @@ REQUIRES_NEW
           1. 可回收对象判定
 引用计数器
 为每个对象维护一个引用计数器，当对象被引用，计数器值就加1；引用失效时，计数器值就减1，当计数器的值为0时，此对象就是可回收对象。
-缺点：会有循环引用问题，导致两个本来可以回收的对象回收不了。
-
-
-可达性分析
-选取GC Roots,判断对象是否存在到任意GC Roo
+缺点：会有循环引用问题，导致两个本
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -959,25 +868,6 @@ REQUIRES_NEW
           
 
           
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Words count in article&#58;</span>
-                
-                <span title="Words count in article">
-                  
-                </span>
-              
-
-              
-
-              
-            </div>
-          
 
           
 
@@ -1000,8 +890,7 @@ REQUIRES_NEW
 Flink 容错机制的核心就是持续创建分布式数据流及其状态的一致快照。Flink的checkpoint 是通过分布式快照实现的,所以在flink中这两个词是一个意思。
 
 
-checkpoint用来保证任务的错误恢复。任务失败可以从最新的checkpoint恢复。
-checkpo
+che
           ...
           <!--noindex-->
           <div class="post-button text-center">

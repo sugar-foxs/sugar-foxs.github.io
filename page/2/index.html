@@ -336,25 +336,6 @@
           
 
           
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Words count in article&#58;</span>
-                
-                <span title="Words count in article">
-                  
-                </span>
-              
-
-              
-
-              
-            </div>
-          
 
           
 
@@ -376,9 +357,7 @@
           Jobmanager处理SubmitJob先将submitJob的主要步骤总结写在开头，然后一步步分析。
 
 1，通过JobGraph生成ExecutionGraph;
-2，恢复状态CheckpointedState，或者Savepoint;
-3，提交Execution给Scheduler进行调度；
-
+2，恢复状态Checkpoint
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -486,25 +465,6 @@
           
 
           
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Words count in article&#58;</span>
-                
-                <span title="Words count in article">
-                  
-                </span>
-              
-
-              
-
-              
-            </div>
-          
 
           
 
@@ -524,7 +484,7 @@
         
           
           volatile
-volatile关键字能够保证变量的可见性，这就先要了解Java内存模型，Java内存模型是所有线程有一个共享的主内存，每个线程都有自己的工作内存，工作内存里都会保存一份共享变量的副本，对变量修改都是修改本线程的变量副本，然后刷新到主内存，但是刷新的时间是不确定的。volatile
+volatile关键字能够保证变量的可见性，这就先要了解Java内存模型，Java内存模型是所有线程有一个共享的主内存，每个线程都有自己的工作内存，工作内存里都会保存一份共享变量的副
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -632,25 +592,6 @@ volatile关键字能够保证变量的可见性，这就先要了解Java内存�
           
 
           
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Words count in article&#58;</span>
-                
-                <span title="Words count in article">
-                  
-                </span>
-              
-
-              
-
-              
-            </div>
-          
 
           
 
@@ -670,9 +611,7 @@ volatile关键字能够保证变量的可见性，这就先要了解Java内存�
         
           
           
-首先先弄清两个概念:并发和并行.并行指两个及多个事件实际意义的同时进行,而并发是宏观上的并行,其实一个cpu上还是顺序执行,只是cpu通过调度算法快速的切换不同事件执行,达到看似多个事件同时进行的效果.说白了并发是为了提高效率接近并行的执行效果.而实现并发的手段是多进程或多线程.
-
-本文主要从线程
+首先先弄清两个概念:并发和并行.并行指两个及多个事件实际意义的同时进行,而并发是宏观上的并行,其实一个cpu上还是顺序执行,只是cpu通过调度算法快速的切换不同事件执行,达到看似多个事件同时进行的效
           ...
           <!--noindex-->
           <div class="post-button text-center">
