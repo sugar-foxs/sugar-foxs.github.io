@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="java," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1. 可回收对象判定 引用计数器 为每个对象维护一个引用计数器，当对象被引用，计数器值就加1；引用失效时，计数器值就减1，当计数器的值为0时，此对象就是可回收对象。 缺点：会有循环引用问题，导致两个本来可以回收的对象回收不了。   可达性分析 选取GC Roots,判断对象是否存在到任意GC Roots的引用链，没有则是可回收对象。 可作为GC Roots的有：虚拟机栈中引用的对象，方法区中类静态">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java垃圾回收">
+<meta property="og:url" content="http://yoursite.com/2019/03/01/2019-03-01-java%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/index.html">
+<meta property="og:site_name" content="sugar_foxs&#39;s blog">
+<meta property="og:description" content="1. 可回收对象判定 引用计数器 为每个对象维护一个引用计数器，当对象被引用，计数器值就加1；引用失效时，计数器值就减1，当计数器的值为0时，此对象就是可回收对象。 缺点：会有循环引用问题，导致两个本来可以回收的对象回收不了。   可达性分析 选取GC Roots,判断对象是否存在到任意GC Roots的引用链，没有则是可回收对象。 可作为GC Roots的有：虚拟机栈中引用的对象，方法区中类静态">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-02-28T16:00:00.000Z">
+<meta property="article:modified_time" content="2019-12-28T13:03:44.199Z">
+<meta property="article:author" content="sugar-foxs">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/03/01/2019-03-01-java垃圾回收/"/>
+
+
+
+
+
+  <title>java垃圾回收 | sugar_foxs's blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">sugar_foxs's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">hello</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/01/2019-03-01-java%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="sugar-foxs">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="sugar_foxs's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">java垃圾回收</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-01T00:00:00+08:00">
+                2019-03-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-可回收对象判定"><a href="#1-可回收对象判定" class="headerlink" title="1. 可回收对象判定"></a>1. 可回收对象判定</h2><ul>
+<li>引用计数器<ul>
+<li>为每个对象维护一个引用计数器，当对象被引用，计数器值就加1；引用失效时，计数器值就减1，当计数器的值为0时，此对象就是可回收对象。</li>
+<li>缺点：会有循环引用问题，导致两个本来可以回收的对象回收不了。</li>
+</ul>
+</li>
+<li>可达性分析<ul>
+<li>选取GC Roots,判断对象是否存在到任意GC Roots的引用链，没有则是可回收对象。</li>
+<li>可作为GC Roots的有：虚拟机栈中引用的对象，方法区中类静态属性引用的对象，方法区中常量引用的对象，本地方法区JNI引用的对象。</li>
+<li>因为这些都是当前存活对象。其他的比如被classloader加载的class对象，monitor的对象，被JVM持有的对象也可能是GC Roots对象。</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-垃圾回收"><a href="#2-垃圾回收" class="headerlink" title="2. 垃圾回收"></a>2. 垃圾回收</h2><h3 id="2-1-回收算法介绍及其优缺点"><a href="#2-1-回收算法介绍及其优缺点" class="headerlink" title="2.1 回收算法介绍及其优缺点"></a>2.1 回收算法介绍及其优缺点</h3><ul>
+<li><p>标记清理算法</p>
+<ul>
+<li>标记完可回收对象后进行清理</li>
+<li>缺点：内存碎片</li>
+</ul>
+</li>
+<li><p>复制算法</p>
+<ul>
+<li>eden区和两个survrior区，默认比例为8：1，初始对象储存在eden区和其中一个survrior区中，当eden区内存满了的时候，会进行Minor GC,将存回对象放入另一个空闲survior区，如果放不下，会通过年老代进行分配担保，将对象存入年老代，如果年老代也烦不下，会进行一次Full GC.</li>
+<li>缺点：在对象存活率高的情况下，效率会降低</li>
+</ul>
+</li>
+<li><p>标记整理算法</p>
+<ul>
+<li>标记完可回收对象后将存活对象向一边移动，清理可回收对象，解决了标记清理的内存碎片问题</li>
+<li>缺点：需要进行移动，吞吐量较低</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-2-垃圾回收器"><a href="#2-2-垃圾回收器" class="headerlink" title="2.2 垃圾回收器"></a>2.2 垃圾回收器</h3><blockquote>
+<p>待补充</p>
+</blockquote>
+<ul>
+<li>CMS</li>
+<li>G1</li>
+</ul>
+<h2 id="3-Minor-GC-和Full-GC的触发条件"><a href="#3-Minor-GC-和Full-GC的触发条件" class="headerlink" title="3. Minor GC 和Full GC的触发条件"></a>3. Minor GC 和Full GC的触发条件</h2><ul>
+<li>Minor GC在eden区没有足够空间分配时触发</li>
+<li>Full GC触发：老年代空间不足的时候<ul>
+<li>老年代最大可用连续空间 &gt; 新生代所有对象总空间</li>
+<li>历次晋升到老年代的对象平均大小 &gt; 老年代的最大可用连续内存</li>
+<li>System.gc</li>
+<li>方法区空间不足</li>
+<li>担保失败后也会进行Full GC</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    sugar-foxs
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="http://yoursite.com/2019/03/01/2019-03-01-java%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" title="java垃圾回收">http://yoursite.com/2019/03/01/2019-03-01-java%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/26/2019-02-26-Flink%E4%B9%8BCheckpoint/" rel="next" title="flink之Checkpoint">
+                <i class="fa fa-chevron-left"></i> flink之Checkpoint
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/12/24/2019-12-24-%E5%B7%A5%E4%BD%9C%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E7%9A%84%E9%97%AE%E9%A2%98/" rel="prev" title="工作中遇到的spring事务传播问题">
+                工作中遇到的spring事务传播问题 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">sugar-foxs</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/sugar-foxs" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="chgu1209@126.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+<br>
+		  <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=25638273&auto=1&height=66"></iframe>
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-可回收对象判定"><span class="nav-number">1.</span> <span class="nav-text">1. 可回收对象判定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-垃圾回收"><span class="nav-number">2.</span> <span class="nav-text">2. 垃圾回收</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-回收算法介绍及其优缺点"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 回收算法介绍及其优缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-垃圾回收器"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 垃圾回收器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Minor-GC-和Full-GC的触发条件"><span class="nav-number">3.</span> <span class="nav-text">3. Minor GC 和Full GC的触发条件</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sugar-foxs</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

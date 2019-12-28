@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="flink," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Checkpoint Flink 容错机制的核心就是持续创建分布式数据流及其状态的一致快照。Flink的checkpoint 是通过分布式快照实现的,所以在flink中这两个词是一个意思。   checkpoint用来保证任务的错误恢复。任务失败可以从最新的checkpoint恢复。 checkpoint机制需要一个可靠的可以回放数据的数据源(kafka,RabbitMQ,HDFS…)和一个存放s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="flink之Checkpoint">
+<meta property="og:url" content="http://yoursite.com/2019/02/26/2019-02-26-Flink%E4%B9%8BCheckpoint/index.html">
+<meta property="og:site_name" content="sugar_foxs&#39;s blog">
+<meta property="og:description" content="Checkpoint Flink 容错机制的核心就是持续创建分布式数据流及其状态的一致快照。Flink的checkpoint 是通过分布式快照实现的,所以在flink中这两个词是一个意思。   checkpoint用来保证任务的错误恢复。任务失败可以从最新的checkpoint恢复。 checkpoint机制需要一个可靠的可以回放数据的数据源(kafka,RabbitMQ,HDFS…)和一个存放s">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-02-25T16:00:00.000Z">
+<meta property="article:modified_time" content="2019-12-28T13:03:44.199Z">
+<meta property="article:author" content="sugar-foxs">
+<meta property="article:tag" content="flink">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/02/26/2019-02-26-Flink之Checkpoint/"/>
+
+
+
+
+
+  <title>flink之Checkpoint | sugar_foxs's blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">sugar_foxs's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">hello</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/26/2019-02-26-Flink%E4%B9%8BCheckpoint/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="sugar-foxs">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="sugar_foxs's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">flink之Checkpoint</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-26T00:00:00+08:00">
+                2019-02-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Checkpoint"><a href="#Checkpoint" class="headerlink" title="Checkpoint"></a>Checkpoint</h1><blockquote>
+<p>Flink 容错机制的核心就是持续创建分布式数据流及其状态的一致快照。Flink的checkpoint 是通过分布式快照实现的,所以在flink中这两个词是一个意思。</p>
+</blockquote>
+<ul>
+<li>checkpoint用来保证任务的错误恢复。任务失败可以从最新的checkpoint恢复。</li>
+<li>checkpoint机制需要一个可靠的可以回放数据的数据源(kafka,RabbitMQ,HDFS…)和一个存放state的持久存储（HDFS,S3…）。</li>
+</ul>
+<h2 id="1-checkpointConfig"><a href="#1-checkpointConfig" class="headerlink" title="1. checkpointConfig"></a>1. checkpointConfig</h2><ul>
+<li><p>通过调用StreamExecutionEnvironment.enableCheckpointing(internal，mode)启用checkpoint。 internal默认是-1，表示checkpoint不开启，mode默认是EXACTLY_ONCE模式。</p>
+</li>
+<li><p>可设置checkpoint timeout,超过这个时间checkpoint没有成功，checkpoint终止。默认10分钟。</p>
+</li>
+<li><p>可设置checkpoint失败任务是否也失败，默认是true。</p>
+</li>
+<li><p>可设置同时进行的checkpoint数量，默认为1。</p>
+</li>
+</ul>
+<h2 id="2-barrier"><a href="#2-barrier" class="headerlink" title="2. barrier"></a>2. barrier</h2><ul>
+<li>将barrier插入到数据流中，作为数据流的一部分和数据一起向下流动。Barrier 不会干扰正常数据，数据流严格有序。一个 barrier 把数据流分割成两部分：一部分进入到当前快照，另一部分进入下一个快照。每一个 barrier 都带有快照 ID，并且 barrier 之前的数据都进入了此快照。Barrier 不会干扰数据流处理，所以非常轻量。多个不同快照的多个 barrier 会在流中同时出现，即多个快照可能同时创建。</li>
+<li>Barrier 在数据源端插入，当 snapshot n 的 barrier 插入后，系统会记录当前 snapshot 位置值 n (用Sn表示)。例如，在 Apache Kafka 中，这个变量表示某个分区中最后一条数据的偏移量。这个位置值 Sn 会被发送到一个称为 checkpoint coordinator 的模块。</li>
+<li>然后 barrier 继续往下流动，当一个 operator 从其输入流接收到所有标识 snapshot n 的 barrier 时，它会向其所有输出流插入一个标识 snapshot n 的 barrier。当 sink operator （DAG 流的终点）从其输入流接收到所有 barrier n 时，它向 the checkpoint coordinator 确认 snapshot n 已完成。当所有 sink 都确认了这个快照，快照就被标识为完成。</li>
+</ul>
+<h2 id="3-如何触发checkpoint？"><a href="#3-如何触发checkpoint？" class="headerlink" title="3. 如何触发checkpoint？"></a>3. 如何触发checkpoint？</h2><ul>
+<li>在生成EcecutionGraph过程中会注册状态监听器CheckpointCoordinatorDeActivator，负责监听job状态，job变为运行状态时，执行startCheckpointScheduler方法定时执行ScheduledTrigger，ScheduledTrigger中执行的是triggerCheckpoint方法。</li>
+<li>在进行一些条件检查之后，首先会构造出一个PendingCheckpoint实例，然后再放到队列里，只有当jobmanager收到SinkTask发来的checkpoint保存成功的消息后，这个PendingCheckpoint才会变成CompletedCheckpoint，这才代表一次checkpoint保存操作真正的完成了。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">final PendingCheckpoint checkpoint &#x3D; </span><br><span class="line">new PendingCheckpoint(</span><br><span class="line">    job,</span><br><span class="line">    checkpointID,</span><br><span class="line">    timestamp,</span><br><span class="line">    ackTasks,</span><br><span class="line">    props,</span><br><span class="line">    checkpointStorageLocation,</span><br><span class="line">    executor);</span><br><span class="line"></span><br><span class="line">if (statsTracker !&#x3D; null) &#123;</span><br><span class="line">    PendingCheckpointStats callback &#x3D; statsTracker.reportPendingCheckpoint(</span><br><span class="line">        checkpointID,</span><br><span class="line">        timestamp,</span><br><span class="line">        props);</span><br><span class="line"></span><br><span class="line">    checkpoint.setStatsCallback(callback);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+再往下看，最重要的方法是向executions发送保存checkpoint的消息，通知taskmanager进行本地的checkpoint保存。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; send the messages to the tasks that trigger their checkpoint</span><br><span class="line">for (Execution execution: executions) &#123;</span><br><span class="line">    execution.triggerCheckpoint(checkpointID, timestamp, checkpointOptions);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+下面看看executions从哪来,下面这段代码在PendingCheckpoint生成之前执行：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Execution[] executions &#x3D; new Execution[tasksToTrigger.length];</span><br><span class="line">for (int i &#x3D; 0; i &lt; tasksToTrigger.length; i++) &#123;</span><br><span class="line">    Execution ee &#x3D; tasksToTrigger[i].getCurrentExecutionAttempt();</span><br><span class="line">    if (ee &#x3D;&#x3D; null) &#123;</span><br><span class="line">        LOG.info(&quot;Checkpoint triggering task &#123;&#125; of job &#123;&#125; is not being executed at the moment. Aborting checkpoint.&quot;,</span><br><span class="line">                tasksToTrigger[i].getTaskNameWithSubtaskIndex(),</span><br><span class="line">                job);</span><br><span class="line">        return new CheckpointTriggerResult(CheckpointDeclineReason.NOT_ALL_REQUIRED_TASKS_RUNNING);</span><br><span class="line">    &#125; else if (ee.getState() &#x3D;&#x3D; ExecutionState.RUNNING) &#123;</span><br><span class="line">        executions[i] &#x3D; ee;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        LOG.info(&quot;Checkpoint triggering task &#123;&#125; of job &#123;&#125; is not in state &#123;&#125; but &#123;&#125; instead. Aborting checkpoint.&quot;,</span><br><span class="line">                tasksToTrigger[i].getTaskNameWithSubtaskIndex(),</span><br><span class="line">                job,</span><br><span class="line">                ExecutionState.RUNNING,</span><br><span class="line">                ee.getState());</span><br><span class="line">        return new CheckpointTriggerResult(CheckpointDeclineReason.NOT_ALL_REQUIRED_TASKS_RUNNING);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+可以看到execution中的元素都是从tasksToTrigger中获得，那t<br>asksToTrigger是什么呢？可以追溯到ExecutionGraph中：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ExecutionVertex[] tasksToTrigger &#x3D; collectExecutionVertices(verticesToTrigger);</span><br></pre></td></tr></table></figure>
+看了下collectExecutionVertices方法，并没有说明来源，继续看verticesToTrigger从哪里来，追溯到StreamingJobGraphGenerator中：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">for (JobVertex vertex : jobVertices.values()) &#123;</span><br><span class="line">			if (vertex.isInputVertex()) &#123;</span><br><span class="line">				triggerVertices.add(vertex.getID());</span><br><span class="line">			&#125;</span><br><span class="line">			commitVertices.add(vertex.getID());</span><br><span class="line">			ackVertices.add(vertex.getID());</span><br><span class="line">		&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public boolean isInputVertex() &#123;</span><br><span class="line">		return this.inputs.isEmpty();</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+就是说triggerVertices是那些没有输入的节点，即数据源。</li>
+<li>综上，配置了checkpoint，job状态监听器在监听到状态为running时，会开启定时器，定时向TaskManager发送TriggerCheckpoint消息。</li>
+</ul>
+<p>下面看看TaskManager收到TriggerCheckpoint消息之后如何处理<br>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">case message: TriggerCheckpoint &#x3D;&gt;</span><br><span class="line">    val taskExecutionId &#x3D; message.getTaskExecutionId</span><br><span class="line">    val checkpointId &#x3D; message.getCheckpointId</span><br><span class="line">    val timestamp &#x3D; message.getTimestamp</span><br><span class="line">    val checkpointOptions &#x3D; message.getCheckpointOptions</span><br><span class="line"></span><br><span class="line">    log.debug(s&quot;Receiver TriggerCheckpoint $checkpointId@$timestamp for $taskExecutionId.&quot;)</span><br><span class="line"></span><br><span class="line">    val task &#x3D; runningTasks.get(taskExecutionId)</span><br><span class="line">    if (task !&#x3D; null) &#123;</span><br><span class="line">        task.triggerCheckpointBarrier(checkpointId, timestamp, checkpointOptions)</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        log.debug(s&quot;TaskManager received a checkpoint request for unknown task $taskExecutionId.&quot;)</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>关键在triggerCheckpointBarrier方法，方法中最核心的是这个方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">boolean success &#x3D; invokable.triggerCheckpoint(checkpointMetaData, checkpointOptions);</span><br></pre></td></tr></table></figure>
+<p>因为之前已经知道消息是发往数据源task的，所以在所有triggerCheckpoint实现中看下SourceStreamTask的,最终追溯到StreamTask的performCheckpoint方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">private boolean performCheckpoint(</span><br><span class="line">        CheckpointMetaData checkpointMetaData,</span><br><span class="line">        CheckpointOptions checkpointOptions,</span><br><span class="line">        CheckpointMetrics checkpointMetrics) throws Exception &#123;</span><br><span class="line">    synchronized (lock) &#123;</span><br><span class="line">        if (isRunning) &#123;</span><br><span class="line">            </span><br><span class="line">            &#x2F;&#x2F; 第一步：为checkpoint做一些准备工作，默认什么都不做</span><br><span class="line">            operatorChain.prepareSnapshotPreBarrier(checkpointMetaData.getCheckpointId());</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F; 第二步：向下游广播发送checkpoint barrier</span><br><span class="line">            operatorChain.broadcastCheckpointBarrier(</span><br><span class="line">                    checkpointMetaData.getCheckpointId(),</span><br><span class="line">                    checkpointMetaData.getTimestamp(),</span><br><span class="line">                    checkpointOptions);</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F; 第三步：异步存储状态快照</span><br><span class="line">            checkpointState(checkpointMetaData, checkpointOptions, checkpointMetrics);</span><br><span class="line">            return true;</span><br><span class="line">        &#125;</span><br><span class="line">        else &#123;</span><br><span class="line">            。。。任务不是运行状态，不触发checkpoint，向下游广播取消checkpoint的消息。</span><br><span class="line">            return false;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其实下游每个task收到checkpoint barrier都会执行上述操作。</p>
+<ul>
+<li>异步储存快照</li>
+</ul>
+<p>进入checkpointState方法，追溯至executeCheckpointing方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">public void executeCheckpointing() throws Exception &#123;</span><br><span class="line">        startSyncPartNano &#x3D; System.nanoTime();</span><br><span class="line">        try &#123;</span><br><span class="line">            for (StreamOperator&lt;?&gt; op : allOperators) &#123;</span><br><span class="line">                checkpointStreamOperator(op);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            startAsyncPartNano &#x3D; System.nanoTime();</span><br><span class="line"></span><br><span class="line">            checkpointMetrics.setSyncDurationMillis((startAsyncPartNano - startSyncPartNano) &#x2F; 1_000_000);</span><br><span class="line"></span><br><span class="line">            AsyncCheckpointRunnable asyncCheckpointRunnable &#x3D; new AsyncCheckpointRunnable(</span><br><span class="line">                owner,</span><br><span class="line">                operatorSnapshotsInProgress,</span><br><span class="line">                checkpointMetaData,</span><br><span class="line">                checkpointMetrics,</span><br><span class="line">                startAsyncPartNano);</span><br><span class="line"></span><br><span class="line">            owner.cancelables.registerCloseable(asyncCheckpointRunnable);</span><br><span class="line">            owner.asyncOperationsThreadPool.submit(asyncCheckpointRunnable);</span><br><span class="line">        &#125; catch (Exception ex) &#123;</span><br><span class="line">            ...</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>对task中所有operator执行checkpointStreamOperator方法，这个方法是opertor存储快照的地方。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">private void checkpointStreamOperator(StreamOperator&lt;?&gt; op) throws Exception &#123;</span><br><span class="line">			if (null !&#x3D; op) &#123;</span><br><span class="line">				OperatorSnapshotFutures snapshotInProgress &#x3D; op.snapshotState(</span><br><span class="line">						checkpointMetaData.getCheckpointId(),</span><br><span class="line">						checkpointMetaData.getTimestamp(),</span><br><span class="line">						checkpointOptions,</span><br><span class="line">						storageLocation);</span><br><span class="line">				operatorSnapshotsInProgress.put(op.getOperatorID(), snapshotInProgress);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>接着看snapshotState方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">public final OperatorSnapshotFutures snapshotState(long checkpointId, long timestamp, CheckpointOptions checkpointOptions,</span><br><span class="line">			CheckpointStreamFactory factory) throws Exception &#123;</span><br><span class="line"></span><br><span class="line">		KeyGroupRange keyGroupRange &#x3D; null !&#x3D; keyedStateBackend ?</span><br><span class="line">				keyedStateBackend.getKeyGroupRange() : KeyGroupRange.EMPTY_KEY_GROUP_RANGE;</span><br><span class="line"></span><br><span class="line">		OperatorSnapshotFutures snapshotInProgress &#x3D; new OperatorSnapshotFutures();</span><br><span class="line"></span><br><span class="line">		try (StateSnapshotContextSynchronousImpl snapshotContext &#x3D; new StateSnapshotContextSynchronousImpl(</span><br><span class="line">				checkpointId,</span><br><span class="line">				timestamp,</span><br><span class="line">				factory,</span><br><span class="line">				keyGroupRange,</span><br><span class="line">				getContainingTask().getCancelables())) &#123;</span><br><span class="line"></span><br><span class="line">			snapshotState(snapshotContext);</span><br><span class="line">            </span><br><span class="line">			snapshotInProgress.setKeyedStateRawFuture(snapshotContext.getKeyedStateStreamFuture());</span><br><span class="line">			snapshotInProgress.setOperatorStateRawFuture(snapshotContext.getOperatorStateStreamFuture());</span><br><span class="line">            &#x2F;&#x2F;这里调用operator的snapshot异步方法</span><br><span class="line">			if (null !&#x3D; operatorStateBackend) &#123;</span><br><span class="line">				snapshotInProgress.setOperatorStateManagedFuture(</span><br><span class="line">					operatorStateBackend.snapshot(checkpointId, timestamp, factory, checkpointOptions));</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">			if (null !&#x3D; keyedStateBackend) &#123;</span><br><span class="line">				snapshotInProgress.setKeyedStateManagedFuture(</span><br><span class="line">					keyedStateBackend.snapshot(checkpointId, timestamp, factory, checkpointOptions));</span><br><span class="line">			&#125;</span><br><span class="line">		&#125; </span><br><span class="line">		return snapshotInProgress;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>operatorStateBackend是保存状态的介质，Flink中提供了三种不同的存储介质:heap，hdfs，rockdb。将Future加入到snapshotInProgress中，全部完成后执行AsyncCheckpointRunnable。</p>
+</li>
+<li><p>AsyncCheckpointRunnable线程的run方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">public void run() &#123;</span><br><span class="line">    FileSystemSafetyNet.initializeSafetyNetForThread();</span><br><span class="line">    try &#123;</span><br><span class="line"></span><br><span class="line">        TaskStateSnapshot jobManagerTaskOperatorSubtaskStates &#x3D;</span><br><span class="line">            new TaskStateSnapshot(operatorSnapshotsInProgress.size());</span><br><span class="line"></span><br><span class="line">        TaskStateSnapshot localTaskOperatorSubtaskStates &#x3D;</span><br><span class="line">            new TaskStateSnapshot(operatorSnapshotsInProgress.size());</span><br><span class="line">        </span><br><span class="line">        for (Map.Entry&lt;OperatorID, OperatorSnapshotFutures&gt; entry : operatorSnapshotsInProgress.entrySet()) &#123;</span><br><span class="line"></span><br><span class="line">            OperatorID operatorID &#x3D; entry.getKey();</span><br><span class="line">            OperatorSnapshotFutures snapshotInProgress &#x3D; entry.getValue();</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F; finalize the async part of all by executing all snapshot runnables</span><br><span class="line">            OperatorSnapshotFinalizer finalizedSnapshots &#x3D;</span><br><span class="line">                new OperatorSnapshotFinalizer(snapshotInProgress);</span><br><span class="line"></span><br><span class="line">            jobManagerTaskOperatorSubtaskStates.putSubtaskStateByOperatorID(</span><br><span class="line">                operatorID,</span><br><span class="line">                finalizedSnapshots.getJobManagerOwnedState());</span><br><span class="line"></span><br><span class="line">            localTaskOperatorSubtaskStates.putSubtaskStateByOperatorID(</span><br><span class="line">                operatorID,</span><br><span class="line">                finalizedSnapshots.getTaskLocalState());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        final long asyncEndNanos &#x3D; System.nanoTime();</span><br><span class="line">        final long asyncDurationMillis &#x3D; (asyncEndNanos - asyncStartNanos) &#x2F; 1_000_000L;</span><br><span class="line">        &#x2F;&#x2F; checkpoint 完成时间</span><br><span class="line">        checkpointMetrics.setAsyncDurationMillis(asyncDurationMillis);</span><br><span class="line">        &#x2F;&#x2F; checkpoint完成后，通知jobmanager checkpoint完成</span><br><span class="line">        if (asyncCheckpointState.compareAndSet(CheckpointingOperation.AsyncCheckpointState.RUNNING,</span><br><span class="line">            CheckpointingOperation.AsyncCheckpointState.COMPLETED)) &#123;</span><br><span class="line">            reportCompletedSnapshotStates(</span><br><span class="line">                jobManagerTaskOperatorSubtaskStates,</span><br><span class="line">                localTaskOperatorSubtaskStates,</span><br><span class="line">                asyncDurationMillis);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            LOG....</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>reportCompletedSnapshotStates方法，在存储完state之后会通过CheckpointResponder发送消息给jobmanager告知checkpoint完成。jobmanager在所有task都通知了同一个id的checkpoint完成之后才会算这个checkpoint完成。</p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    sugar-foxs
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="http://yoursite.com/2019/02/26/2019-02-26-Flink%E4%B9%8BCheckpoint/" title="flink之Checkpoint">http://yoursite.com/2019/02/26/2019-02-26-Flink%E4%B9%8BCheckpoint/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/flink/" rel="tag"># flink</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/25/2019-02-25-Jobmanager%E5%A4%84%E7%90%86%E6%B6%88%E6%81%AF--SubmitJob%E6%B6%88%E6%81%AF/" rel="next" title="Jobmanager处理SubmitJob">
+                <i class="fa fa-chevron-left"></i> Jobmanager处理SubmitJob
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/01/2019-03-01-java%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" rel="prev" title="java垃圾回收">
+                java垃圾回收 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">sugar-foxs</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/sugar-foxs" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="chgu1209@126.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+<br>
+		  <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=25638273&auto=1&height=66"></iframe>
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Checkpoint"><span class="nav-number">1.</span> <span class="nav-text">Checkpoint</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-checkpointConfig"><span class="nav-number">1.1.</span> <span class="nav-text">1. checkpointConfig</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-barrier"><span class="nav-number">1.2.</span> <span class="nav-text">2. barrier</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-如何触发checkpoint？"><span class="nav-number">1.3.</span> <span class="nav-text">3. 如何触发checkpoint？</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sugar-foxs</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

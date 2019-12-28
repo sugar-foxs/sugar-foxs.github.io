@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="java,spring," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="spring事务传播机制 spring事务传播机制分别有哪几种   REQUIRED   如果有事务, 那么加入事务, 没有的话新建一个(默认情况下)。   NOT_SUPPORTED   不为这个方法开启事务，相当于没有事务。   REQUIRES_NEW   不管是否存在事务,都创建一个新的事务,原来的挂起,新的执行完毕,继续执行老的事务。   MANDATORY   必须在一个已有的事务中执">
+<meta property="og:type" content="article">
+<meta property="og:title" content="spring事务传播机制">
+<meta property="og:url" content="http://yoursite.com/2019/12/24/2019-12-24-spring%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E6%9C%BA%E5%88%B6/index.html">
+<meta property="og:site_name" content="sugar_foxs&#39;s blog">
+<meta property="og:description" content="spring事务传播机制 spring事务传播机制分别有哪几种   REQUIRED   如果有事务, 那么加入事务, 没有的话新建一个(默认情况下)。   NOT_SUPPORTED   不为这个方法开启事务，相当于没有事务。   REQUIRES_NEW   不管是否存在事务,都创建一个新的事务,原来的挂起,新的执行完毕,继续执行老的事务。   MANDATORY   必须在一个已有的事务中执">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-12-23T16:00:00.000Z">
+<meta property="article:modified_time" content="2019-12-28T13:03:44.200Z">
+<meta property="article:author" content="sugar-foxs">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="spring">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/12/24/2019-12-24-spring事务传播机制/"/>
+
+
+
+
+
+  <title>spring事务传播机制 | sugar_foxs's blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">sugar_foxs's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">hello</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/24/2019-12-24-spring%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E6%9C%BA%E5%88%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="sugar-foxs">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="sugar_foxs's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">spring事务传播机制</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-24T00:00:00+08:00">
+                2019-12-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="spring事务传播机制"><a href="#spring事务传播机制" class="headerlink" title="spring事务传播机制"></a>spring事务传播机制</h1><blockquote>
+<p>spring事务传播机制分别有哪几种</p>
+</blockquote>
+<ol>
+<li>REQUIRED</li>
+</ol>
+<ul>
+<li>如果有事务, 那么加入事务, 没有的话新建一个(默认情况下)。</li>
+</ul>
+<ol start="2">
+<li>NOT_SUPPORTED</li>
+</ol>
+<ul>
+<li>不为这个方法开启事务，相当于没有事务。</li>
+</ul>
+<ol start="3">
+<li>REQUIRES_NEW</li>
+</ol>
+<ul>
+<li>不管是否存在事务,都创建一个新的事务,原来的挂起,新的执行完毕,继续执行老的事务。</li>
+</ul>
+<ol start="4">
+<li>MANDATORY</li>
+</ol>
+<ul>
+<li>必须在一个已有的事务中执行,否则抛出异常。</li>
+</ul>
+<ol start="5">
+<li>NEVER</li>
+</ol>
+<ul>
+<li>必须在一个没有事务的方法中执行,否则抛出异常(与Propagation.MANDATORY相反)。</li>
+</ul>
+<ol start="6">
+<li>SUPPORTS</li>
+</ol>
+<ul>
+<li>如果其他bean调用这个方法,在其他bean中声明事务,那就用事务.如果其他bean没有声明事务,那就不用事务。</li>
+</ul>
+<ol start="7">
+<li>NESTED</li>
+</ol>
+<ul>
+<li>如果当前存在事务，则在嵌套事务内执行。如果当前没有事务，则执行与REQUIRED类似的操作。</li>
+</ul>
+<blockquote>
+<p>假设方法a调用方法b,两个方法分别加上事务不同的传播机制。看会发生什么。</p>
+</blockquote>
+<h2 id="REQUIRED"><a href="#REQUIRED" class="headerlink" title="REQUIRED"></a>REQUIRED</h2><ul>
+<li>两个都是REQUIRED机制，b方法发现a已经有事务了，就不再新建事务了，加入a事务。</li>
+<li>a使用NOT_SUPPORTED,b使用REQUIRED,b方法发现a没有事务，会自己新建一个事务。</li>
+</ul>
+<h2 id="NOT-SUPPORTED"><a href="#NOT-SUPPORTED" class="headerlink" title="NOT_SUPPORTED"></a>NOT_SUPPORTED</h2><ul>
+<li>这个相当于没有Spring事务，每条执行语句单独执行，单独提交。</li>
+</ul>
+<h2 id="REQUIRES-NEW"><a href="#REQUIRES-NEW" class="headerlink" title="REQUIRES_NEW"></a>REQUIRES_NEW</h2><ul>
+<li>a使用REQUIRED，b使用REQUIRES_NEW，b会新建一个独立事务，a的事务挂起，b的事务先提交，然后a的事务执行再提交。</li>
+<li>外层事务的回滚不影响REQUIRES_NEW事务的执行，即a事务回滚，b事务不会回滚，不受影响。</li>
+</ul>
+<h2 id="MANDATORY"><a href="#MANDATORY" class="headerlink" title="MANDATORY"></a>MANDATORY</h2><ul>
+<li>a使用NOT_SUPPORTED,b使用MANDATORY，会发生错误。</li>
+<li>MANDATORY必须在已有的事务中执行。</li>
+</ul>
+<h2 id="NEVER"><a href="#NEVER" class="headerlink" title="NEVER"></a>NEVER</h2><ul>
+<li>a使用REQUIRED,b使用NEVER，即a使用事务，b使用NEVER传播机制会发生错误。</li>
+<li>因为b使用了NEVER机制，必须在一个没有事务的方法中执行，否则报错。</li>
+</ul>
+<h2 id="SUPPORTS"><a href="#SUPPORTS" class="headerlink" title="SUPPORTS"></a>SUPPORTS</h2><ul>
+<li>a使用REQUIRED，b使用SUPPORTS,b会复用a的事务。</li>
+<li>a使用NOT_SUPPORTED，b使用SUPPORTS,b便不会使用事务。</li>
+<li>是否使用事务取决于调用方法是否有事务，如果有则直接用，如果没有则不使用事务。</li>
+</ul>
+<h2 id="NESTED"><a href="#NESTED" class="headerlink" title="NESTED"></a>NESTED</h2><ul>
+<li>a使用REQUIRED，b使用NESTED,b直接在a事务的基础上创建一个嵌套事务，本质上还是同一个事务，做一次提交。</li>
+<li>a使用NOT_SUPPORTED，b使用NESTED，b直接创建一个新的事务，单独提交。</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    sugar-foxs
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="http://yoursite.com/2019/12/24/2019-12-24-spring%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E6%9C%BA%E5%88%B6/" title="spring事务传播机制">http://yoursite.com/2019/12/24/2019-12-24-spring%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E6%9C%BA%E5%88%B6/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/spring/" rel="tag"># spring</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/24/2019-12-24-%E5%B7%A5%E4%BD%9C%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E7%9A%84%E9%97%AE%E9%A2%98/" rel="next" title="工作中遇到的spring事务传播问题">
+                <i class="fa fa-chevron-left"></i> 工作中遇到的spring事务传播问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/12/25/2019-12-25-docker%E5%91%BD%E4%BB%A4/" rel="prev" title="docker命令">
+                docker命令 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">sugar-foxs</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/sugar-foxs" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="chgu1209@126.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+<br>
+		  <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=25638273&auto=1&height=66"></iframe>
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#spring事务传播机制"><span class="nav-number">1.</span> <span class="nav-text">spring事务传播机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#REQUIRED"><span class="nav-number">1.1.</span> <span class="nav-text">REQUIRED</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NOT-SUPPORTED"><span class="nav-number">1.2.</span> <span class="nav-text">NOT_SUPPORTED</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#REQUIRES-NEW"><span class="nav-number">1.3.</span> <span class="nav-text">REQUIRES_NEW</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MANDATORY"><span class="nav-number">1.4.</span> <span class="nav-text">MANDATORY</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NEVER"><span class="nav-number">1.5.</span> <span class="nav-text">NEVER</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SUPPORTS"><span class="nav-number">1.6.</span> <span class="nav-text">SUPPORTS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NESTED"><span class="nav-number">1.7.</span> <span class="nav-text">NESTED</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sugar-foxs</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
