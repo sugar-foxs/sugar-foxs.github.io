@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="java," />
+  <meta name="keywords" content="spring,mybatis," />
 
 
 
@@ -79,17 +79,18 @@
 
 
 
-<meta name="description" content="volatile volatile关键字能够保证变量的可见性，这就先要了解Java内存模型，Java内存模型是所有线程有一个共享的主内存，每个线程都有自己的工作内存，工作内存里都会保存一份共享变量的副本，对变量修改都是修改本线程的变量副本，然后刷新到主内存，但是刷新的时间是不确定的。volatile修饰了变量之后，每个线程修改变量副本之后都会立即刷新到主内存，读取这个变量也会强制从主内存读取最新值">
+<meta name="description" content="mybatis 拦截器分页 实现分页为了性能肯定是使用物理分页，而不是将所有数据存入内存再分页，这个做法在大数据量下性能很差。使用物理分页也可以自己在sql后面加上limit 1,5 的语句来实现，但是这样每个需要分页的sql都要加上这个语句，所以最优的方法是使用拦截器拦截需要分页的sql，对这个sql加上limit，这样能够节省工作量。本片文章主要介绍mybatis的拦截器分页的实现，具体原理这">
 <meta property="og:type" content="article">
-<meta property="og:title" content="volatile">
-<meta property="og:url" content="http://yoursite.com/2017/07/29/2017-07-29-volatile/index.html">
+<meta property="og:title" content="mybatis拦截器分页">
+<meta property="og:url" content="http://yoursite.com/2017/07/29/2019-12-29-mybatis%E6%8B%A6%E6%88%AA%E5%99%A8%E5%88%86%E9%A1%B5/index.html">
 <meta property="og:site_name" content="sugar_foxs&#39;s blog">
-<meta property="og:description" content="volatile volatile关键字能够保证变量的可见性，这就先要了解Java内存模型，Java内存模型是所有线程有一个共享的主内存，每个线程都有自己的工作内存，工作内存里都会保存一份共享变量的副本，对变量修改都是修改本线程的变量副本，然后刷新到主内存，但是刷新的时间是不确定的。volatile修饰了变量之后，每个线程修改变量副本之后都会立即刷新到主内存，读取这个变量也会强制从主内存读取最新值">
+<meta property="og:description" content="mybatis 拦截器分页 实现分页为了性能肯定是使用物理分页，而不是将所有数据存入内存再分页，这个做法在大数据量下性能很差。使用物理分页也可以自己在sql后面加上limit 1,5 的语句来实现，但是这样每个需要分页的sql都要加上这个语句，所以最优的方法是使用拦截器拦截需要分页的sql，对这个sql加上limit，这样能够节省工作量。本片文章主要介绍mybatis的拦截器分页的实现，具体原理这">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2017-07-28T16:00:00.000Z">
-<meta property="article:modified_time" content="2019-12-28T16:33:17.958Z">
+<meta property="article:modified_time" content="2019-12-29T08:55:50.178Z">
 <meta property="article:author" content="sugar-foxs">
-<meta property="article:tag" content="java">
+<meta property="article:tag" content="spring">
+<meta property="article:tag" content="mybatis">
 <meta name="twitter:card" content="summary">
 
 
@@ -120,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/07/29/2017-07-29-volatile/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/07/29/2019-12-29-mybatis拦截器分页/"/>
 
 
 
 
 
-  <title>volatile | sugar_foxs's blog</title>
+  <title>mybatis拦截器分页 | sugar_foxs's blog</title>
   
 
 
@@ -229,7 +230,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/29/2017-07-29-volatile/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/29/2019-12-29-mybatis%E6%8B%A6%E6%88%AA%E5%99%A8%E5%88%86%E9%A1%B5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="sugar-foxs">
@@ -246,7 +247,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">volatile</h1>
+          <h1 class="post-title" itemprop="name headline">mybatis拦截器分页</h1>
         
 
         <div class="post-meta">
@@ -296,19 +297,17 @@
       
 
       
-        <h1 id="volatile"><a href="#volatile" class="headerlink" title="volatile"></a>volatile</h1><blockquote>
-<p>volatile关键字能够保证变量的可见性，这就先要了解Java内存模型，Java内存模型是所有线程有一个共享的主内存，每个线程都有自己的工作内存，工作内存里都会保存一份共享变量的副本，对变量修改都是修改本线程的变量副本，然后刷新到主内存，但是刷新的时间是不确定的。volatile修饰了变量之后，每个线程修改变量副本之后都会立即刷新到主内存，读取这个变量也会强制从主内存读取最新值。所以volatile保证了变量的可见性。</p>
+        <h1 id="mybatis-拦截器分页"><a href="#mybatis-拦截器分页" class="headerlink" title="mybatis 拦截器分页"></a>mybatis 拦截器分页</h1><blockquote>
+<p>实现分页为了性能肯定是使用物理分页，而不是将所有数据存入内存再分页，这个做法在大数据量下性能很差。使用物理分页也可以自己在sql后面加上limit 1,5 的语句来实现，但是这样每个需要分页的sql都要加上这个语句，所以最优的方法是使用拦截器拦截需要分页的sql，对这个sql加上limit，这样能够节省工作量。本片文章主要介绍mybatis的拦截器分页的实现，具体原理这里不讲。</p>
 </blockquote>
-<h2 id="在什么场景下能够使用volatile保证线程安全？"><a href="#在什么场景下能够使用volatile保证线程安全？" class="headerlink" title="在什么场景下能够使用volatile保证线程安全？"></a>在什么场景下能够使用volatile保证线程安全？</h2><p>因为volatile能够保证可见性，有序性，不能保证原子性，所以在保证原子性的场景下使用volatile能实现线程安全。符合下面两条规则的场景：</p>
-<ul>
-<li><p>1，运算结果并不依赖变量的当前值，或者能够确保只有单一的线程修改变量的值。</p>
-</li>
-<li><p>2，变量不需要与其他的状态变量共同参与不变约束。</p>
-</li>
-</ul>
-<p>否则要使用synchronized，Lock，原子类来保证原子性。因为锁保证了原子性，可见性，有序性，所以是线程安全的。</p>
-<h2 id="虚拟机层面是如何保证立即可见的呢？"><a href="#虚拟机层面是如何保证立即可见的呢？" class="headerlink" title="虚拟机层面是如何保证立即可见的呢？"></a>虚拟机层面是如何保证立即可见的呢？</h2><p>对volatile修饰的变量赋值后，多执行了一个带lock前缀的空操作，这个操作相当于一个内存屏障，内存屏障能够在多个CPU访问同一块内存时保证一致性。lock前缀的作用是使得本CPU的Cache写入了内存，该写入动作也会引起别的CPU或者别的内核无效化其Cache,这种操作相当于对Cache中的变量做了一次“store”“write”操作，将变量从工作内存同步回主内存，所以通过这样一个空操作，可以让volatile变量的修改对其他CPU立即可见。</p>
-<h2 id="如何保证有序性的呢？"><a href="#如何保证有序性的呢？" class="headerlink" title="如何保证有序性的呢？"></a>如何保证有序性的呢？</h2><p>volatile本身具有禁止指令重排序语义，因为指令重排序无法越过内存屏障。</p>
+<h2 id="拦截器"><a href="#拦截器" class="headerlink" title="拦截器"></a>拦截器</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * @author guchunhui</span><br><span class="line"> * 2019-12-29 13:51</span><br><span class="line"> **&#x2F;</span><br><span class="line"> &#x2F;&#x2F; 3.4.1以上版本得使用这个，否则会报错</span><br><span class="line">@Intercepts(&#123; @Signature(type &#x3D; StatementHandler.class, method &#x3D; &quot;prepare&quot;, args &#x3D; &#123; Connection.class, Integer.class &#125;) &#125;)</span><br><span class="line">@Component</span><br><span class="line">public class PageInterceptor implements Interceptor &#123;</span><br><span class="line">    Logger logger &#x3D; LoggerFactory.getLogger(PageInterceptor.class);</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public Object intercept(Invocation invocation) throws Throwable &#123;</span><br><span class="line">        StatementHandler statementHandler &#x3D; (StatementHandler)invocation.getTarget();</span><br><span class="line">        MetaObject metaObject &#x3D; MetaObject.forObject(statementHandler, SystemMetaObject.DEFAULT_OBJECT_FACTORY, SystemMetaObject.DEFAULT_OBJECT_WRAPPER_FACTORY,new DefaultReflectorFactory());</span><br><span class="line">        MappedStatement mappedStatement &#x3D; (MappedStatement) metaObject.getValue(&quot;delegate.mappedStatement&quot;);</span><br><span class="line">        String id &#x3D; mappedStatement.getId();</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;所有以ByPage结尾的dao层方法会被拦截</span><br><span class="line">        if(id.matches(&quot;.+ByPage$&quot;))&#123;</span><br><span class="line"></span><br><span class="line">            BoundSql boundSql &#x3D; statementHandler.getBoundSql();</span><br><span class="line">            PaginationParam params &#x3D; (PaginationParam)boundSql.getParameterObject();</span><br><span class="line">            int currPage &#x3D; params.getPageNum();</span><br><span class="line">            int pageSize &#x3D; params.getPageSize();</span><br><span class="line"></span><br><span class="line">            String sql &#x3D; boundSql.getSql();</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F; 获取总数</span><br><span class="line">            String countSql &#x3D; &quot;select count(*) from (&quot; + sql + &quot;)a&quot;;</span><br><span class="line">            Connection connection &#x3D; (Connection) invocation.getArgs()[0];</span><br><span class="line">            PreparedStatement countStatement &#x3D; connection.prepareStatement(countSql);</span><br><span class="line">            ParameterHandler parameterHandler &#x3D; (ParameterHandler) metaObject.getValue(&quot;delegate.parameterHandler&quot;);</span><br><span class="line">            parameterHandler.setParameters(countStatement);</span><br><span class="line">            ResultSet rs &#x3D; countStatement.executeQuery();</span><br><span class="line">            if(rs.next())&#123;</span><br><span class="line">                params.setTotalNum(rs.getInt(1));</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F; 生成分页语句</span><br><span class="line">            String pageSql &#x3D; sql + &quot; limit &quot; + (currPage-1) * pageSize + &quot;,&quot; + pageSize;</span><br><span class="line">            metaObject.setValue(&quot;delegate.boundSql.sql&quot;, pageSql);</span><br><span class="line">        &#125;</span><br><span class="line">        return invocation.proceed();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public Object plugin(Object o) &#123;</span><br><span class="line">        return Plugin.wrap(o, this);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void setProperties(Properties properties) &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>PaginationParam负责分页参数和存储结果总数，你自己也可以算出总页数存入。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * @author guchunhui</span><br><span class="line"> * 2019-12-29 14:42</span><br><span class="line"> **&#x2F;</span><br><span class="line">@Data</span><br><span class="line">public class PaginationParam extends BaseParam &#123;</span><br><span class="line">    private Integer pageNum;</span><br><span class="line">    private Integer pageSize;</span><br><span class="line">    private Integer totalNum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>拦截器是在你之前使用mybatis操作数据库正常的情况下增加这个拦截器类就行。dao层需要分页的方法使用ByPage结尾就可以实现分页。</p>
+</blockquote>
 
       
     </div>
@@ -326,7 +325,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/java/" rel="tag"># java</a>
+            <a href="/tags/spring/" rel="tag"># spring</a>
+          
+            <a href="/tags/mybatis/" rel="tag"># mybatis</a>
           
         </div>
       
@@ -339,8 +340,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/07/29/2019-12-29-mybatis%E6%8B%A6%E6%88%AA%E5%99%A8%E5%88%86%E9%A1%B5/" rel="next" title="mybatis拦截器分页">
-                <i class="fa fa-chevron-left"></i> mybatis拦截器分页
+              <a href="/2017/06/16/2017-06-16-java%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="next" title="java多线程">
+                <i class="fa fa-chevron-left"></i> java多线程
               </a>
             
           </div>
@@ -349,8 +350,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/02/25/2019-02-25-Jobmanager%E5%A4%84%E7%90%86%E6%B6%88%E6%81%AF--SubmitJob%E6%B6%88%E6%81%AF/" rel="prev" title="Jobmanager处理SubmitJob">
-                Jobmanager处理SubmitJob <i class="fa fa-chevron-right"></i>
+              <a href="/2017/07/29/2017-07-29-volatile/" rel="prev" title="volatile">
+                volatile <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -496,7 +497,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#volatile"><span class="nav-number">1.</span> <span class="nav-text">volatile</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#在什么场景下能够使用volatile保证线程安全？"><span class="nav-number">1.1.</span> <span class="nav-text">在什么场景下能够使用volatile保证线程安全？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#虚拟机层面是如何保证立即可见的呢？"><span class="nav-number">1.2.</span> <span class="nav-text">虚拟机层面是如何保证立即可见的呢？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何保证有序性的呢？"><span class="nav-number">1.3.</span> <span class="nav-text">如何保证有序性的呢？</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#mybatis-拦截器分页"><span class="nav-number">1.</span> <span class="nav-text">mybatis 拦截器分页</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#拦截器"><span class="nav-number">1.1.</span> <span class="nav-text">拦截器</span></a></li></ol></li></ol></div>
             
 
           </div>

@@ -88,7 +88,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/dbf344a4ly1gacqxc6dxfj22iq04ytav.jpg">
 <meta property="article:published_time" content="2019-12-24T16:00:00.000Z">
-<meta property="article:modified_time" content="2019-12-28T13:16:22.824Z">
+<meta property="article:modified_time" content="2019-12-29T08:51:21.825Z">
 <meta property="article:author" content="sugar-foxs">
 <meta property="article:tag" content="docker">
 <meta name="twitter:card" content="summary">
@@ -340,6 +340,13 @@
 <h2 id="docker-restart"><a href="#docker-restart" class="headerlink" title="docker restart"></a>docker restart</h2><ul>
 <li>重启容器</li>
 </ul>
+<h2 id="docker-mysql-修改时区"><a href="#docker-mysql-修改时区" class="headerlink" title="docker mysql 修改时区"></a>docker mysql 修改时区</h2><ul>
+<li>查看时区：docker exec [容器id/别名]  date  </li>
+<li>进入容器：docker exec -it [容器id/别名] /bin/bash</li>
+<li>找到通用时区文件夹： cd /usr/share/zoneinfo/Asia</li>
+<li>复制当前文件夹下Shanghai：cp Shanghai /etc/localtime</li>
+<li>重启容器：docker restart [容器id/别名]</li>
+</ul>
 
       
     </div>
@@ -459,7 +466,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -472,7 +479,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -523,7 +530,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#docker命令"><span class="nav-number">1.</span> <span class="nav-text">docker命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-pull"><span class="nav-number">1.1.</span> <span class="nav-text">docker pull</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-ps"><span class="nav-number">1.2.</span> <span class="nav-text">docker ps</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-run"><span class="nav-number">1.3.</span> <span class="nav-text">docker run</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-start"><span class="nav-number">1.4.</span> <span class="nav-text">docker start</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-stop"><span class="nav-number">1.5.</span> <span class="nav-text">docker stop</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-restart"><span class="nav-number">1.6.</span> <span class="nav-text">docker restart</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#docker命令"><span class="nav-number">1.</span> <span class="nav-text">docker命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-pull"><span class="nav-number">1.1.</span> <span class="nav-text">docker pull</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-ps"><span class="nav-number">1.2.</span> <span class="nav-text">docker ps</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-run"><span class="nav-number">1.3.</span> <span class="nav-text">docker run</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-start"><span class="nav-number">1.4.</span> <span class="nav-text">docker start</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-stop"><span class="nav-number">1.5.</span> <span class="nav-text">docker stop</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-restart"><span class="nav-number">1.6.</span> <span class="nav-text">docker restart</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-mysql-修改时区"><span class="nav-number">1.7.</span> <span class="nav-text">docker mysql 修改时区</span></a></li></ol></li></ol></div>
             
 
           </div>
