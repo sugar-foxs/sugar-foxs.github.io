@@ -46,15 +46,15 @@
   };
 </script>
 
-  <meta name="description" content="ScheduledThreadPoolExecutor java中实现周期性任务调度的方式有多种，比如Timer，@Schedule注解，还有就是本篇将要介绍的周期调度线程池ScheduledThreadPoolExecutor，主要看看是如何进行周期调度的。">
+  <meta name="description" content="java中实现周期性任务调度的方式有多种，比如Timer，@Schedule注解，还有就是本篇将要介绍的周期调度线程池ScheduledThreadPoolExecutor，主要看看是如何进行周期调度的。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ScheduledThreadPoolExecutor周期调度">
 <meta property="og:url" content="http://yoursite.com/2020/01/01/2020-01-01-ScheduledThreadPoolExecutor%E5%91%A8%E6%9C%9F%E8%B0%83%E5%BA%A6%E7%BA%BF%E7%A8%8B%E6%B1%A0/index.html">
 <meta property="og:site_name" content="sugar_foxs&#39;s blog">
-<meta property="og:description" content="ScheduledThreadPoolExecutor java中实现周期性任务调度的方式有多种，比如Timer，@Schedule注解，还有就是本篇将要介绍的周期调度线程池ScheduledThreadPoolExecutor，主要看看是如何进行周期调度的。">
+<meta property="og:description" content="java中实现周期性任务调度的方式有多种，比如Timer，@Schedule注解，还有就是本篇将要介绍的周期调度线程池ScheduledThreadPoolExecutor，主要看看是如何进行周期调度的。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-01-01T12:00:00.000Z">
-<meta property="article:modified_time" content="2020-01-03T16:19:15.582Z">
+<meta property="article:modified_time" content="2020-01-03T16:27:49.743Z">
 <meta property="article:author" content="sugar-foxs">
 <meta property="article:tag" content="java">
 <meta name="twitter:card" content="summary">
@@ -209,7 +209,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-01-04 00:19:15" itemprop="dateModified" datetime="2020-01-04T00:19:15+08:00">2020-01-04</time>
+                <time title="Modified: 2020-01-04 00:27:49" itemprop="dateModified" datetime="2020-01-04T00:27:49+08:00">2020-01-04</time>
               </span>
 
           
@@ -230,7 +230,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="ScheduledThreadPoolExecutor"><a href="#ScheduledThreadPoolExecutor" class="headerlink" title="ScheduledThreadPoolExecutor"></a>ScheduledThreadPoolExecutor</h1><blockquote>
+        <blockquote>
 <p>java中实现周期性任务调度的方式有多种，比如Timer，@Schedule注解，还有就是本篇将要介绍的周期调度线程池ScheduledThreadPoolExecutor，主要看看是如何进行周期调度的。</p>
 </blockquote>
 <a id="more"></a>
@@ -238,7 +238,7 @@
 <li>我们从他的周期调度方法scheduleAtFixedRate和scheduleWithFixedDelay着手：</li>
 <li>写在前面，scheduleAtFixedRate和scheduleWithFixedDelay的区别是：scheduleWithFixedDelay是在任务执行完之后延迟一段时间再执行下一次任务；scheduleAtFixedRate是每隔一段时间就执行一次，但如果任务执行时间比周期时间长，下一次任务会在上次任务执行完立即执行，所以周期时间设置一般需要比任务执行时间长。</li>
 </ul>
-<h2 id="scheduleAtFixedRate"><a href="#scheduleAtFixedRate" class="headerlink" title="scheduleAtFixedRate"></a>scheduleAtFixedRate</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> ScheduledFuture&lt;?&gt; scheduleAtFixedRate(Runnable command,<span class="keyword">long</span> initialDelay,<span class="keyword">long</span> period,TimeUnit unit)&#123;</span><br><span class="line">    <span class="keyword">if</span> (command == <span class="keyword">null</span> || unit == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">    <span class="keyword">if</span> (period &lt;= <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException();</span><br><span class="line">    <span class="comment">// 生成周期任务ScheduledFutureTask</span></span><br><span class="line">    ScheduledFutureTask&lt;Void&gt; sft = <span class="keyword">new</span> ScheduledFutureTask&lt;Void&gt;(</span><br><span class="line">        command,</span><br><span class="line">        <span class="keyword">null</span>,</span><br><span class="line">        <span class="comment">// triggerTime是计算出执行的时间</span></span><br><span class="line">        triggerTime(initialDelay, unit),</span><br><span class="line">        <span class="comment">// 这里和scheduleWithFixedDelay不一样，另一个是unit.toNanos(-delay)</span></span><br><span class="line">        unit.toNanos(period));</span><br><span class="line">    <span class="comment">// 这个方法默认只是原样返回了sft</span></span><br><span class="line">    RunnableScheduledFuture&lt;Void&gt; t = decorateTask(command, sft);</span><br><span class="line">    sft.outerTask = t;</span><br><span class="line">    <span class="comment">// 核心方法在这</span></span><br><span class="line">    delayedExecute(t);</span><br><span class="line">    <span class="keyword">return</span> t;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="scheduleAtFixedRate"><a href="#scheduleAtFixedRate" class="headerlink" title="scheduleAtFixedRate"></a>scheduleAtFixedRate</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> ScheduledFuture&lt;?&gt; scheduleAtFixedRate(Runnable command,<span class="keyword">long</span> initialDelay,<span class="keyword">long</span> period,TimeUnit unit)&#123;</span><br><span class="line">    <span class="keyword">if</span> (command == <span class="keyword">null</span> || unit == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">    <span class="keyword">if</span> (period &lt;= <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException();</span><br><span class="line">    <span class="comment">// 生成周期任务ScheduledFutureTask</span></span><br><span class="line">    ScheduledFutureTask&lt;Void&gt; sft = <span class="keyword">new</span> ScheduledFutureTask&lt;Void&gt;(</span><br><span class="line">        command,</span><br><span class="line">        <span class="keyword">null</span>,</span><br><span class="line">        <span class="comment">// triggerTime是计算出执行的时间</span></span><br><span class="line">        triggerTime(initialDelay, unit),</span><br><span class="line">        <span class="comment">// 这里和scheduleWithFixedDelay不一样，另一个是unit.toNanos(-delay)</span></span><br><span class="line">        unit.toNanos(period));</span><br><span class="line">    <span class="comment">// 这个方法默认只是原样返回了sft</span></span><br><span class="line">    RunnableScheduledFuture&lt;Void&gt; t = decorateTask(command, sft);</span><br><span class="line">    sft.outerTask = t;</span><br><span class="line">    <span class="comment">// 核心方法在这</span></span><br><span class="line">    delayedExecute(t);</span><br><span class="line">    <span class="keyword">return</span> t;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li><p>我们进一步看下delayedExecute方法，scheduleWithFixedDelay方法最终也是执行的该方法。</p>
@@ -365,7 +365,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ScheduledThreadPoolExecutor"><span class="nav-number">1.</span> <span class="nav-text">ScheduledThreadPoolExecutor</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#scheduleAtFixedRate"><span class="nav-number">1.1.</span> <span class="nav-text">scheduleAtFixedRate</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">2.</span> <span class="nav-text">总结</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#scheduleAtFixedRate"><span class="nav-number">1.</span> <span class="nav-text">scheduleAtFixedRate</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">2.</span> <span class="nav-text">总结</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
