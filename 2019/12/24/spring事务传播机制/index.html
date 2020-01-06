@@ -46,22 +46,21 @@
   };
 </script>
 
-  <meta name="description" content="docker pull docker pull mysql:5.6  拉取mysql镜像，版本是5.6">
+  <meta name="description" content="spring事务传播机制分别有哪几种   REQUIRED   如果有事务, 那么加入事务, 没有的话新建一个(默认情况下)。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="docker命令">
-<meta property="og:url" content="http://yoursite.com/2019/12/25/2019-12-25-docker%E5%91%BD%E4%BB%A4/index.html">
+<meta property="og:title" content="spring事务传播机制">
+<meta property="og:url" content="http://yoursite.com/2019/12/24/spring%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E6%9C%BA%E5%88%B6/index.html">
 <meta property="og:site_name" content="sugar_foxs&#39;s blog">
-<meta property="og:description" content="docker pull docker pull mysql:5.6  拉取mysql镜像，版本是5.6">
+<meta property="og:description" content="spring事务传播机制分别有哪几种   REQUIRED   如果有事务, 那么加入事务, 没有的话新建一个(默认情况下)。">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/dbf344a4ly1gacqxc6dxfj22iq04ytav.jpg">
-<meta property="article:published_time" content="2019-12-24T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-01-03T16:30:44.328Z">
+<meta property="article:published_time" content="2019-12-23T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-01-06T14:44:24.260Z">
 <meta property="article:author" content="sugar-foxs">
-<meta property="article:tag" content="docker">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="spring">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/dbf344a4ly1gacqxc6dxfj22iq04ytav.jpg">
 
-<link rel="canonical" href="http://yoursite.com/2019/12/25/2019-12-25-docker%E5%91%BD%E4%BB%A4/">
+<link rel="canonical" href="http://yoursite.com/2019/12/24/spring%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E6%9C%BA%E5%88%B6/">
 
 
 <script id="page-configurations">
@@ -73,7 +72,7 @@
   };
 </script>
 
-  <title>docker命令 | sugar_foxs's blog</title>
+  <title>spring事务传播机制 | sugar_foxs's blog</title>
   
 
 
@@ -181,7 +180,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/25/2019-12-25-docker%E5%91%BD%E4%BB%A4/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/24/spring%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E6%9C%BA%E5%88%B6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -194,7 +193,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          docker命令
+          spring事务传播机制
         </h1>
 
         <div class="post-meta">
@@ -204,14 +203,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2019-12-25 00:00:00" itemprop="dateCreated datePublished" datetime="2019-12-25T00:00:00+08:00">2019-12-25</time>
+              <time title="Created: 2019-12-24 00:00:00" itemprop="dateCreated datePublished" datetime="2019-12-24T00:00:00+08:00">2019-12-24</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-01-04 00:30:44" itemprop="dateModified" datetime="2020-01-04T00:30:44+08:00">2020-01-04</time>
+                <time title="Modified: 2020-01-06 22:44:24" itemprop="dateModified" datetime="2020-01-06T22:44:24+08:00">2020-01-06</time>
               </span>
 
           
@@ -232,54 +231,81 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="docker-pull"><a href="#docker-pull" class="headerlink" title="docker pull"></a>docker pull</h2><ul>
-<li><p>docker pull mysql:5.6</p>
+        <blockquote>
+<p>spring事务传播机制分别有哪几种</p>
+</blockquote>
+<ol>
+<li>REQUIRED</li>
+</ol>
 <ul>
-<li>拉取mysql镜像，版本是5.6<a id="more"></a>
-<h2 id="docker-ps"><a href="#docker-ps" class="headerlink" title="docker ps"></a>docker ps</h2></li>
+<li>如果有事务, 那么加入事务, 没有的话新建一个(默认情况下)。<a id="more"></a></li>
 </ul>
-</li>
-<li><p>列出所有在运行的容器信息<br><img src="http://ww1.sinaimg.cn/large/dbf344a4ly1gacqxc6dxfj22iq04ytav.jpg" alt="hello"></p>
-</li>
-<li><p>docker ps -n 5</p>
+<ol start="2">
+<li>NOT_SUPPORTED</li>
+</ol>
 <ul>
-<li>列出最近创建的5个容器信息</li>
+<li>不为这个方法开启事务，相当于没有事务。</li>
 </ul>
-</li>
-<li><p>docker ps -f 根据条件过滤,默认是正在运行的，加上-a会显示所有符合条件单的，包括未运行的。</p>
+<ol start="3">
+<li>REQUIRES_NEW</li>
+</ol>
 <ul>
-<li>docker ps -f ancestor=mysql  根据镜像过滤</li>
-<li>docker ps -f status=running  根据状态过滤</li>
-<li>docker ps -f name=mysql 根据名称过滤</li>
-<li>docker ps -f label=a 根据标签过滤</li>
-<li>docker ps -f before=容器id 根据启动顺序过滤</li>
+<li>不管是否存在事务,都创建一个新的事务,原来的挂起,新的执行完毕,继续执行老的事务。</li>
 </ul>
-</li>
+<ol start="4">
+<li>MANDATORY</li>
+</ol>
+<ul>
+<li>必须在一个已有的事务中执行,否则抛出异常。</li>
 </ul>
-<h2 id="docker-run"><a href="#docker-run" class="headerlink" title="docker run"></a>docker run</h2><ul>
-<li>docker run -p 3316:3306 –name mysql -e MYSQL_ROOT_PASSWORD=123456 -d mysql:5.6<ul>
-<li>–name：为容器指定名称</li>
-<li>-p：指定端口映射，格式为（主机端口:容器端口）</li>
-<li>-e：设置环境变量</li>
-<li>-d：后台运行容器，并返回容器ID</li>
+<ol start="5">
+<li>NEVER</li>
+</ol>
+<ul>
+<li>必须在一个没有事务的方法中执行,否则抛出异常(与Propagation.MANDATORY相反)。</li>
 </ul>
-</li>
+<ol start="6">
+<li>SUPPORTS</li>
+</ol>
+<ul>
+<li>如果其他bean调用这个方法,在其他bean中声明事务,那就用事务.如果其他bean没有声明事务,那就不用事务。</li>
 </ul>
-<h2 id="docker-start"><a href="#docker-start" class="headerlink" title="docker start"></a>docker start</h2><ul>
-<li>启动容器</li>
+<ol start="7">
+<li>NESTED</li>
+</ol>
+<ul>
+<li>如果当前存在事务，则在嵌套事务内执行。如果当前没有事务，则执行与REQUIRED类似的操作。</li>
 </ul>
-<h2 id="docker-stop"><a href="#docker-stop" class="headerlink" title="docker stop"></a>docker stop</h2><ul>
-<li>停止容器</li>
+<blockquote>
+<p>假设方法a调用方法b,两个方法分别加上事务不同的传播机制。看会发生什么。</p>
+</blockquote>
+<h2 id="REQUIRED"><a href="#REQUIRED" class="headerlink" title="REQUIRED"></a>REQUIRED</h2><ul>
+<li>两个都是REQUIRED机制，b方法发现a已经有事务了，就不再新建事务了，加入a事务。</li>
+<li>a使用NOT_SUPPORTED,b使用REQUIRED,b方法发现a没有事务，会自己新建一个事务。</li>
 </ul>
-<h2 id="docker-restart"><a href="#docker-restart" class="headerlink" title="docker restart"></a>docker restart</h2><ul>
-<li>重启容器</li>
+<h2 id="NOT-SUPPORTED"><a href="#NOT-SUPPORTED" class="headerlink" title="NOT_SUPPORTED"></a>NOT_SUPPORTED</h2><ul>
+<li>这个相当于没有Spring事务，每条执行语句单独执行，单独提交。</li>
 </ul>
-<h2 id="docker-mysql-修改时区"><a href="#docker-mysql-修改时区" class="headerlink" title="docker mysql 修改时区"></a>docker mysql 修改时区</h2><ul>
-<li>查看时区：docker exec [容器id/别名]  date  </li>
-<li>进入容器：docker exec -it [容器id/别名] /bin/bash</li>
-<li>找到通用时区文件夹： cd /usr/share/zoneinfo/Asia</li>
-<li>复制当前文件夹下Shanghai：cp Shanghai /etc/localtime</li>
-<li>重启容器：docker restart [容器id/别名]</li>
+<h2 id="REQUIRES-NEW"><a href="#REQUIRES-NEW" class="headerlink" title="REQUIRES_NEW"></a>REQUIRES_NEW</h2><ul>
+<li>a使用REQUIRED，b使用REQUIRES_NEW，b会新建一个独立事务，a的事务挂起，b的事务先提交，然后a的事务执行再提交。</li>
+<li>外层事务的回滚不影响REQUIRES_NEW事务的执行，即a事务回滚，b事务不会回滚，不受影响。</li>
+</ul>
+<h2 id="MANDATORY"><a href="#MANDATORY" class="headerlink" title="MANDATORY"></a>MANDATORY</h2><ul>
+<li>a使用NOT_SUPPORTED,b使用MANDATORY，会发生错误。</li>
+<li>MANDATORY必须在已有的事务中执行。</li>
+</ul>
+<h2 id="NEVER"><a href="#NEVER" class="headerlink" title="NEVER"></a>NEVER</h2><ul>
+<li>a使用REQUIRED,b使用NEVER，即a使用事务，b使用NEVER传播机制会发生错误。</li>
+<li>因为b使用了NEVER机制，必须在一个没有事务的方法中执行，否则报错。</li>
+</ul>
+<h2 id="SUPPORTS"><a href="#SUPPORTS" class="headerlink" title="SUPPORTS"></a>SUPPORTS</h2><ul>
+<li>a使用REQUIRED，b使用SUPPORTS,b会复用a的事务。</li>
+<li>a使用NOT_SUPPORTED，b使用SUPPORTS,b便不会使用事务。</li>
+<li>是否使用事务取决于调用方法是否有事务，如果有则直接用，如果没有则不使用事务。</li>
+</ul>
+<h2 id="NESTED"><a href="#NESTED" class="headerlink" title="NESTED"></a>NESTED</h2><ul>
+<li>a使用REQUIRED，b使用NESTED,b直接在a事务的基础上创建一个嵌套事务，本质上还是同一个事务，做一次提交。</li>
+<li>a使用NOT_SUPPORTED，b使用NESTED，b直接创建一个新的事务，单独提交。</li>
 </ul>
 
     </div>
@@ -291,7 +317,8 @@
       <footer class="post-footer">
           
           <div class="post-tags">
-              <a href="/tags/docker/" rel="tag"><i class="fa fa-tag"></i> docker</a>
+              <a href="/tags/java/" rel="tag"><i class="fa fa-tag"></i> java</a>
+              <a href="/tags/spring/" rel="tag"><i class="fa fa-tag"></i> spring</a>
           </div>
 
         
@@ -300,12 +327,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2019/12/24/2019-12-24-spring%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E6%9C%BA%E5%88%B6/" rel="prev" title="spring事务传播机制">
-      <i class="fa fa-chevron-left"></i> spring事务传播机制
+    <a href="/2019/12/24/%E5%B7%A5%E4%BD%9C%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E7%9A%84%E9%97%AE%E9%A2%98/" rel="prev" title="工作中遇到的spring事务传播问题">
+      <i class="fa fa-chevron-left"></i> 工作中遇到的spring事务传播问题
     </a></div>
       <div class="post-nav-item">
-    <a href="/2019/12/29/2019-12-29-mybatis%E6%8B%A6%E6%88%AA%E5%99%A8%E5%88%86%E9%A1%B5/" rel="next" title="mybatis拦截器分页">
-      mybatis拦截器分页 <i class="fa fa-chevron-right"></i>
+    <a href="/2019/12/25/docker%E5%91%BD%E4%BB%A4/" rel="next" title="docker命令">
+      docker命令 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -366,7 +393,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-pull"><span class="nav-number">1.</span> <span class="nav-text">docker pull</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-ps"><span class="nav-number">2.</span> <span class="nav-text">docker ps</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-run"><span class="nav-number">3.</span> <span class="nav-text">docker run</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-start"><span class="nav-number">4.</span> <span class="nav-text">docker start</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-stop"><span class="nav-number">5.</span> <span class="nav-text">docker stop</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-restart"><span class="nav-number">6.</span> <span class="nav-text">docker restart</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-mysql-修改时区"><span class="nav-number">7.</span> <span class="nav-text">docker mysql 修改时区</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#REQUIRED"><span class="nav-number">1.</span> <span class="nav-text">REQUIRED</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NOT-SUPPORTED"><span class="nav-number">2.</span> <span class="nav-text">NOT_SUPPORTED</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#REQUIRES-NEW"><span class="nav-number">3.</span> <span class="nav-text">REQUIRES_NEW</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MANDATORY"><span class="nav-number">4.</span> <span class="nav-text">MANDATORY</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NEVER"><span class="nav-number">5.</span> <span class="nav-text">NEVER</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SUPPORTS"><span class="nav-number">6.</span> <span class="nav-text">SUPPORTS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NESTED"><span class="nav-number">7.</span> <span class="nav-text">NESTED</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -379,7 +406,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-count">12</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

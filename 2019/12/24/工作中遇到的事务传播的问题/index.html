@@ -46,21 +46,21 @@
   };
 </script>
 
-  <meta name="description" content="spring事务传播机制分别有哪几种   REQUIRED   如果有事务, 那么加入事务, 没有的话新建一个(默认情况下)。">
+  <meta name="description" content="问题描述：在一个事务中查询一个之前创建的数据行为空，查mysql这个数据行是存在的。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="spring事务传播机制">
-<meta property="og:url" content="http://yoursite.com/2019/12/24/2019-12-24-spring%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E6%9C%BA%E5%88%B6/index.html">
+<meta property="og:title" content="工作中遇到的spring事务传播问题">
+<meta property="og:url" content="http://yoursite.com/2019/12/24/%E5%B7%A5%E4%BD%9C%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E7%9A%84%E9%97%AE%E9%A2%98/index.html">
 <meta property="og:site_name" content="sugar_foxs&#39;s blog">
-<meta property="og:description" content="spring事务传播机制分别有哪几种   REQUIRED   如果有事务, 那么加入事务, 没有的话新建一个(默认情况下)。">
+<meta property="og:description" content="问题描述：在一个事务中查询一个之前创建的数据行为空，查mysql这个数据行是存在的。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2019-12-23T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-01-03T16:31:37.602Z">
+<meta property="article:modified_time" content="2020-01-06T14:44:31.662Z">
 <meta property="article:author" content="sugar-foxs">
 <meta property="article:tag" content="java">
 <meta property="article:tag" content="spring">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/2019/12/24/2019-12-24-spring%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E6%9C%BA%E5%88%B6/">
+<link rel="canonical" href="http://yoursite.com/2019/12/24/%E5%B7%A5%E4%BD%9C%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E7%9A%84%E9%97%AE%E9%A2%98/">
 
 
 <script id="page-configurations">
@@ -72,7 +72,7 @@
   };
 </script>
 
-  <title>spring事务传播机制 | sugar_foxs's blog</title>
+  <title>工作中遇到的spring事务传播问题 | sugar_foxs's blog</title>
   
 
 
@@ -180,7 +180,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/24/2019-12-24-spring%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E6%9C%BA%E5%88%B6/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/24/%E5%B7%A5%E4%BD%9C%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E7%9A%84%E9%97%AE%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -193,7 +193,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          spring事务传播机制
+          工作中遇到的spring事务传播问题
         </h1>
 
         <div class="post-meta">
@@ -210,7 +210,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-01-04 00:31:37" itemprop="dateModified" datetime="2020-01-04T00:31:37+08:00">2020-01-04</time>
+                <time title="Modified: 2020-01-06 22:44:31" itemprop="dateModified" datetime="2020-01-06T22:44:31+08:00">2020-01-06</time>
               </span>
 
           
@@ -231,82 +231,16 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <blockquote>
-<p>spring事务传播机制分别有哪几种</p>
-</blockquote>
-<ol>
-<li>REQUIRED</li>
-</ol>
-<ul>
-<li>如果有事务, 那么加入事务, 没有的话新建一个(默认情况下)。<a id="more"></a></li>
-</ul>
-<ol start="2">
-<li>NOT_SUPPORTED</li>
-</ol>
-<ul>
-<li>不为这个方法开启事务，相当于没有事务。</li>
-</ul>
-<ol start="3">
-<li>REQUIRES_NEW</li>
-</ol>
-<ul>
-<li>不管是否存在事务,都创建一个新的事务,原来的挂起,新的执行完毕,继续执行老的事务。</li>
-</ul>
-<ol start="4">
-<li>MANDATORY</li>
-</ol>
-<ul>
-<li>必须在一个已有的事务中执行,否则抛出异常。</li>
-</ul>
-<ol start="5">
-<li>NEVER</li>
-</ol>
-<ul>
-<li>必须在一个没有事务的方法中执行,否则抛出异常(与Propagation.MANDATORY相反)。</li>
-</ul>
-<ol start="6">
-<li>SUPPORTS</li>
-</ol>
-<ul>
-<li>如果其他bean调用这个方法,在其他bean中声明事务,那就用事务.如果其他bean没有声明事务,那就不用事务。</li>
-</ul>
-<ol start="7">
-<li>NESTED</li>
-</ol>
-<ul>
-<li>如果当前存在事务，则在嵌套事务内执行。如果当前没有事务，则执行与REQUIRED类似的操作。</li>
+        <ul>
+<li>问题描述：在一个事务中查询一个之前创建的数据行为空，查mysql这个数据行是存在的。<a id="more"></a></li>
+<li>经debug之后知道创建数据行的操作调用的新的类里的方法，该方法新起了一个REQUIRES_NEW事务。因为REQUIRES_NEW新建的事务是独立于当前事务的，又因为数据库默认隔离级别是可重复读，所以在当前事务查询REQUIRES_NEW新建的独立事务中新建的数据行，是看不到变化的。所以查询结果是null。</li>
+<li>解决方法：需要查询的新建数据行的方法也在一个REQUIRES_NEW事务中，这样能保证查询到数据。</li>
 </ul>
 <blockquote>
-<p>假设方法a调用方法b,两个方法分别加上事务不同的传播机制。看会发生什么。</p>
+<p>下面分别介绍下spring事务传播机制和mysql事务隔离级别</p>
 </blockquote>
-<h2 id="REQUIRED"><a href="#REQUIRED" class="headerlink" title="REQUIRED"></a>REQUIRED</h2><ul>
-<li>两个都是REQUIRED机制，b方法发现a已经有事务了，就不再新建事务了，加入a事务。</li>
-<li>a使用NOT_SUPPORTED,b使用REQUIRED,b方法发现a没有事务，会自己新建一个事务。</li>
-</ul>
-<h2 id="NOT-SUPPORTED"><a href="#NOT-SUPPORTED" class="headerlink" title="NOT_SUPPORTED"></a>NOT_SUPPORTED</h2><ul>
-<li>这个相当于没有Spring事务，每条执行语句单独执行，单独提交。</li>
-</ul>
-<h2 id="REQUIRES-NEW"><a href="#REQUIRES-NEW" class="headerlink" title="REQUIRES_NEW"></a>REQUIRES_NEW</h2><ul>
-<li>a使用REQUIRED，b使用REQUIRES_NEW，b会新建一个独立事务，a的事务挂起，b的事务先提交，然后a的事务执行再提交。</li>
-<li>外层事务的回滚不影响REQUIRES_NEW事务的执行，即a事务回滚，b事务不会回滚，不受影响。</li>
-</ul>
-<h2 id="MANDATORY"><a href="#MANDATORY" class="headerlink" title="MANDATORY"></a>MANDATORY</h2><ul>
-<li>a使用NOT_SUPPORTED,b使用MANDATORY，会发生错误。</li>
-<li>MANDATORY必须在已有的事务中执行。</li>
-</ul>
-<h2 id="NEVER"><a href="#NEVER" class="headerlink" title="NEVER"></a>NEVER</h2><ul>
-<li>a使用REQUIRED,b使用NEVER，即a使用事务，b使用NEVER传播机制会发生错误。</li>
-<li>因为b使用了NEVER机制，必须在一个没有事务的方法中执行，否则报错。</li>
-</ul>
-<h2 id="SUPPORTS"><a href="#SUPPORTS" class="headerlink" title="SUPPORTS"></a>SUPPORTS</h2><ul>
-<li>a使用REQUIRED，b使用SUPPORTS,b会复用a的事务。</li>
-<li>a使用NOT_SUPPORTED，b使用SUPPORTS,b便不会使用事务。</li>
-<li>是否使用事务取决于调用方法是否有事务，如果有则直接用，如果没有则不使用事务。</li>
-</ul>
-<h2 id="NESTED"><a href="#NESTED" class="headerlink" title="NESTED"></a>NESTED</h2><ul>
-<li>a使用REQUIRED，b使用NESTED,b直接在a事务的基础上创建一个嵌套事务，本质上还是同一个事务，做一次提交。</li>
-<li>a使用NOT_SUPPORTED，b使用NESTED，b直接创建一个新的事务，单独提交。</li>
-</ul>
+<h2 id="spring事务传播机制"><a href="#spring事务传播机制" class="headerlink" title="spring事务传播机制"></a>spring事务传播机制</h2><p>见另一篇</p>
+<h2 id="mysql事务隔离级别"><a href="#mysql事务隔离级别" class="headerlink" title="mysql事务隔离级别"></a>mysql事务隔离级别</h2><p>见另一篇<a href="">mysql事务隔离级别</a></p>
 
     </div>
 
@@ -327,12 +261,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2019/12/24/2019-12-24-%E5%B7%A5%E4%BD%9C%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E7%9A%84%E9%97%AE%E9%A2%98/" rel="prev" title="工作中遇到的spring事务传播问题">
-      <i class="fa fa-chevron-left"></i> 工作中遇到的spring事务传播问题
+    <a href="/2019/12/24/spring%E7%9A%84@schedule%E6%B3%A8%E8%A7%A3%E8%B0%83%E5%BA%A6%E4%BB%BB%E5%8A%A1%E5%8E%9F%E7%90%86/" rel="prev" title="spring的@schedule注解调度任务原理">
+      <i class="fa fa-chevron-left"></i> spring的@schedule注解调度任务原理
     </a></div>
       <div class="post-nav-item">
-    <a href="/2019/12/25/2019-12-25-docker%E5%91%BD%E4%BB%A4/" rel="next" title="docker命令">
-      docker命令 <i class="fa fa-chevron-right"></i>
+    <a href="/2019/12/24/spring%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E6%9C%BA%E5%88%B6/" rel="next" title="spring事务传播机制">
+      spring事务传播机制 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -393,7 +327,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#REQUIRED"><span class="nav-number">1.</span> <span class="nav-text">REQUIRED</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NOT-SUPPORTED"><span class="nav-number">2.</span> <span class="nav-text">NOT_SUPPORTED</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#REQUIRES-NEW"><span class="nav-number">3.</span> <span class="nav-text">REQUIRES_NEW</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MANDATORY"><span class="nav-number">4.</span> <span class="nav-text">MANDATORY</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NEVER"><span class="nav-number">5.</span> <span class="nav-text">NEVER</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SUPPORTS"><span class="nav-number">6.</span> <span class="nav-text">SUPPORTS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NESTED"><span class="nav-number">7.</span> <span class="nav-text">NESTED</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#spring事务传播机制"><span class="nav-number">1.</span> <span class="nav-text">spring事务传播机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mysql事务隔离级别"><span class="nav-number">2.</span> <span class="nav-text">mysql事务隔离级别</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -406,7 +340,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-count">12</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

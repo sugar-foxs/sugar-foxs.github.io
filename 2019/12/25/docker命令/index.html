@@ -46,21 +46,22 @@
   };
 </script>
 
-  <meta name="description" content="分页有两种实现方式：内存分页，物理分页。  内存分页，将所有数据存入内存再分页，这个做法在大数据量下性能很差，只适合在小数据量下使用； 物理分页，通过在sql层面实现，在sql后面加上limit 1,5 的语句来实现，但是这样每个需要分页的sql都要加上这个语句。 所以最优的方法是使用拦截器拦截需要分页的sql实现物理分页，这样能够节省工作量，也能提高性能。本篇文章主要介绍mybatis的拦截器">
+  <meta name="description" content="docker pull docker pull mysql:5.6  拉取mysql镜像，版本是5.6">
 <meta property="og:type" content="article">
-<meta property="og:title" content="mybatis拦截器分页">
-<meta property="og:url" content="http://yoursite.com/2019/12/29/2019-12-29-mybatis%E6%8B%A6%E6%88%AA%E5%99%A8%E5%88%86%E9%A1%B5/index.html">
+<meta property="og:title" content="docker命令">
+<meta property="og:url" content="http://yoursite.com/2019/12/25/docker%E5%91%BD%E4%BB%A4/index.html">
 <meta property="og:site_name" content="sugar_foxs&#39;s blog">
-<meta property="og:description" content="分页有两种实现方式：内存分页，物理分页。  内存分页，将所有数据存入内存再分页，这个做法在大数据量下性能很差，只适合在小数据量下使用； 物理分页，通过在sql层面实现，在sql后面加上limit 1,5 的语句来实现，但是这样每个需要分页的sql都要加上这个语句。 所以最优的方法是使用拦截器拦截需要分页的sql实现物理分页，这样能够节省工作量，也能提高性能。本篇文章主要介绍mybatis的拦截器">
+<meta property="og:description" content="docker pull docker pull mysql:5.6  拉取mysql镜像，版本是5.6">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2019-12-28T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-01-03T16:28:41.860Z">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/dbf344a4ly1gacqxc6dxfj22iq04ytav.jpg">
+<meta property="article:published_time" content="2019-12-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-01-06T14:44:12.784Z">
 <meta property="article:author" content="sugar-foxs">
-<meta property="article:tag" content="spring">
-<meta property="article:tag" content="mybatis">
+<meta property="article:tag" content="docker">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/dbf344a4ly1gacqxc6dxfj22iq04ytav.jpg">
 
-<link rel="canonical" href="http://yoursite.com/2019/12/29/2019-12-29-mybatis%E6%8B%A6%E6%88%AA%E5%99%A8%E5%88%86%E9%A1%B5/">
+<link rel="canonical" href="http://yoursite.com/2019/12/25/docker%E5%91%BD%E4%BB%A4/">
 
 
 <script id="page-configurations">
@@ -72,7 +73,7 @@
   };
 </script>
 
-  <title>mybatis拦截器分页 | sugar_foxs's blog</title>
+  <title>docker命令 | sugar_foxs's blog</title>
   
 
 
@@ -180,7 +181,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/29/2019-12-29-mybatis%E6%8B%A6%E6%88%AA%E5%99%A8%E5%88%86%E9%A1%B5/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/25/docker%E5%91%BD%E4%BB%A4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -193,7 +194,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          mybatis拦截器分页
+          docker命令
         </h1>
 
         <div class="post-meta">
@@ -203,14 +204,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2019-12-29 00:00:00" itemprop="dateCreated datePublished" datetime="2019-12-29T00:00:00+08:00">2019-12-29</time>
+              <time title="Created: 2019-12-25 00:00:00" itemprop="dateCreated datePublished" datetime="2019-12-25T00:00:00+08:00">2019-12-25</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-01-04 00:28:41" itemprop="dateModified" datetime="2020-01-04T00:28:41+08:00">2020-01-04</time>
+                <time title="Modified: 2020-01-06 22:44:12" itemprop="dateModified" datetime="2020-01-06T22:44:12+08:00">2020-01-06</time>
               </span>
 
           
@@ -231,23 +232,55 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <blockquote>
-<p>分页有两种实现方式：内存分页，物理分页。</p>
+        <h2 id="docker-pull"><a href="#docker-pull" class="headerlink" title="docker pull"></a>docker pull</h2><ul>
+<li><p>docker pull mysql:5.6</p>
 <ul>
-<li>内存分页，将所有数据存入内存再分页，这个做法在大数据量下性能很差，只适合在小数据量下使用；</li>
-<li>物理分页，通过在sql层面实现，在sql后面加上limit 1,5 的语句来实现，但是这样每个需要分页的sql都要加上这个语句。</li>
-<li>所以最优的方法是使用拦截器拦截需要分页的sql实现物理分页，这样能够节省工作量，也能提高性能。本篇文章主要介绍mybatis的拦截器分页的实现，具体原理这里不讲。</li>
+<li>拉取mysql镜像，版本是5.6<a id="more"></a>
+<h2 id="docker-ps"><a href="#docker-ps" class="headerlink" title="docker ps"></a>docker ps</h2></li>
 </ul>
-</blockquote>
-<a id="more"></a>
-<h1 id="拦截器"><a href="#拦截器" class="headerlink" title="拦截器"></a>拦截器</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * @author guchunhui</span><br><span class="line"> * 2019-12-29 13:51</span><br><span class="line"> **&#x2F;</span><br><span class="line"> &#x2F;&#x2F; 高版本得使用这个，否则会报错</span><br><span class="line">@Intercepts(&#123; @Signature(type &#x3D; StatementHandler.class, method &#x3D; &quot;prepare&quot;, args &#x3D; &#123; Connection.class, Integer.class &#125;) &#125;)</span><br><span class="line">@Component</span><br><span class="line">public class PageInterceptor implements Interceptor &#123;</span><br><span class="line">    Logger logger &#x3D; LoggerFactory.getLogger(PageInterceptor.class);</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public Object intercept(Invocation invocation) throws Throwable &#123;</span><br><span class="line">        StatementHandler statementHandler &#x3D; (StatementHandler)invocation.getTarget();</span><br><span class="line">        MetaObject metaObject &#x3D; MetaObject.forObject(statementHandler, SystemMetaObject.DEFAULT_OBJECT_FACTORY, SystemMetaObject.DEFAULT_OBJECT_WRAPPER_FACTORY,new DefaultReflectorFactory());</span><br><span class="line">        MappedStatement mappedStatement &#x3D; (MappedStatement) metaObject.getValue(&quot;delegate.mappedStatement&quot;);</span><br><span class="line">        String id &#x3D; mappedStatement.getId();</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;所有以ByPage结尾的dao层方法会被拦截</span><br><span class="line">        if(id.matches(&quot;.+ByPage$&quot;))&#123;</span><br><span class="line"></span><br><span class="line">            BoundSql boundSql &#x3D; statementHandler.getBoundSql();</span><br><span class="line">            PaginationParam params &#x3D; (PaginationParam)boundSql.getParameterObject();</span><br><span class="line">            int currPage &#x3D; params.getPageNum();</span><br><span class="line">            int pageSize &#x3D; params.getPageSize();</span><br><span class="line"></span><br><span class="line">            String sql &#x3D; boundSql.getSql();</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F; 获取总数</span><br><span class="line">            String countSql &#x3D; &quot;select count(*) from (&quot; + sql + &quot;)a&quot;;</span><br><span class="line">            Connection connection &#x3D; (Connection) invocation.getArgs()[0];</span><br><span class="line">            PreparedStatement countStatement &#x3D; connection.prepareStatement(countSql);</span><br><span class="line">            ParameterHandler parameterHandler &#x3D; (ParameterHandler) metaObject.getValue(&quot;delegate.parameterHandler&quot;);</span><br><span class="line">            parameterHandler.setParameters(countStatement);</span><br><span class="line">            ResultSet rs &#x3D; countStatement.executeQuery();</span><br><span class="line">            if(rs.next())&#123;</span><br><span class="line">                params.setTotalNum(rs.getInt(1));</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F; 生成分页语句</span><br><span class="line">            String pageSql &#x3D; sql + &quot; limit &quot; + (currPage-1) * pageSize + &quot;,&quot; + pageSize;</span><br><span class="line">            metaObject.setValue(&quot;delegate.boundSql.sql&quot;, pageSql);</span><br><span class="line">        &#125;</span><br><span class="line">        return invocation.proceed();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public Object plugin(Object o) &#123;</span><br><span class="line">        return Plugin.wrap(o, this);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void setProperties(Properties properties) &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>PaginationParam负责分页参数和存储结果总数，你自己也可以算出总页数存入。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * @author guchunhui</span><br><span class="line"> * 2019-12-29 14:42</span><br><span class="line"> **&#x2F;</span><br><span class="line">@Data</span><br><span class="line">public class PaginationParam extends BaseParam &#123;</span><br><span class="line">    private Integer pageNum;</span><br><span class="line">    private Integer pageSize;</span><br><span class="line">    private Integer totalNum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>使用分页拦截器需要在你之前使用mybatis操作数据库正常的情况下增加。<br>dao层需要分页的方法只需要使用ByPage结尾就可以实现分页。</p>
-</blockquote>
+</li>
+<li><p>列出所有在运行的容器信息<br><img src="http://ww1.sinaimg.cn/large/dbf344a4ly1gacqxc6dxfj22iq04ytav.jpg" alt="hello"></p>
+</li>
+<li><p>docker ps -n 5</p>
+<ul>
+<li>列出最近创建的5个容器信息</li>
+</ul>
+</li>
+<li><p>docker ps -f 根据条件过滤,默认是正在运行的，加上-a会显示所有符合条件单的，包括未运行的。</p>
+<ul>
+<li>docker ps -f ancestor=mysql  根据镜像过滤</li>
+<li>docker ps -f status=running  根据状态过滤</li>
+<li>docker ps -f name=mysql 根据名称过滤</li>
+<li>docker ps -f label=a 根据标签过滤</li>
+<li>docker ps -f before=容器id 根据启动顺序过滤</li>
+</ul>
+</li>
+</ul>
+<h2 id="docker-run"><a href="#docker-run" class="headerlink" title="docker run"></a>docker run</h2><ul>
+<li>docker run -p 3316:3306 –name mysql -e MYSQL_ROOT_PASSWORD=123456 -d mysql:5.6<ul>
+<li>–name：为容器指定名称</li>
+<li>-p：指定端口映射，格式为（主机端口:容器端口）</li>
+<li>-e：设置环境变量</li>
+<li>-d：后台运行容器，并返回容器ID</li>
+</ul>
+</li>
+</ul>
+<h2 id="docker-start"><a href="#docker-start" class="headerlink" title="docker start"></a>docker start</h2><ul>
+<li>启动容器</li>
+</ul>
+<h2 id="docker-stop"><a href="#docker-stop" class="headerlink" title="docker stop"></a>docker stop</h2><ul>
+<li>停止容器</li>
+</ul>
+<h2 id="docker-restart"><a href="#docker-restart" class="headerlink" title="docker restart"></a>docker restart</h2><ul>
+<li>重启容器</li>
+</ul>
+<h2 id="docker-mysql-修改时区"><a href="#docker-mysql-修改时区" class="headerlink" title="docker mysql 修改时区"></a>docker mysql 修改时区</h2><ul>
+<li>查看时区：docker exec [容器id/别名]  date  </li>
+<li>进入容器：docker exec -it [容器id/别名] /bin/bash</li>
+<li>找到通用时区文件夹： cd /usr/share/zoneinfo/Asia</li>
+<li>复制当前文件夹下Shanghai：cp Shanghai /etc/localtime</li>
+<li>重启容器：docker restart [容器id/别名]</li>
+</ul>
 
     </div>
 
@@ -258,8 +291,7 @@
       <footer class="post-footer">
           
           <div class="post-tags">
-              <a href="/tags/spring/" rel="tag"><i class="fa fa-tag"></i> spring</a>
-              <a href="/tags/mybatis/" rel="tag"><i class="fa fa-tag"></i> mybatis</a>
+              <a href="/tags/docker/" rel="tag"><i class="fa fa-tag"></i> docker</a>
           </div>
 
         
@@ -268,12 +300,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2019/12/25/2019-12-25-docker%E5%91%BD%E4%BB%A4/" rel="prev" title="docker命令">
-      <i class="fa fa-chevron-left"></i> docker命令
+    <a href="/2019/12/24/spring%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E6%9C%BA%E5%88%B6/" rel="prev" title="spring事务传播机制">
+      <i class="fa fa-chevron-left"></i> spring事务传播机制
     </a></div>
       <div class="post-nav-item">
-    <a href="/2019/12/29/2019-12-29-mybatis-%E5%8A%A0%E8%BD%BD%E9%85%8D%E7%BD%AE/" rel="next" title="mybatis加载配置">
-      mybatis加载配置 <i class="fa fa-chevron-right"></i>
+    <a href="/2019/12/29/mybatis%E6%8B%A6%E6%88%AA%E5%99%A8%E5%88%86%E9%A1%B5/" rel="next" title="mybatis拦截器分页">
+      mybatis拦截器分页 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -334,7 +366,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#拦截器"><span class="nav-number">1.</span> <span class="nav-text">拦截器</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-pull"><span class="nav-number">1.</span> <span class="nav-text">docker pull</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-ps"><span class="nav-number">2.</span> <span class="nav-text">docker ps</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-run"><span class="nav-number">3.</span> <span class="nav-text">docker run</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-start"><span class="nav-number">4.</span> <span class="nav-text">docker start</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-stop"><span class="nav-number">5.</span> <span class="nav-text">docker stop</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-restart"><span class="nav-number">6.</span> <span class="nav-text">docker restart</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-mysql-修改时区"><span class="nav-number">7.</span> <span class="nav-text">docker mysql 修改时区</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -347,7 +379,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-count">12</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
