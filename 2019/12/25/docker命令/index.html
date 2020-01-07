@@ -46,16 +46,16 @@
   };
 </script>
 
-  <meta name="description" content="docker pull docker pull mysql:5.6  拉取mysql镜像，版本是5.6">
+  <meta name="description" content="docker pull docker pull mysql:5.6 拉取mysql镜像，版本是5.6">
 <meta property="og:type" content="article">
 <meta property="og:title" content="docker命令">
 <meta property="og:url" content="http://yoursite.com/2019/12/25/docker%E5%91%BD%E4%BB%A4/index.html">
 <meta property="og:site_name" content="sugar_foxs&#39;s blog">
-<meta property="og:description" content="docker pull docker pull mysql:5.6  拉取mysql镜像，版本是5.6">
+<meta property="og:description" content="docker pull docker pull mysql:5.6 拉取mysql镜像，版本是5.6">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/dbf344a4ly1gacqxc6dxfj22iq04ytav.jpg">
 <meta property="article:published_time" content="2019-12-24T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-01-06T14:44:12.784Z">
+<meta property="article:modified_time" content="2020-01-07T14:10:52.455Z">
 <meta property="article:author" content="sugar-foxs">
 <meta property="article:tag" content="docker">
 <meta name="twitter:card" content="summary">
@@ -211,7 +211,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-01-06 22:44:12" itemprop="dateModified" datetime="2020-01-06T22:44:12+08:00">2020-01-06</time>
+                <time title="Modified: 2020-01-07 22:10:52" itemprop="dateModified" datetime="2020-01-07T22:10:52+08:00">2020-01-07</time>
               </span>
 
           
@@ -233,12 +233,14 @@
 
       
         <h2 id="docker-pull"><a href="#docker-pull" class="headerlink" title="docker pull"></a>docker pull</h2><ul>
-<li><p>docker pull mysql:5.6</p>
-<ul>
+<li>docker pull mysql:5.6<ul>
 <li>拉取mysql镜像，版本是5.6<a id="more"></a>
-<h2 id="docker-ps"><a href="#docker-ps" class="headerlink" title="docker ps"></a>docker ps</h2></li>
+
+</li>
 </ul>
 </li>
+</ul>
+<h2 id="docker-ps"><a href="#docker-ps" class="headerlink" title="docker ps"></a>docker ps</h2><ul>
 <li><p>列出所有在运行的容器信息<br><img src="http://ww1.sinaimg.cn/large/dbf344a4ly1gacqxc6dxfj22iq04ytav.jpg" alt="hello"></p>
 </li>
 <li><p>docker ps -n 5</p>
@@ -265,6 +267,9 @@
 </ul>
 </li>
 </ul>
+<h2 id="docker-port-容器id-别名-端口"><a href="#docker-port-容器id-别名-端口" class="headerlink" title="docker port 容器id/别名 [端口]"></a>docker port 容器id/别名 [端口]</h2><ul>
+<li>查看端口绑定情况</li>
+</ul>
 <h2 id="docker-start"><a href="#docker-start" class="headerlink" title="docker start"></a>docker start</h2><ul>
 <li>启动容器</li>
 </ul>
@@ -273,6 +278,15 @@
 </ul>
 <h2 id="docker-restart"><a href="#docker-restart" class="headerlink" title="docker restart"></a>docker restart</h2><ul>
 <li>重启容器</li>
+</ul>
+<h2 id="docker-exec-it-容器id-别名-bin-bash"><a href="#docker-exec-it-容器id-别名-bin-bash" class="headerlink" title="docker exec -it [容器id/别名] /bin/bash"></a>docker exec -it [容器id/别名] /bin/bash</h2><ul>
+<li>进入容器,使用这个命令进入容器有个好处，在exit退出时不会导致容器停止。</li>
+<li>-i:交互式操作</li>
+<li>-t:终端</li>
+<li>输入exit退出终端</li>
+</ul>
+<h2 id="docker-rm-f-容器id"><a href="#docker-rm-f-容器id" class="headerlink" title="docker rm -f 容器id"></a>docker rm -f 容器id</h2><ul>
+<li>删除容器</li>
 </ul>
 <h2 id="docker-mysql-修改时区"><a href="#docker-mysql-修改时区" class="headerlink" title="docker mysql 修改时区"></a>docker mysql 修改时区</h2><ul>
 <li>查看时区：docker exec [容器id/别名]  date  </li>
@@ -366,7 +380,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-pull"><span class="nav-number">1.</span> <span class="nav-text">docker pull</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-ps"><span class="nav-number">2.</span> <span class="nav-text">docker ps</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-run"><span class="nav-number">3.</span> <span class="nav-text">docker run</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-start"><span class="nav-number">4.</span> <span class="nav-text">docker start</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-stop"><span class="nav-number">5.</span> <span class="nav-text">docker stop</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-restart"><span class="nav-number">6.</span> <span class="nav-text">docker restart</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-mysql-修改时区"><span class="nav-number">7.</span> <span class="nav-text">docker mysql 修改时区</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-pull"><span class="nav-number">1.</span> <span class="nav-text">docker pull</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-ps"><span class="nav-number">2.</span> <span class="nav-text">docker ps</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-run"><span class="nav-number">3.</span> <span class="nav-text">docker run</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-port-容器id-别名-端口"><span class="nav-number">4.</span> <span class="nav-text">docker port 容器id&#x2F;别名 [端口]</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-start"><span class="nav-number">5.</span> <span class="nav-text">docker start</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-stop"><span class="nav-number">6.</span> <span class="nav-text">docker stop</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-restart"><span class="nav-number">7.</span> <span class="nav-text">docker restart</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-exec-it-容器id-别名-bin-bash"><span class="nav-number">8.</span> <span class="nav-text">docker exec -it [容器id&#x2F;别名] &#x2F;bin&#x2F;bash</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-rm-f-容器id"><span class="nav-number">9.</span> <span class="nav-text">docker rm -f 容器id</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-mysql-修改时区"><span class="nav-number">10.</span> <span class="nav-text">docker mysql 修改时区</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
