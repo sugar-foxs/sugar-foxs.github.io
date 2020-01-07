@@ -14,6 +14,7 @@ tags:
 - docker pull mysql:5.6
     - 拉取mysql镜像，版本是5.6
 <!-- more -->
+
 ## docker ps
 - 列出所有在运行的容器信息
 ![hello](http://ww1.sinaimg.cn/large/dbf344a4ly1gacqxc6dxfj22iq04ytav.jpg)
@@ -35,6 +36,9 @@ tags:
     - -e：设置环境变量
     - -d：后台运行容器，并返回容器ID
 
+## docker port 容器id/别名 [端口]
+- 查看端口绑定情况
+
 ## docker start
 - 启动容器
 
@@ -43,6 +47,16 @@ tags:
 
 ## docker restart
 - 重启容器
+
+## docker exec -it [容器id/别名] /bin/bash
+- 进入容器,使用这个命令进入容器有个好处，在exit退出时不会导致容器停止。
+- -i:交互式操作
+- -t:终端
+- 输入exit退出终端
+
+## docker rm -f 容器id
+- 删除容器
+
 
 ## docker mysql 修改时区
 - 查看时区：docker exec [容器id/别名]  date  
