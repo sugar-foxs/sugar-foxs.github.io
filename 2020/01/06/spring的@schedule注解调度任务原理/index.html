@@ -54,7 +54,7 @@
 <meta property="og:description" content="本篇文章主要阅读源码看看@schdule注解是如何工作的。问题写在前面：  schedule注解的任务是何时实例化成任务的 调度任务如何调度的">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-01-05T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-01-09T12:43:24.103Z">
+<meta property="article:modified_time" content="2020-01-09T13:16:32.118Z">
 <meta property="article:author" content="sugar-foxs">
 <meta property="article:tag" content="java">
 <meta property="article:tag" content="spring">
@@ -210,7 +210,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-01-09 20:43:24" itemprop="dateModified" datetime="2020-01-09T20:43:24+08:00">2020-01-09</time>
+                <time title="Modified: 2020-01-09 21:16:32" itemprop="dateModified" datetime="2020-01-09T21:16:32+08:00">2020-01-09</time>
               </span>
 
           
@@ -242,7 +242,7 @@
 <li><p>首先看下@schedule注解：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target</span>(&#123;ElementType.METHOD, ElementType.ANNOTATION_TYPE&#125;)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="comment">// Schedules注解可以包含多个Scheduled，即多个调度任务</span></span><br><span class="line"><span class="meta">@Repeatable</span>(Schedules<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line"><span class="class"><span class="title">public</span> @<span class="title">interface</span> <span class="title">Scheduled</span> </span>&#123;</span><br><span class="line">	<span class="comment">// corn 表达式</span></span><br><span class="line">	<span class="function">String <span class="title">cron</span><span class="params">()</span> <span class="keyword">default</span> ""</span>;</span><br><span class="line">	<span class="comment">//时区，默认服务器本地时区</span></span><br><span class="line">	<span class="function">String <span class="title">zone</span><span class="params">()</span> <span class="keyword">default</span> ""</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 一次任务调用结束和下一次调用开始之间的间隔</span></span><br><span class="line">	<span class="function"><span class="keyword">long</span> <span class="title">fixedDelay</span><span class="params">()</span> <span class="keyword">default</span> -1</span>;</span><br><span class="line">	<span class="comment">// 上一个的string格式</span></span><br><span class="line">	<span class="function">String <span class="title">fixedDelayString</span><span class="params">()</span> <span class="keyword">default</span> ""</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 两次任务执行开始之间的间隔</span></span><br><span class="line">	<span class="function"><span class="keyword">long</span> <span class="title">fixedRate</span><span class="params">()</span> <span class="keyword">default</span> -1</span>;</span><br><span class="line">	<span class="comment">// 上一个的string格式</span></span><br><span class="line">	<span class="function">String <span class="title">fixedRateString</span><span class="params">()</span> <span class="keyword">default</span> ""</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 初始延迟</span></span><br><span class="line">	<span class="function"><span class="keyword">long</span> <span class="title">initialDelay</span><span class="params">()</span> <span class="keyword">default</span> -1</span>;</span><br><span class="line">	<span class="comment">// 上一个的string格式</span></span><br><span class="line">	<span class="function">String <span class="title">initialDelayString</span><span class="params">()</span> <span class="keyword">default</span> ""</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>下面看这个注解在什么地方被调用的，通过查看这个注解里的方法的调用方，可以看到是被ScheduledAnnotationBeanPostProcessor调用的。</p>
+<li><p>通过查看这个注解里的方法的调用方，可以看到是在ScheduledAnnotationBeanPostProcessor里调用的。</p>
 </li>
 </ul>
 <h1 id="ScheduledAnnotationBeanPostProcessor"><a href="#ScheduledAnnotationBeanPostProcessor" class="headerlink" title="ScheduledAnnotationBeanPostProcessor"></a>ScheduledAnnotationBeanPostProcessor</h1><ul>
