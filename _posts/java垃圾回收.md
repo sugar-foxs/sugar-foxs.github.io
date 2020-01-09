@@ -4,7 +4,6 @@ title:      java垃圾回收
 subtitle:   
 date:       2019-03-01
 author:     sugar-foxs
-header-img: img/home-bg-o.jpg
 catalog: 	true
 tags:
     - java

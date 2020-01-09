@@ -4,7 +4,6 @@ title:      docker命令
 subtitle:   
 date:       2019-12-25
 author:     sugar-foxs
-header-img: img/home-bg-o.jpg
 catalog: 	true
 tags:
     - docker

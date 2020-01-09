@@ -4,7 +4,6 @@ title:      spring事务传播机制
 subtitle:   
 date:       2019-12-24
 author:     sugar-foxs
-header-img: img/home-bg-o.jpg
 catalog: 	true
 tags:
     - java

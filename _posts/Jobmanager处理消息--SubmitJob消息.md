@@ -4,7 +4,6 @@ title:      Jobmanager处理SubmitJob
 subtitle:   
 date:       2019-02-25
 author:     sugar-foxs
-header-img: img/home-bg-o.jpg
 catalog: 	true
 tags:
     - flink

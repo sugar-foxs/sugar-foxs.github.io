@@ -4,7 +4,6 @@ title:      java多线程
 subtitle:   
 date:       2017-06-16
 author:     sugar-foxs
-header-img: img/home-bg-o.jpg
 catalog: 	true
 tags:
     - java

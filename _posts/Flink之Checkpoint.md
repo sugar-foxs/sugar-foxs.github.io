@@ -4,7 +4,6 @@ title:      flink之Checkpoint
 subtitle:   checkpoint
 date:       2019-02-26
 author:     sugar-foxs
-header-img: img/home-bg-o.jpg
 catalog: 	true
 tags:
     - flink
