@@ -29,7 +29,7 @@ tags:
 ## 如何触发checkpoint？
 - 在生成EcecutionGraph过程中会注册状态监听器CheckpointCoordinatorDeActivator，负责监听job状态，job变为运行状态时，执行startCheckpointScheduler方法定时执行ScheduledTrigger，ScheduledTrigger中执行的是triggerCheckpoint方法。
 - 在进行一些条件检查之后，首先会构造出一个PendingCheckpoint实例，然后再放到队列里，只有当jobmanager收到SinkTask发来的checkpoint保存成功的消息后，这个PendingCheckpoint才会变成CompletedCheckpoint，这才代表一次checkpoint保存操作真正的完成了。
-```
+```java
 final PendingCheckpoint checkpoint = 
 new PendingCheckpoint(
     job,
@@ -50,14 +50,14 @@ if (statsTracker != null) {
 }
 ```
 再往下看，最重要的方法是向executions发送保存checkpoint的消息，通知taskmanager进行本地的checkpoint保存。
-```
+```java
 // send the messages to the tasks that trigger their checkpoint
 for (Execution execution: executions) {
     execution.triggerCheckpoint(checkpointID, timestamp, checkpointOptions);
 }
 ```
 下面看看executions从哪来,下面这段代码在PendingCheckpoint生成之前执行：
-```
+```java
 Execution[] executions = new Execution[tasksToTrigger.length];
 for (int i = 0; i < tasksToTrigger.length; i++) {
     Execution ee = tasksToTrigger[i].getCurrentExecutionAttempt();
@@ -80,30 +80,29 @@ for (int i = 0; i < tasksToTrigger.length; i++) {
 ```
 可以看到execution中的元素都是从tasksToTrigger中获得，那t
 asksToTrigger是什么呢？可以追溯到ExecutionGraph中：
-```
+```java
 ExecutionVertex[] tasksToTrigger = collectExecutionVertices(verticesToTrigger);
 ```
 看了下collectExecutionVertices方法，并没有说明来源，继续看verticesToTrigger从哪里来，追溯到StreamingJobGraphGenerator中：
-```
+```java
 for (JobVertex vertex : jobVertices.values()) {
-			if (vertex.isInputVertex()) {
-				triggerVertices.add(vertex.getID());
-			}
-			commitVertices.add(vertex.getID());
-			ackVertices.add(vertex.getID());
-		}
-```
-```
+    if (vertex.isInputVertex()) {
+        triggerVertices.add(vertex.getID());
+    }
+    commitVertices.add(vertex.getID());
+    ackVertices.add(vertex.getID());
+}
+
 public boolean isInputVertex() {
-		return this.inputs.isEmpty();
-	}
+    return this.inputs.isEmpty();
+}
 ```
 就是说triggerVertices是那些没有输入的节点，即数据源。
 - 综上，配置了checkpoint，job状态监听器在监听到状态为running时，会开启定时器，定时向TaskManager发送TriggerCheckpoint消息。
 
 下面看看TaskManager收到TriggerCheckpoint消息之后如何处理
 。
-```
+```java
 case message: TriggerCheckpoint =>
     val taskExecutionId = message.getTaskExecutionId
     val checkpointId = message.getCheckpointId
@@ -120,11 +119,11 @@ case message: TriggerCheckpoint =>
     }
 ```
 关键在triggerCheckpointBarrier方法，方法中最核心的是这个方法：
-```
+```java
 boolean success = invokable.triggerCheckpoint(checkpointMetaData, checkpointOptions);
 ```
 因为之前已经知道消息是发往数据源task的，所以在所有triggerCheckpoint实现中看下SourceStreamTask的,最终追溯到StreamTask的performCheckpoint方法：
-```
+```java
 private boolean performCheckpoint(
         CheckpointMetaData checkpointMetaData,
         CheckpointOptions checkpointOptions,
@@ -157,7 +156,7 @@ private boolean performCheckpoint(
 - 异步储存快照
 
 进入checkpointState方法，追溯至executeCheckpointing方法：
-```
+```java
 public void executeCheckpointing() throws Exception {
         startSyncPartNano = System.nanoTime();
         try {
@@ -185,7 +184,7 @@ public void executeCheckpointing() throws Exception {
 }
 ```
 - 对task中所有operator执行checkpointStreamOperator方法，这个方法是opertor存储快照的地方。
-```
+```java
 private void checkpointStreamOperator(StreamOperator<?> op) throws Exception {
 			if (null != op) {
 				OperatorSnapshotFutures snapshotInProgress = op.snapshotState(
@@ -198,43 +197,43 @@ private void checkpointStreamOperator(StreamOperator<?> op) throws Exception {
 		}
 ```
 - 接着看snapshotState方法：
-```
+```java
 public final OperatorSnapshotFutures snapshotState(long checkpointId, long timestamp, CheckpointOptions checkpointOptions,
 			CheckpointStreamFactory factory) throws Exception {
 
-		KeyGroupRange keyGroupRange = null != keyedStateBackend ?
-				keyedStateBackend.getKeyGroupRange() : KeyGroupRange.EMPTY_KEY_GROUP_RANGE;
+    KeyGroupRange keyGroupRange = null != keyedStateBackend ?
+            keyedStateBackend.getKeyGroupRange() : KeyGroupRange.EMPTY_KEY_GROUP_RANGE;
 
-		OperatorSnapshotFutures snapshotInProgress = new OperatorSnapshotFutures();
+    OperatorSnapshotFutures snapshotInProgress = new OperatorSnapshotFutures();
 
-		try (StateSnapshotContextSynchronousImpl snapshotContext = new StateSnapshotContextSynchronousImpl(
-				checkpointId,
-				timestamp,
-				factory,
-				keyGroupRange,
-				getContainingTask().getCancelables())) {
+    try (StateSnapshotContextSynchronousImpl snapshotContext = new StateSnapshotContextSynchronousImpl(
+            checkpointId,
+            timestamp,
+            factory,
+            keyGroupRange,
+            getContainingTask().getCancelables())) {
 
-			snapshotState(snapshotContext);
-            
-			snapshotInProgress.setKeyedStateRawFuture(snapshotContext.getKeyedStateStreamFuture());
-			snapshotInProgress.setOperatorStateRawFuture(snapshotContext.getOperatorStateStreamFuture());
-            //这里调用operator的snapshot异步方法
-			if (null != operatorStateBackend) {
-				snapshotInProgress.setOperatorStateManagedFuture(
-					operatorStateBackend.snapshot(checkpointId, timestamp, factory, checkpointOptions));
-			}
+        snapshotState(snapshotContext);
+        
+        snapshotInProgress.setKeyedStateRawFuture(snapshotContext.getKeyedStateStreamFuture());
+        snapshotInProgress.setOperatorStateRawFuture(snapshotContext.getOperatorStateStreamFuture());
+        //这里调用operator的snapshot异步方法
+        if (null != operatorStateBackend) {
+            snapshotInProgress.setOperatorStateManagedFuture(
+                operatorStateBackend.snapshot(checkpointId, timestamp, factory, checkpointOptions));
+        }
 
-			if (null != keyedStateBackend) {
-				snapshotInProgress.setKeyedStateManagedFuture(
-					keyedStateBackend.snapshot(checkpointId, timestamp, factory, checkpointOptions));
-			}
-		} 
-		return snapshotInProgress;
-	}
+        if (null != keyedStateBackend) {
+            snapshotInProgress.setKeyedStateManagedFuture(
+                keyedStateBackend.snapshot(checkpointId, timestamp, factory, checkpointOptions));
+        }
+    } 
+    return snapshotInProgress;
+}
 ```
 operatorStateBackend是保存状态的介质，Flink中提供了三种不同的存储介质:heap，hdfs，rockdb。将Future加入到snapshotInProgress中，全部完成后执行AsyncCheckpointRunnable。
 - AsyncCheckpointRunnable线程的run方法：
-```
+```java
 public void run() {
     FileSystemSafetyNet.initializeSafetyNetForThread();
     try {
