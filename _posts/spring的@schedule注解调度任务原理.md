@@ -47,7 +47,7 @@ public @interface Scheduled {
 }
 ```
 
-- 下面看这个注解在什么地方被调用的，通过查看这个注解里的方法的调用方，可以看到是被ScheduledAnnotationBeanPostProcessor调用的。
+- 通过查看这个注解里的方法的调用方，可以看到是在ScheduledAnnotationBeanPostProcessor里调用的。
 
 # ScheduledAnnotationBeanPostProcessor
 
@@ -57,7 +57,6 @@ public @interface Scheduled {
 @Configuration
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 public class SchedulingConfiguration {
-
 	@Bean(name = TaskManagementConfigUtils.SCHEDULED_ANNOTATION_PROCESSOR_BEAN_NAME)
 	@Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 	public ScheduledAnnotationBeanPostProcessor scheduledAnnotationProcessor() {
@@ -67,7 +66,7 @@ public class SchedulingConfiguration {
 ```
 
 ## processScheduled
-- 解析schedule注解的方法
+- 解析schedule注解里参数并生成调度任务的方法
 ```java
 protected void processScheduled(Scheduled scheduled, Method method, Object bean) {
     Method invocableMethod = AopUtils.selectInvocableMethod(method, bean.getClass());
@@ -75,24 +74,18 @@ protected void processScheduled(Scheduled scheduled, Method method, Object bean)
     boolean processedSchedule = false;
     String errorMessage =
             "Exactly one of the 'cron', 'fixedDelay(String)', or 'fixedRate(String)' attributes is required";
-
     Set<ScheduledTask> tasks = new LinkedHashSet<>(4);
 
     // 取出初始延迟参数
     long initialDelay = scheduled.initialDelay();
     String initialDelayString = scheduled.initialDelayString();
     if (StringUtils.hasText(initialDelayString)) {
-        Assert.isTrue(initialDelay < 0, "Specify 'initialDelay' or 'initialDelayString', not both");
         if (this.embeddedValueResolver != null) {
             initialDelayString = this.embeddedValueResolver.resolveStringValue(initialDelayString);
         }
         if (StringUtils.hasLength(initialDelayString)) {
             try {
                 initialDelay = parseDelayAsLong(initialDelayString);
-            }
-            catch (RuntimeException ex) {
-                throw new IllegalArgumentException(
-                        "Invalid initialDelayString value \"" + initialDelayString + "\" - cannot parse into long");
             }
         }
     }
@@ -144,10 +137,6 @@ protected void processScheduled(Scheduled scheduled, Method method, Object bean)
             try {
                 fixedDelay = parseDelayAsLong(fixedDelayString);
             }
-            catch (RuntimeException ex) {
-                throw new IllegalArgumentException(
-                        "Invalid fixedDelayString value \"" + fixedDelayString + "\" - cannot parse into long");
-            }
             // 任务注册到registrar中
             tasks.add(this.registrar.scheduleFixedDelayTask(new FixedDelayTask(runnable, fixedDelay, initialDelay)));
         }
@@ -172,17 +161,10 @@ protected void processScheduled(Scheduled scheduled, Method method, Object bean)
             try {
                 fixedRate = parseDelayAsLong(fixedRateString);
             }
-            catch (RuntimeException ex) {
-                throw new IllegalArgumentException(
-                        "Invalid fixedRateString value \"" + fixedRateString + "\" - cannot parse into long");
-            }
             // 任务注册到registrar中
             tasks.add(this.registrar.scheduleFixedRateTask(new FixedRateTask(runnable, fixedRate, initialDelay)));
         }
     }
-
-    Assert.isTrue(processedSchedule, errorMessage);
-
     synchronized (this.scheduledTasks) {
         Set<ScheduledTask> registeredTasks = this.scheduledTasks.get(bean);
         if (registeredTasks == null) {
@@ -191,7 +173,6 @@ protected void processScheduled(Scheduled scheduled, Method method, Object bean)
         }
         registeredTasks.addAll(tasks);
     }
-}
 }
 ```
 
@@ -237,46 +218,46 @@ protected void scheduleTasks() {
 
 ```java
 public void onApplicationEvent(ContextRefreshedEvent event) {
-		if (event.getApplicationContext() == this.applicationContext) {
-			finishRegistration();
-		}
-	}
-	private void finishRegistration() {
-		if (this.scheduler != null) {
-			this.registrar.setScheduler(this.scheduler);
-		}
+    if (event.getApplicationContext() == this.applicationContext) {
+        finishRegistration();
+    }
+}
+private void finishRegistration() {
+    if (this.scheduler != null) {
+        this.registrar.setScheduler(this.scheduler);
+    }
 
-		if (this.beanFactory instanceof ListableBeanFactory) {
-			Map<String, SchedulingConfigurer> beans =
-					((ListableBeanFactory) this.beanFactory).getBeansOfType(SchedulingConfigurer.class);
-			List<SchedulingConfigurer> configurers = new ArrayList<>(beans.values());
-			AnnotationAwareOrderComparator.sort(configurers);
-			for (SchedulingConfigurer configurer : configurers) {
-				configurer.configureTasks(this.registrar);
-			}
-		}
-		if (this.registrar.hasTasks() && this.registrar.getScheduler() == null) {
-			try {
-				this.registrar.setTaskScheduler(resolveSchedulerBean(beanFactory, TaskScheduler.class, false));
-			}
-			catch (NoUniqueBeanDefinitionException ex) {
-				try {
-					this.registrar.setTaskScheduler(resolveSchedulerBean(beanFactory, TaskScheduler.class, true));
-				}
-			}
-			catch (NoSuchBeanDefinitionException ex) {
-				try {
-					this.registrar.setScheduler(resolveSchedulerBean(beanFactory, ScheduledExecutorService.class, false));
-				}
-				catch (NoUniqueBeanDefinitionException ex2) {
-					try {
-						this.registrar.setScheduler(resolveSchedulerBean(beanFactory, ScheduledExecutorService.class, true));
-					}
-				}
-			}
-		}
-		this.registrar.afterPropertiesSet();
-	}
+    if (this.beanFactory instanceof ListableBeanFactory) {
+        Map<String, SchedulingConfigurer> beans =
+                ((ListableBeanFactory) this.beanFactory).getBeansOfType(SchedulingConfigurer.class);
+        List<SchedulingConfigurer> configurers = new ArrayList<>(beans.values());
+        AnnotationAwareOrderComparator.sort(configurers);
+        for (SchedulingConfigurer configurer : configurers) {
+            configurer.configureTasks(this.registrar);
+        }
+    }
+    if (this.registrar.hasTasks() && this.registrar.getScheduler() == null) {
+        try {
+            this.registrar.setTaskScheduler(resolveSchedulerBean(beanFactory, TaskScheduler.class, false));
+        }
+        catch (NoUniqueBeanDefinitionException ex) {
+            try {
+                this.registrar.setTaskScheduler(resolveSchedulerBean(beanFactory, TaskScheduler.class, true));
+            }
+        }
+        catch (NoSuchBeanDefinitionException ex) {
+            try {
+                this.registrar.setScheduler(resolveSchedulerBean(beanFactory, ScheduledExecutorService.class, false));
+            }
+            catch (NoUniqueBeanDefinitionException ex2) {
+                try {
+                    this.registrar.setScheduler(resolveSchedulerBean(beanFactory, ScheduledExecutorService.class, true));
+                }
+            }
+        }
+    }
+    this.registrar.afterPropertiesSet();
+}
 ```
 
 - 上面的finishRegistration方法主要负责通过by-type/by-name方式找到可用的线程池bean,并设置给ScheduledTaskRegistrar实例，用于调度任务。
