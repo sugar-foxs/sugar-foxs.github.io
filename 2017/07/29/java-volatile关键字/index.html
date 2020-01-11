@@ -46,21 +46,20 @@
   };
 </script>
 
-  <meta name="description" content="本文主要介绍spring事务传播机制。">
+  <meta name="description" content="volatile关键字能够保证变量的可见性，这就先要了解Java内存模型，Java内存模型是所有线程有一个共享的主内存，每个线程都有自己的工作内存，工作内存里都会保存一份共享变量的副本，">
 <meta property="og:type" content="article">
-<meta property="og:title" content="spring事务传播机制">
-<meta property="og:url" content="http://yoursite.com/2019/12/24/spring%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E6%9C%BA%E5%88%B6/index.html">
+<meta property="og:title" content="java-volatile关键字">
+<meta property="og:url" content="http://yoursite.com/2017/07/29/java-volatile%E5%85%B3%E9%94%AE%E5%AD%97/index.html">
 <meta property="og:site_name" content="sugar_foxs&#39;s blog">
-<meta property="og:description" content="本文主要介绍spring事务传播机制。">
+<meta property="og:description" content="volatile关键字能够保证变量的可见性，这就先要了解Java内存模型，Java内存模型是所有线程有一个共享的主内存，每个线程都有自己的工作内存，工作内存里都会保存一份共享变量的副本，">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2019-12-23T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-01-11T06:35:24.347Z">
+<meta property="article:published_time" content="2017-07-28T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-01-11T06:29:55.063Z">
 <meta property="article:author" content="sugar-foxs">
 <meta property="article:tag" content="java">
-<meta property="article:tag" content="spring">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/2019/12/24/spring%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E6%9C%BA%E5%88%B6/">
+<link rel="canonical" href="http://yoursite.com/2017/07/29/java-volatile%E5%85%B3%E9%94%AE%E5%AD%97/">
 
 
 <script id="page-configurations">
@@ -72,7 +71,7 @@
   };
 </script>
 
-  <title>spring事务传播机制 | sugar_foxs's blog</title>
+  <title>java-volatile关键字 | sugar_foxs's blog</title>
   
 
 
@@ -195,7 +194,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/24/spring%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E6%9C%BA%E5%88%B6/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/29/java-volatile%E5%85%B3%E9%94%AE%E5%AD%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -208,7 +207,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          spring事务传播机制
+          java-volatile关键字
         </h1>
 
         <div class="post-meta">
@@ -218,14 +217,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-12-24 00:00:00" itemprop="dateCreated datePublished" datetime="2019-12-24T00:00:00+08:00">2019-12-24</time>
+              <time title="创建时间：2017-07-29 00:00:00" itemprop="dateCreated datePublished" datetime="2017-07-29T00:00:00+08:00">2017-07-29</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-11 14:35:24" itemprop="dateModified" datetime="2020-01-11T14:35:24+08:00">2020-01-11</time>
+                <time title="修改时间：2020-01-11 14:29:55" itemprop="dateModified" datetime="2020-01-11T14:29:55+08:00">2020-01-11</time>
               </span>
 
           
@@ -246,51 +245,22 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>本文主要介绍spring事务传播机制。</p>
+        <p>volatile关键字能够保证变量的可见性，这就先要了解Java内存模型，Java内存模型是所有线程有一个共享的主内存，每个线程都有自己的工作内存，工作内存里都会保存一份共享变量的副本，</p>
 <a id="more"></a>
-
-<ul>
-<li>spring事务传播机制有以下几种：<ul>
-<li>REQUIRED：如果有事务, 那么加入事务, 没有的话新建一个(默认情况下)。</li>
-<li>NOT_SUPPORTED：不为这个方法开启事务，相当于没有事务。</li>
-<li>REQUIRES_NEW：不管是否存在事务,都创建一个新的事务,原来的挂起,新的执行完毕,继续执行老的事务。</li>
-<li>MANDATORY：必须在一个已有的事务中执行,否则抛出异常。</li>
-<li>NEVER：必须在一个没有事务的方法中执行,否则抛出异常(与Propagation.MANDATORY相反)。</li>
-<li>SUPPORTS：如果其他bean调用这个方法,在其他bean中声明事务,那就用事务.如果其他bean没有声明事务,那就不用事务。</li>
-<li>NESTED：如果当前存在事务，则在嵌套事务内执行。如果当前没有事务，则执行与REQUIRED类似的操作。</li>
+<p>对变量修改都是修改本线程的变量副本，然后刷新到主内存，但是刷新的时间是不确定的。volatile修饰了变量之后，每个线程修改变量副本之后都会立即刷新到主内存，读取这个变量也会强制从主内存读取最新值。所以volatile保证了变量的可见性。</p>
+<h2 id="在什么场景下能够使用volatile保证线程安全"><a href="#在什么场景下能够使用volatile保证线程安全" class="headerlink" title="在什么场景下能够使用volatile保证线程安全"></a>在什么场景下能够使用volatile保证线程安全</h2><ul>
+<li>因为volatile能够保证可见性，有序性，不能保证原子性，所以在保证原子性的场景下使用volatile能实现线程安全。符合下面两条规则的场景：<ul>
+<li>运算结果并不依赖变量的当前值，或者能够确保只有单一的线程修改变量的值。</li>
+<li>变量不需要与其他的状态变量共同参与不变约束。</li>
 </ul>
 </li>
+<li>否则要使用synchronized，Lock，原子类来保证原子性。因为锁保证了原子性，可见性，有序性，所以是线程安全的。</li>
 </ul>
-<blockquote>
-<p>假设方法a调用方法b,两个方法分别加上事务不同的传播机制。看会发生什么。</p>
+<h2 id="虚拟机层面如何保证立即可见"><a href="#虚拟机层面如何保证立即可见" class="headerlink" title="虚拟机层面如何保证立即可见"></a>虚拟机层面如何保证立即可见</h2><blockquote>
+<p>对volatile修饰的变量赋值后，多执行了一个带lock前缀的空操作，这个操作相当于一个内存屏障，内存屏障能够在多个CPU访问同一块内存时保证一致性。lock前缀的作用是使得本CPU的Cache写入了内存，该写入动作也会引起别的CPU或者别的内核无效化其Cache,这种操作相当于对Cache中的变量做了一次“store”“write”操作，将变量从工作内存同步回主内存，所以通过这样一个空操作，可以让volatile变量的修改对其他CPU立即可见。</p>
 </blockquote>
-<h2 id="REQUIRED"><a href="#REQUIRED" class="headerlink" title="REQUIRED"></a>REQUIRED</h2><ul>
-<li>两个都是REQUIRED机制，b方法发现a已经有事务了，就不再新建事务了，加入a事务。</li>
-<li>a使用NOT_SUPPORTED,b使用REQUIRED,b方法发现a没有事务，会自己新建一个事务。</li>
-</ul>
-<h2 id="NOT-SUPPORTED"><a href="#NOT-SUPPORTED" class="headerlink" title="NOT_SUPPORTED"></a>NOT_SUPPORTED</h2><ul>
-<li>这个相当于没有Spring事务，每条执行语句单独执行，单独提交。</li>
-</ul>
-<h2 id="REQUIRES-NEW"><a href="#REQUIRES-NEW" class="headerlink" title="REQUIRES_NEW"></a>REQUIRES_NEW</h2><ul>
-<li>a使用REQUIRED，b使用REQUIRES_NEW，b会新建一个独立事务，a的事务挂起，b的事务先提交，然后a的事务执行再提交。</li>
-<li>外层事务的回滚不影响REQUIRES_NEW事务的执行，即a事务回滚，b事务不会回滚，不受影响。</li>
-</ul>
-<h2 id="MANDATORY"><a href="#MANDATORY" class="headerlink" title="MANDATORY"></a>MANDATORY</h2><ul>
-<li>a使用NOT_SUPPORTED,b使用MANDATORY，会发生错误。</li>
-<li>MANDATORY必须在已有的事务中执行。</li>
-</ul>
-<h2 id="NEVER"><a href="#NEVER" class="headerlink" title="NEVER"></a>NEVER</h2><ul>
-<li>a使用REQUIRED,b使用NEVER，即a使用事务，b使用NEVER传播机制会发生错误。</li>
-<li>因为b使用了NEVER机制，必须在一个没有事务的方法中执行，否则报错。</li>
-</ul>
-<h2 id="SUPPORTS"><a href="#SUPPORTS" class="headerlink" title="SUPPORTS"></a>SUPPORTS</h2><ul>
-<li>a使用REQUIRED，b使用SUPPORTS,b会复用a的事务。</li>
-<li>a使用NOT_SUPPORTED，b使用SUPPORTS,b便不会使用事务。</li>
-<li>是否使用事务取决于调用方法是否有事务，如果有则直接用，如果没有则不使用事务。</li>
-</ul>
-<h2 id="NESTED"><a href="#NESTED" class="headerlink" title="NESTED"></a>NESTED</h2><ul>
-<li>a使用REQUIRED，b使用NESTED,b直接在a事务的基础上创建一个嵌套事务，本质上还是同一个事务，做一次提交。</li>
-<li>a使用NOT_SUPPORTED，b使用NESTED，b直接创建一个新的事务，单独提交。</li>
+<h2 id="如何保证有序性"><a href="#如何保证有序性" class="headerlink" title="如何保证有序性"></a>如何保证有序性</h2><ul>
+<li>volatile本身具有禁止指令重排序语义，因为指令重排序无法越过内存屏障。</li>
 </ul>
 
     </div>
@@ -303,7 +273,6 @@
           
           <div class="post-tags">
               <a href="/tags/java/" rel="tag"><i class="fa fa-tag"></i> java</a>
-              <a href="/tags/spring/" rel="tag"><i class="fa fa-tag"></i> spring</a>
           </div>
 
         
@@ -312,12 +281,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2019/12/24/%E5%B7%A5%E4%BD%9C%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E7%9A%84%E9%97%AE%E9%A2%98/" rel="prev" title="工作中遇到的spring事务传播问题">
-      <i class="fa fa-chevron-left"></i> 工作中遇到的spring事务传播问题
+    <a href="/2017/06/16/java%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="prev" title="java多线程">
+      <i class="fa fa-chevron-left"></i> java多线程
     </a></div>
       <div class="post-nav-item">
-    <a href="/2019/12/25/docker%E5%91%BD%E4%BB%A4/" rel="next" title="docker命令">
-      docker命令 <i class="fa fa-chevron-right"></i>
+    <a href="/2019/02/25/Jobmanager%E5%A4%84%E7%90%86%E6%B6%88%E6%81%AF--SubmitJob%E6%B6%88%E6%81%AF/" rel="next" title="Jobmanager处理SubmitJob">
+      Jobmanager处理SubmitJob <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -378,7 +347,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#REQUIRED"><span class="nav-number">1.</span> <span class="nav-text">REQUIRED</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NOT-SUPPORTED"><span class="nav-number">2.</span> <span class="nav-text">NOT_SUPPORTED</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#REQUIRES-NEW"><span class="nav-number">3.</span> <span class="nav-text">REQUIRES_NEW</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MANDATORY"><span class="nav-number">4.</span> <span class="nav-text">MANDATORY</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NEVER"><span class="nav-number">5.</span> <span class="nav-text">NEVER</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SUPPORTS"><span class="nav-number">6.</span> <span class="nav-text">SUPPORTS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NESTED"><span class="nav-number">7.</span> <span class="nav-text">NESTED</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#在什么场景下能够使用volatile保证线程安全"><span class="nav-number">1.</span> <span class="nav-text">在什么场景下能够使用volatile保证线程安全</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#虚拟机层面如何保证立即可见"><span class="nav-number">2.</span> <span class="nav-text">虚拟机层面如何保证立即可见</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何保证有序性"><span class="nav-number">3.</span> <span class="nav-text">如何保证有序性</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

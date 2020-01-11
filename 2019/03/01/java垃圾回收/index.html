@@ -46,17 +46,18 @@
   };
 </script>
 
-  <meta name="description" content="可回收对象判定 引用计数器 为每个对象维护一个引用计数器，当对象被引用，计数器值就加1；引用失效时，计数器值就减1，当计数器的值为0时，此对象就是可回收对象。">
+  <meta name="description" content="本文主要介绍java垃圾回收，包括：可回收对象判定，垃圾回收算法，垃圾回收器。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="java垃圾回收">
 <meta property="og:url" content="http://yoursite.com/2019/03/01/java%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/index.html">
 <meta property="og:site_name" content="sugar_foxs&#39;s blog">
-<meta property="og:description" content="可回收对象判定 引用计数器 为每个对象维护一个引用计数器，当对象被引用，计数器值就加1；引用失效时，计数器值就减1，当计数器的值为0时，此对象就是可回收对象。">
+<meta property="og:description" content="本文主要介绍java垃圾回收，包括：可回收对象判定，垃圾回收算法，垃圾回收器。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2019-02-28T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-01-08T01:54:52.686Z">
+<meta property="article:modified_time" content="2020-01-11T06:31:44.025Z">
 <meta property="article:author" content="sugar-foxs">
 <meta property="article:tag" content="java">
+<meta property="article:tag" content="jvm">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2019/03/01/java%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/">
@@ -224,7 +225,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-08 09:54:52" itemprop="dateModified" datetime="2020-01-08T09:54:52+08:00">2020-01-08</time>
+                <time title="修改时间：2020-01-11 14:31:44" itemprop="dateModified" datetime="2020-01-11T14:31:44+08:00">2020-01-11</time>
               </span>
 
           
@@ -245,9 +246,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="可回收对象判定"><a href="#可回收对象判定" class="headerlink" title="可回收对象判定"></a>可回收对象判定</h1><ul>
+        <p>本文主要介绍java垃圾回收，包括：可回收对象判定，垃圾回收算法，垃圾回收器。</p>
+<a id="more"></a>
+
+<h1 id="可回收对象判定"><a href="#可回收对象判定" class="headerlink" title="可回收对象判定"></a>可回收对象判定</h1><ul>
 <li>引用计数器<ul>
-<li>为每个对象维护一个引用计数器，当对象被引用，计数器值就加1；引用失效时，计数器值就减1，当计数器的值为0时，此对象就是可回收对象。<a id="more"></a></li>
+<li>为每个对象维护一个引用计数器，当对象被引用，计数器值就加1；引用失效时，计数器值就减1，当计数器的值为0时，此对象就是可回收对象。</li>
 <li>缺点：会有循环引用问题，导致两个本来可以回收的对象回收不了。</li>
 </ul>
 </li>
@@ -307,6 +311,7 @@
           
           <div class="post-tags">
               <a href="/tags/java/" rel="tag"><i class="fa fa-tag"></i> java</a>
+              <a href="/tags/jvm/" rel="tag"><i class="fa fa-tag"></i> jvm</a>
           </div>
 
         
@@ -406,7 +411,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

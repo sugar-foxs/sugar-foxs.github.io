@@ -46,17 +46,18 @@
   };
 </script>
 
-  <meta name="description" content="首先先弄清两个概念:并发和并行.并行指两个及多个事件实际意义的同时进行,而并发是宏观上的并行,其实一个cpu上还是顺序执行,只是cpu通过调度算法快速的切换不同事件执行,达到看似多个事件同时进行的效果.说白了并发是为了提高效率接近并行的执行效果.而实现并发的手段是多进程或多线程.">
+  <meta name="description" content="本文主要从线程的产生，状态，同步，通信，安全等方面介绍java中的多线程。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="java多线程">
 <meta property="og:url" content="http://yoursite.com/2017/06/16/java%E5%A4%9A%E7%BA%BF%E7%A8%8B/index.html">
 <meta property="og:site_name" content="sugar_foxs&#39;s blog">
-<meta property="og:description" content="首先先弄清两个概念:并发和并行.并行指两个及多个事件实际意义的同时进行,而并发是宏观上的并行,其实一个cpu上还是顺序执行,只是cpu通过调度算法快速的切换不同事件执行,达到看似多个事件同时进行的效果.说白了并发是为了提高效率接近并行的执行效果.而实现并发的手段是多进程或多线程.">
+<meta property="og:description" content="本文主要从线程的产生，状态，同步，通信，安全等方面介绍java中的多线程。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2017-06-15T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-01-11T06:00:28.368Z">
+<meta property="article:modified_time" content="2020-01-11T06:49:22.793Z">
 <meta property="article:author" content="sugar-foxs">
 <meta property="article:tag" content="java">
+<meta property="article:tag" content="并发编程">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2017/06/16/java%E5%A4%9A%E7%BA%BF%E7%A8%8B/">
@@ -224,7 +225,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-11 14:00:28" itemprop="dateModified" datetime="2020-01-11T14:00:28+08:00">2020-01-11</time>
+                <time title="修改时间：2020-01-11 14:49:22" itemprop="dateModified" datetime="2020-01-11T14:49:22+08:00">2020-01-11</time>
               </span>
 
           
@@ -245,18 +246,29 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <blockquote>
-<p>首先先弄清两个概念:并发和并行.<br>并行指两个及多个事件实际意义的同时进行,而并发是宏观上的并行,其实一个cpu上还是顺序执行,只是cpu通过调度算法快速的切换不同事件执行,达到看似多个事件同时进行的效果.说白了并发是为了提高效率接近并行的执行效果.而实现并发的手段是多进程或多线程.</p>
-</blockquote>
+        <p>本文主要从线程的产生，状态，同步，通信，安全等方面介绍java中的多线程。</p>
 <a id="more"></a>
-<p>本文主要从线程的产生，状态，同步，通信，安全等方面介绍java中的多线程:</p>
+
+<blockquote>
+<p>首先先弄清两个概念:并发和并行。</p>
+<ul>
+<li>并行指两个及多个事件实际意义的同时进行。</li>
+<li>并发是宏观上的并行，其实一个cpu上还是顺序执行，只是cpu通过调度算法快速的切换不同事件执行,达到看似多个事件同时进行的效果。并发是为了提高效率接近并行的执行效果。而实现并发的手段是多进程或多线程。</li>
+</ul>
+</blockquote>
 <h1 id="线程产生"><a href="#线程产生" class="headerlink" title="线程产生"></a>线程产生</h1><h2 id="继承Thread类"><a href="#继承Thread类" class="headerlink" title="继承Thread类"></a>继承Thread类</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span></span>&#123;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span></span>&#123;</span><br><span class="line">       MyThread t1 =<span class="keyword">new</span> MyThread();</span><br><span class="line">       t2.start();</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="comment">//TODO</span></span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="实现Runnable接口-也是使用Thread来执行这个任务"><a href="#实现Runnable接口-也是使用Thread来执行这个任务" class="headerlink" title="实现Runnable接口,也是使用Thread来执行这个任务"></a>实现Runnable接口,也是使用Thread来执行这个任务</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span></span>&#123;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span></span>&#123;</span><br><span class="line">        MyRunnable r = <span class="keyword">new</span> MyRunnable();</span><br><span class="line">        Thread t1 = <span class="keyword">new</span> Thread(r); t1.start(); </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyRunnable</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123; </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123; </span><br><span class="line">        <span class="comment">//TODO </span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="实现Callable接口-任务完成后可返回结果-但前两种方法不行"><a href="#实现Callable接口-任务完成后可返回结果-但前两种方法不行" class="headerlink" title="实现Callable接口 ,任务完成后可返回结果,但前两种方法不行"></a>实现Callable接口 ,任务完成后可返回结果,但前两种方法不行</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span></span>&#123;</span><br><span class="line">    MyCallable c = <span class="keyword">new</span> MyCallable();</span><br><span class="line">    FutureTask&lt;Integer&gt; result = <span class="keyword">new</span> FutureTask&lt;Integer&gt;(c); <span class="comment">//FutureTask类既实现了Runnable接口,也实现了Future&lt;V&gt;接口</span></span><br><span class="line">    <span class="keyword">new</span> Thread(result).start();  <span class="comment">//启动线程</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Integer sum = result.get();</span><br><span class="line">        System.out.println(sum);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (InterruptedException | ExecutionException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyCallable</span> <span class="keyword">implements</span> <span class="title">Callable</span>&lt;<span class="title">Integer</span>&gt;</span>&#123;</span><br><span class="line">      <span class="function"><span class="keyword">public</span> Integer <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">              <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">      &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="实现Runnable接口"><a href="#实现Runnable接口" class="headerlink" title="实现Runnable接口"></a>实现Runnable接口</h2><ul>
+<li>也是使用Thread来执行这个任务</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span></span>&#123;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span></span>&#123;</span><br><span class="line">        MyRunnable r = <span class="keyword">new</span> MyRunnable();</span><br><span class="line">        Thread t1 = <span class="keyword">new</span> Thread(r); t1.start(); </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyRunnable</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123; </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123; </span><br><span class="line">        <span class="comment">//TODO </span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="实现Callable接口"><a href="#实现Callable接口" class="headerlink" title="实现Callable接口"></a>实现Callable接口</h2><ul>
+<li>任务完成后可返回结果，但前两种方法不行。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span></span>&#123;</span><br><span class="line">    MyCallable c = <span class="keyword">new</span> MyCallable();</span><br><span class="line">    <span class="comment">//FutureTask类既实现了Runnable接口,也实现了Future&lt;V&gt;接口</span></span><br><span class="line">    FutureTask&lt;Integer&gt; result = <span class="keyword">new</span> FutureTask&lt;Integer&gt;(c); </span><br><span class="line">    <span class="keyword">new</span> Thread(result).start();  <span class="comment">//启动线程</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Integer sum = result.get();</span><br><span class="line">        System.out.println(sum);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (InterruptedException | ExecutionException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyCallable</span> <span class="keyword">implements</span> <span class="title">Callable</span>&lt;<span class="title">Integer</span>&gt;</span>&#123;</span><br><span class="line">      <span class="function"><span class="keyword">public</span> Integer <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">              <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">      &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>之后会详细介绍Callable,Future,FutureTask</p>
-<h1 id="线程状态"><a href="#线程状态" class="headerlink" title="线程状态"></a>线程状态</h1><ol>
+<h1 id="线程状态"><a href="#线程状态" class="headerlink" title="线程状态"></a>线程状态</h1><ul>
 <li><p>新状态：线程对象已经创建，还没有在其上调用start()方法。</p>
 </li>
 <li><p>可运行状态：当线程有资格运行，但调度程序还没有把它选定为运行线程时线程所处的状态。当start()方法调用时，线程首先进入可运行状态。在线程运行之后或者从阻塞、等待或睡眠状态回来后，也返回到可运行状态。</p>
@@ -267,48 +279,52 @@
 </li>
 <li><p>死亡态：当线程的run()方法完成时就认为它死去。这个线程对象也许是活的，但是，它已经不是一个单独执行的线程。线程一旦死亡，就不能复生。 如果在一个死去的线程上调用start()方法，会抛出java.lang.IllegalThreadStateException异常。</p>
 </li>
-</ol>
-<h1 id="线程同步"><a href="#线程同步" class="headerlink" title="线程同步"></a>线程同步</h1><h2 id="互斥同步"><a href="#互斥同步" class="headerlink" title="互斥同步"></a>互斥同步</h2><ul>
-<li>1.使用synchronized修饰方法或语句块</li>
 </ul>
-<p>synchronized是一个内置锁的加锁机制，当某个方法加上synchronized关键字后，就表明要获得该内置锁才能执行，但并不能阻止其他线程访问不需要获得该内置锁的方法。</p>
-<p>synchronized可以加在方法上，也可以直接加在对象上，从而保证一段代码只能有一个线程在运行，保证线程的同步。</p>
+<h1 id="线程同步"><a href="#线程同步" class="headerlink" title="线程同步"></a>线程同步</h1><h2 id="互斥同步"><a href="#互斥同步" class="headerlink" title="互斥同步"></a>互斥同步</h2><blockquote>
+<p>可以使用synchronized和ReentrantLock两种锁实现互斥，达到同步的目的。</p>
+</blockquote>
 <ul>
+<li><p>使用synchronized修饰方法或语句块</p>
+<ul>
+<li><p>synchronized是一个内置锁的加锁机制，当某个方法加上synchronized关键字后，就表明要获得该内置锁才能执行，但并不能阻止其他线程访问不需要获得该内置锁的方法。</p>
+</li>
+<li><p>synchronized可以加在方法上，也可以直接加在对象上，从而保证一段代码只能有一个线程在运行，保证线程的同步。</p>
+</li>
 <li><p>synchronized加在不同方法上有什么不同？</p>
 <ul>
-<li><p>如果synchronized加在一个类的普通方法上，那么相当于synchronized(this)。是一个对象锁。</p>
-</li>
-<li><p>如果synchronized加载一个类的静态方法上，那么相当于synchronized(Class对象)。是一个类锁，一个类只有一个类锁。</p>
+<li>如果synchronized加在一个类的普通方法上，那么相当于synchronized(this)。是一个对象锁。</li>
+<li>如果synchronized加载一个类的静态方法上，那么相当于synchronized(Class对象)。是一个类锁，一个类只有一个类锁。</li>
+</ul>
 </li>
 </ul>
 </li>
-<li><p>2.使用显式锁ReentrantLock</p>
+<li><p>使用显式锁ReentrantLock</p>
 <ul>
 <li>这里是<a href="https://blog.csdn.net/u013014724/article/details/103936025" target="_blank" rel="noopener">synchronized和ReentrantLock的比较</a></li>
 </ul>
 </li>
 </ul>
 <h2 id="非阻塞同步"><a href="#非阻塞同步" class="headerlink" title="非阻塞同步"></a>非阻塞同步</h2><ul>
-<li>使用CAS算法</li>
+<li>使用CAS算法，CAS会在另外的文章中专门介绍。</li>
 </ul>
-<h1 id="线程通信"><a href="#线程通信" class="headerlink" title="线程通信"></a>线程通信</h1><ol>
-<li><p>wait和notify机制</p>
+<h1 id="线程通信"><a href="#线程通信" class="headerlink" title="线程通信"></a>线程通信</h1><ul>
+<li><p>Object的wait和notify机制</p>
 </li>
 <li><p>Condition的等待/通知机制:await,signal,signalAll</p>
 </li>
-</ol>
-<h1 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a>线程安全</h1><blockquote>
-<p>为了并发执行程序，提高执行效率，使用多线程编程，而多线程编程就会涉及到安全问题，比如多个线程访问共享的可变数据的问题。<br>如果你的代码所在的进程中有多个线程在同时运行，而这些线程可能会同时运行这段代码。如果每次运行结果和单线程运行的结果是一样的，而且其他的变量的值也和预期的是一样的，就是线程安全的。</p>
-</blockquote>
-<ul>
-<li>但是如果不安全，如何实现线程安全呢？</li>
 </ul>
-<ol>
-<li><p>通过上面的线程同步的方法</p>
+<h1 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a>线程安全</h1><ul>
+<li><p>为了并发执行程序，提高执行效率，使用多线程编程，而多线程编程就会涉及到安全问题，比如多个线程访问共享的可变数据的问题。</p>
 </li>
-<li><p>使用本地线程存储ThreadLocal</p>
+<li><p>如果你的代码所在的进程中有多个线程在同时运行，而这些线程可能会同时运行这段代码。如果每次运行结果和单线程运行的结果是一样的，而且其他的变量的值也和预期的是一样的，就是线程安全的。</p>
 </li>
-</ol>
+<li><p>但是如果不安全，如何实现线程安全呢</p>
+<ul>
+<li>通过上面的线程同步的方法</li>
+<li>使用本地线程存储ThreadLocal</li>
+</ul>
+</li>
+</ul>
 
     </div>
 
@@ -320,6 +336,7 @@
           
           <div class="post-tags">
               <a href="/tags/java/" rel="tag"><i class="fa fa-tag"></i> java</a>
+              <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" rel="tag"><i class="fa fa-tag"></i> 并发编程</a>
           </div>
 
         
@@ -329,8 +346,8 @@
     <div class="post-nav">
       <div class="post-nav-item"></div>
       <div class="post-nav-item">
-    <a href="/2017/07/29/volatile/" rel="next" title="volatile">
-      volatile <i class="fa fa-chevron-right"></i>
+    <a href="/2017/07/29/java-volatile%E5%85%B3%E9%94%AE%E5%AD%97/" rel="next" title="java-volatile关键字">
+      java-volatile关键字 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -391,7 +408,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#线程产生"><span class="nav-number">1.</span> <span class="nav-text">线程产生</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#继承Thread类"><span class="nav-number">1.1.</span> <span class="nav-text">继承Thread类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现Runnable接口-也是使用Thread来执行这个任务"><span class="nav-number">1.2.</span> <span class="nav-text">实现Runnable接口,也是使用Thread来执行这个任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现Callable接口-任务完成后可返回结果-但前两种方法不行"><span class="nav-number">1.3.</span> <span class="nav-text">实现Callable接口 ,任务完成后可返回结果,但前两种方法不行</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程状态"><span class="nav-number">2.</span> <span class="nav-text">线程状态</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程同步"><span class="nav-number">3.</span> <span class="nav-text">线程同步</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#互斥同步"><span class="nav-number">3.1.</span> <span class="nav-text">互斥同步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#非阻塞同步"><span class="nav-number">3.2.</span> <span class="nav-text">非阻塞同步</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程通信"><span class="nav-number">4.</span> <span class="nav-text">线程通信</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程安全"><span class="nav-number">5.</span> <span class="nav-text">线程安全</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#线程产生"><span class="nav-number">1.</span> <span class="nav-text">线程产生</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#继承Thread类"><span class="nav-number">1.1.</span> <span class="nav-text">继承Thread类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现Runnable接口"><span class="nav-number">1.2.</span> <span class="nav-text">实现Runnable接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现Callable接口"><span class="nav-number">1.3.</span> <span class="nav-text">实现Callable接口</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程状态"><span class="nav-number">2.</span> <span class="nav-text">线程状态</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程同步"><span class="nav-number">3.</span> <span class="nav-text">线程同步</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#互斥同步"><span class="nav-number">3.1.</span> <span class="nav-text">互斥同步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#非阻塞同步"><span class="nav-number">3.2.</span> <span class="nav-text">非阻塞同步</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程通信"><span class="nav-number">4.</span> <span class="nav-text">线程通信</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程安全"><span class="nav-number">5.</span> <span class="nav-text">线程安全</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -416,7 +433,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
