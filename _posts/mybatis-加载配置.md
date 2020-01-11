@@ -10,9 +10,10 @@ tags:
     - spring
 ---
 
-> 这篇文章主要看下mybatis的配置文件配置了哪些东西，做了什么工作。
-查看源码可以追踪到XMLConfigBuilder类，这个类主要是做加载配置工作，生成Configution。通过Configuration新建SqlSessionFactory，这个以后再细看，这篇主要看加载配置过程。
+本文主要看下mybatis的配置文件配置了哪些东西，做了什么工作。
 <!-- more -->
+
+> 查看源码可以追踪到XMLConfigBuilder类，这个类主要是做加载配置工作，生成Configution。通过Configuration新建SqlSessionFactory，这个以后再细看，这篇主要看加载配置过程。
 
 # XMLConfigBuilder
 - 先看下这个类的代码，主要代码如下，

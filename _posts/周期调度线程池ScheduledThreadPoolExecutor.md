@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      ScheduledThreadPoolExecutor周期调度
+title:      周期调度线程池ScheduledThreadPoolExecutor
 subtitle:   
 date:       2020-01-01 20:00:00
 author:     sugar-foxs

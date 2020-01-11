@@ -9,10 +9,12 @@ tags:
     - docker
 ---
 
+本文主要记录一些docker中使用到的命令。
+<!-- more -->
+
 ## docker pull 
 - docker pull mysql:5.6
     - 拉取mysql镜像，版本是5.6
-<!-- more -->
 
 ## docker ps
 - 列出所有在运行的容器信息

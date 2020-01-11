@@ -9,10 +9,13 @@ tags:
     - flink
 ---
 
-> Flink 容错机制的核心就是持续创建分布式数据流及其状态的一致快照。Flink的checkpoint 是通过分布式快照实现的,所以在flink中这两个词是一个意思。
+
+本文主要介绍flink的checkpoint机制。
 <!-- more -->
-- checkpoint用来保证任务的错误恢复。任务失败可以从最新的checkpoint恢复。
-- checkpoint机制需要一个可靠的可以回放数据的数据源(kafka,RabbitMQ,HDFS...)和一个存放state的持久存储（HDFS,S3...）。
+
+- Flink 容错机制的核心就是持续创建分布式数据流及其状态的一致快照。Flink的checkpoint 是通过分布式快照实现的,所以在flink中这两个词是一个意思。
+    - checkpoint用来保证任务的错误恢复。任务失败可以从最新的checkpoint恢复。
+    - checkpoint机制需要一个可靠的可以回放数据的数据源(kafka,RabbitMQ,HDFS...)和一个存放state的持久存储（HDFS,S3...）。
 ## checkpointConfig
 
 - 通过调用StreamExecutionEnvironment.enableCheckpointing(internal，mode)启用checkpoint。 internal默认是-1，表示checkpoint不开启，mode默认是EXACTLY_ONCE模式。

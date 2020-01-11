@@ -9,10 +9,13 @@ tags:
     - flink
 ---
 
+本文主要介绍Jobmanager如何处理SubmitJob。
+
+<!-- more -->
+
 ## Jobmanager处理SubmitJob
 
 先将submitJob的主要步骤总结写在开头，然后一步步分析。
-<!-- more -->
 - 1，通过JobGraph生成ExecutionGraph;
 - 2，恢复状态CheckpointedState，或者Savepoint;
 - 3，提交Execution给Scheduler进行调度；

@@ -10,10 +10,12 @@ tags:
     - spring
 ---
 
-本篇文章主要阅读源码看看@schdule注解是如何工作的。问题写在前面：
-- schedule注解的任务是何时实例化成任务的
-- 调度任务如何调度的
+本篇文章主要阅读源码看看@schdule注解是如何工作的。
 <!-- more -->
+
+> 问题写在前面：
+>    - schedule注解的任务是何时实例化成任务的
+>    - 调度任务如何调度的
 
 # schedule注解
 
@@ -47,7 +49,7 @@ public @interface Scheduled {
 }
 ```
 
-- 通过查看这个注解里的方法的调用方，可以看到是在ScheduledAnnotationBeanPostProcessor里调用的。
+- 通过查看这个注解里的方法的调用方，可以看到是在ScheduledAnnotationBeanPostProcessor里的processScheduled方法调用的。
 
 # ScheduledAnnotationBeanPostProcessor
 
@@ -65,8 +67,10 @@ public class SchedulingConfiguration {
 }
 ```
 
-## processScheduled
-- 解析schedule注解里参数并生成调度任务的方法
+- ScheduledAnnotationBeanPostProcessor实例中包含了ScheduledTaskRegistrar实例，这个实例中有线程池TaskScheduler，后面会讲到线程池是如何设置的。
+
+## processScheduled方法
+- 该方法负责解析schedule注解里参数并生成调度任务
 ```java
 protected void processScheduled(Scheduled scheduled, Method method, Object bean) {
     Method invocableMethod = AopUtils.selectInvocableMethod(method, bean.getClass());
@@ -177,7 +181,6 @@ protected void processScheduled(Scheduled scheduled, Method method, Object bean)
 ```
 
 - processScheduled方法负责解析schedule注解的参数，生成相应的调度任务，存入ScheduledTaskRegistrar实例中。
-- ScheduledAnnotationBeanPostProcessor实例中包含了ScheduledTaskRegistrar实例，这个实例中有线程池TaskScheduler，后面会讲到线程池是如何设置的。
 - 解析生成的任务都放入了线程池中执行，执行任务的逻辑在下面的scheduleTasks方法里。
 
 ```java
@@ -214,7 +217,7 @@ protected void scheduleTasks() {
 ```
 - 使用TaskScheduler调度各种调度任务，并将返回结果future封装在ScheduleTask中，可以看到最底层的线程池其实就是ScheduledThreadPoolExecutor。见另一篇{% post_link ScheduledThreadPoolExecutor周期调度%}
 
-- 此方法是在afterPropertiesSet方法中调用的，从下面的代码可以看到afterPropertiesSet是在ScheduledAnnotationBeanPostProcessor类的onApplicationEvent方法中调用的，而onApplicationEvent则是重写了ApplicationListener接口的方法。
+- 此方法是在afterPropertiesSet方法中调用的，从下面的代码可以看到afterPropertiesSet是在ScheduledAnnotationBeanPostProcessor类的onApplicationEvent方法中调用的，而onApplicationEvent则是重写了ApplicationListener接口的方法。后面会说这个ApplicationListener。
 
 ```java
 public void onApplicationEvent(ContextRefreshedEvent event) {
