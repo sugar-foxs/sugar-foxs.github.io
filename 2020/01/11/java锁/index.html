@@ -54,7 +54,7 @@
 <meta property="og:description" content="本文主要介绍java锁的实现和使用中会出现的问题，比如死锁，以及如何避免。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-01-10T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-01-11T06:28:08.524Z">
+<meta property="article:modified_time" content="2020-01-11T06:58:54.957Z">
 <meta property="article:author" content="sugar-foxs">
 <meta property="article:tag" content="java">
 <meta property="article:tag" content="并发编程">
@@ -219,7 +219,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-01-11 00:00:00 / 修改时间：14:28:08" itemprop="dateCreated datePublished" datetime="2020-01-11T00:00:00+08:00">2020-01-11</time>
+              <time title="创建时间：2020-01-11 00:00:00 / 修改时间：14:58:54" itemprop="dateCreated datePublished" datetime="2020-01-11T00:00:00+08:00">2020-01-11</time>
             </span>
 
           
@@ -244,7 +244,7 @@
 <a id="more"></a>
 
 <h1 id="java中锁的实现"><a href="#java中锁的实现" class="headerlink" title="java中锁的实现"></a>java中锁的实现</h1><ul>
-<li>java中锁的实现有两种：synchronized和ReentrantLock。</li>
+<li>java中锁的实现有两种：synchronized和ReentrantLock。synchronized是一个悲观锁，而ReentrantLock是一个乐观锁，底层使用的是CAS。</li>
 </ul>
 <h2 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h2><ul>
 <li><p>synchronized是java虚拟机的内置锁</p>
@@ -259,7 +259,7 @@
 <ul>
 <li>自旋锁：线程没有获取到锁便进入忙循环，直到获取到锁。</li>
 <li>自适应自旋：因为锁占用的时间长的话，自旋的时间太长浪费处理器资源，所以有了自适应自旋，自适应自旋的自旋时间不再固定，而是根据前一次在同一个锁上的自旋时间决定的。如果对于某个锁自旋很少成功，则省掉自旋过程，避免浪费资源，如果刚刚获得过成功，则自旋等待的时间持续相对的更长。</li>
-<li>轻量级锁：在不存在锁竞争的时候起作用，当有锁竞争时会膨胀为重量级锁。轻量级锁是使用CAS操作完成的加锁解锁过程。虚拟机的对象头中有Mark Word，其中有两位用来存储锁标志位，代码进入同步块时，如果同步对象没有被锁定，虚拟机现在栈帧中建立一个锁记录，来存储锁对象目前的Mark Word的拷贝，然后虚拟机使用CAS操作将对象的Mark Word更新为指向锁记录的指针。如果更新成功了，这个线程就拥有了这个对象锁，否则，先检查Mark Word是否指向当前线程的栈帧，如果是直接进入同步块执行，否则说明锁已经被其他线程抢占了。</li>
+<li>轻量级锁：在不存在锁竞争的时候起作用，当有锁竞争时会膨胀为重量级锁。轻量级锁是使用CAS操作完成的加锁解锁过程。虚拟机的对象头中有Mark Word，其中有两位用来存储锁标志位，代码进入同步块时，如果同步对象没有被锁定，虚拟机先在栈帧中建立一个锁记录，来存储锁对象目前的Mark Word的拷贝，然后虚拟机使用CAS操作将对象的Mark Word更新为指向锁记录的指针。如果更新成功了，这个线程就拥有了这个对象锁，否则，先检查Mark Word是否指向当前线程的栈帧，如果是直接进入同步块执行，否则说明锁已经被其他线程抢占了。</li>
 <li>偏向锁：在无竞争的情况下把整个同步都消除掉，连CAS操作都不做了。意思是这个所锁会偏向与第一个获得它的线程，只要这个锁没有被其他线程获取，则持有偏向锁的线程将永远不需要同步。线程第一次获取锁时，对象头中的标志位设置为偏向模式，使用CAS将线程ID记录在Mark Word中，如果CAS成功，持有偏向锁的线程之后都不需要进行同步操作。当有另一个线程尝试获取锁时，偏向模式结束。</li>
 </ul>
 </li>
@@ -295,6 +295,20 @@
 </ul>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
 <li>在需要使用一些sychronized没有的功能时，一般使用ReentrantLock来实现同步，否则一般使用sychronized，在synchronized进行了优化之后，性能不再是优先选择ReentrantLock的条件。</li>
+<li>synchronized和ReenttrantLock的相同点：<ul>
+<li>都可重入</li>
+<li>都实现了非公平锁</li>
+</ul>
+</li>
+<li>synchronized和ReenttrantLock的不同点：<ul>
+<li>synchronized是悲观锁，而ReentrantLock是乐观锁。</li>
+<li>synchronized是java语法层面的锁，而ReentrantLock是api层面的锁</li>
+<li>ReentrantLock需要手动解锁，而synchronized不需要</li>
+<li>ReentrantLock可中断</li>
+<li>ReentrantLock还实现了公平锁</li>
+<li>ReentrantLock锁可绑定多个条件</li>
+</ul>
+</li>
 </ul>
 
     </div>
