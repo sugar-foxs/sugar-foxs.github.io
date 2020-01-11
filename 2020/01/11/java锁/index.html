@@ -46,15 +46,15 @@
   };
 </script>
 
-  <meta name="description" content="synchronized synchronized是虚拟机的内置锁  对于同步块：编译之后,会在同步块的前后形成 monitorenter 和 monitorexit 两个字节码指令，每个对象都具有一个monitor与之关联，拥有了monitor的线程便锁住了对象。 对于同步方法：编译之后，该同步方法有一个同步标志来表明该方法是同步方法。   synchronized对同一个线程是可重入的,进去一">
+  <meta name="description" content="java中锁的实现有两种：synchronized和ReentrantLock。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="java锁">
 <meta property="og:url" content="http://yoursite.com/2020/01/11/java%E9%94%81/index.html">
 <meta property="og:site_name" content="sugar_foxs&#39;s blog">
-<meta property="og:description" content="synchronized synchronized是虚拟机的内置锁  对于同步块：编译之后,会在同步块的前后形成 monitorenter 和 monitorexit 两个字节码指令，每个对象都具有一个monitor与之关联，拥有了monitor的线程便锁住了对象。 对于同步方法：编译之后，该同步方法有一个同步标志来表明该方法是同步方法。   synchronized对同一个线程是可重入的,进去一">
+<meta property="og:description" content="java中锁的实现有两种：synchronized和ReentrantLock。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-01-10T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-01-11T05:57:02.010Z">
+<meta property="article:modified_time" content="2020-01-11T06:11:47.719Z">
 <meta property="article:author" content="sugar-foxs">
 <meta property="article:tag" content="java">
 <meta name="twitter:card" content="summary">
@@ -218,7 +218,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-01-11 00:00:00 / 修改时间：13:57:02" itemprop="dateCreated datePublished" datetime="2020-01-11T00:00:00+08:00">2020-01-11</time>
+              <time title="创建时间：2020-01-11 00:00:00 / 修改时间：14:11:47" itemprop="dateCreated datePublished" datetime="2020-01-11T00:00:00+08:00">2020-01-11</time>
             </span>
 
           
@@ -239,34 +239,42 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h1><ul>
-<li><p>synchronized是虚拟机的内置锁</p>
+        <p>java中锁的实现有两种：synchronized和ReentrantLock。</p>
+<a id="more"></a>
+
+<h1 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h1><ul>
+<li><p>synchronized是java虚拟机的内置锁</p>
 <ul>
-<li>对于同步块：编译之后,会在同步块的前后形成 monitorenter 和 monitorexit 两个字节码指令，每个对象都具有一个monitor与之关联，拥有了monitor的线程便锁住了对象。</li>
+<li>对于同步块：编译之后，会在同步块的前后形成 monitorenter 和 monitorexit 两个字节码指令，每个对象都具有一个monitor与之关联，拥有了monitor的线程便锁住了对象。</li>
 <li>对于同步方法：编译之后，该同步方法有一个同步标志来表明该方法是同步方法。</li>
 </ul>
 </li>
-<li><p>synchronized对同一个线程是可重入的,进去一次monitor的count加1。</p>
+<li><p>synchronized对同一个线程是可重入的，进去一次monitor，count就加1。</p>
 </li>
-<li><p>java的线程是映射到操作系统的原生系统之上的，如果要阻塞或唤醒一个线程,都需要操作系统来帮忙完成，这就需要从用户态转换到核心态中，状态转换需要耗费很多的时间。所以synchronized属于一个重量级锁.之后虚拟机也进行了优化，比如：自旋锁,自适应自旋锁,轻量级锁,偏向锁。</p>
+<li><p>java的线程是映射到操作系统的原生系统之上的，如果要阻塞或唤醒一个线程，都需要操作系统来帮忙完成，这就需要从用户态转换到核心态中，状态转换需要耗费很多的时间。所以synchronized属于一个重量级锁。之后虚拟机也进行了优化，比如：自旋锁，自适应自旋锁，轻量级锁，偏向锁。</p>
 <ul>
-<li>自旋锁：线程没有获取到锁便进入忙循环,</li>
-<li>自适应自旋：因为锁占用的时间长的话,自旋的时间太长浪费处理器资源,所以有了自适应自旋,自适应自旋的自旋时间不再固定,而是根据前一次在同一个锁上的自旋时间决定的.如果对于某个锁自旋很少成功,则省掉自旋过程,避免浪费资源,如果刚刚获得过成功,则自旋等待的时间持续相对的更长.</li>
-<li>轻量级锁：在不存在锁竞争的时候起作用,当有锁竞争时会膨胀为重量级锁.轻量级锁是使用CAS操作完成的加锁解锁过程.虚拟机的对象头中有Mark Word,其中有两位用来存储锁标志位,代码进入同步块时,如果同步对象没有被锁定,虚拟机现在栈帧中建立一个锁记录,来存储锁对象目前的Mark Word的拷贝,然后虚拟机使用CAS操作将对象的Mark Word更新为指向锁记录的指针.如果更新成功了,这个线程就拥有了这个对象锁,否则,先检查Mark Word是否指向当前线程的栈帧,如果是直接进入同步块执行,否则说明锁已经被其他线程抢占了.</li>
-<li>偏向锁：在无竞争的情况下把整个同步都消除掉,连CAS操作都不做了.意思是这个所锁会偏向与第一个获得它的线程,只要这个锁没有被其他线程获取,则持有偏向锁的线程将永远不需要同步.线程第一次获取锁时,对象头中的标志位设置为偏向模式,使用CAS将线程ID记录在Mark Word中,如果CAS成功,持有偏向锁的线程之后都不需要进行同步操作.当有另一个线程尝试获取锁时,偏向模式结束。</li>
+<li>自旋锁：线程没有获取到锁便进入忙循环，直到获取到锁。</li>
+<li>自适应自旋：因为锁占用的时间长的话，自旋的时间太长浪费处理器资源，所以有了自适应自旋，自适应自旋的自旋时间不再固定，而是根据前一次在同一个锁上的自旋时间决定的。如果对于某个锁自旋很少成功，则省掉自旋过程，避免浪费资源，如果刚刚获得过成功，则自旋等待的时间持续相对的更长。</li>
+<li>轻量级锁：在不存在锁竞争的时候起作用，当有锁竞争时会膨胀为重量级锁。轻量级锁是使用CAS操作完成的加锁解锁过程。虚拟机的对象头中有Mark Word，其中有两位用来存储锁标志位，代码进入同步块时，如果同步对象没有被锁定，虚拟机现在栈帧中建立一个锁记录，来存储锁对象目前的Mark Word的拷贝，然后虚拟机使用CAS操作将对象的Mark Word更新为指向锁记录的指针。如果更新成功了，这个线程就拥有了这个对象锁，否则，先检查Mark Word是否指向当前线程的栈帧，如果是直接进入同步块执行，否则说明锁已经被其他线程抢占了。</li>
+<li>偏向锁：在无竞争的情况下把整个同步都消除掉，连CAS操作都不做了。意思是这个所锁会偏向与第一个获得它的线程，只要这个锁没有被其他线程获取，则持有偏向锁的线程将永远不需要同步。线程第一次获取锁时，对象头中的标志位设置为偏向模式，使用CAS将线程ID记录在Mark Word中，如果CAS成功，持有偏向锁的线程之后都不需要进行同步操作。当有另一个线程尝试获取锁时，偏向模式结束。</li>
 </ul>
 </li>
 </ul>
 <h1 id="ReentrantLock"><a href="#ReentrantLock" class="headerlink" title="ReentrantLock"></a>ReentrantLock</h1><ul>
-<li><p>ReentrantLock是基于AQS实现的,在AQS内部会保存一个共享状态变量state，通过CAS修改该变量的值，修改成功的线程表示获取到该锁，没有修改成功，或者发现状态state已经是加锁状态，则创建一个代表当前线程的结点加入到等待队列的尾部,如果前趋结点waitStuatus状态是SIGNAL,线程可以大胆挂起等待被唤醒,如果不是,向前遍历跳过被取消的结点，直到找到一个没有被取消的结点为止，将找到的这个结点作为它的前趋结点，将找到的这个结点的waitStatus位设置为SIGNAL,返回false表示线程不应该被挂起。</p>
+<li><p>ReentrantLock是基于AQS实现的，在AQS内部会保存一个共享状态变量state，通过CAS修改该变量的值，修改成功的线程表示获取到该锁，没有修改成功，或者发现状态state已经是加锁状态，则创建一个代表当前线程的结点加入到等待队列的尾部，如果前趋结点waitStuatus状态是SIGNAL，线程可以大胆挂起等待被唤醒，如果不是，向前遍历跳过被取消的结点，直到找到一个没有被取消的结点为止，将找到的这个结点作为它的前趋结点，将找到的这个结点的waitStatus位设置为SIGNAL，返回false表示线程不应该被挂起。AQS具体原理在其他文章中介绍。</p>
 </li>
-<li><p>ReentrantLock增加了一些高级功能:</p>
+<li><p>ReentrantLock 也是可重入的。</p>
+</li>
+<li><p>同时ReentrantLock还增加了一些高级功能:</p>
 <ul>
-<li>可中断:当持有锁的线程长期不释放锁的时候,正在等待的线程可以选择放弃等待,改为处理其他事情,可中断特性对处理执行时间非常长的同步块很有帮助。</li>
-<li>公平锁: 因为synchroized是非公平的,ReentrantLock有公平和非公平锁(默认是非公平锁),所以公平锁是和sychronized的区别.多个线程在等待同一个锁时,必须按照申请锁的时间顺序来一次获得锁。</li>
+<li>可中断:当持有锁的线程长期不释放锁的时候，正在等待的线程可以选择放弃等待，改为处理其他事情，可中断特性对处理执行时间非常长的同步块很有帮助。</li>
+<li>公平锁: 因为synchroized是非公平的，ReentrantLock有公平和非公平锁(默认是非公平锁)，所以公平锁是和sychronized的区别。多个线程在等待同一个锁时，必须按照申请锁的时间顺序来一次获得锁。</li>
 <li>锁可绑定多个条件:一个ReentrantLock对象可以同时绑定多个Condition对象。</li>
 </ul>
 </li>
+</ul>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
+<li>在需要使用一些sychronized没有的功能时，一般使用ReentrantLock来实现同步，否则一般使用sychronized。</li>
 </ul>
 
     </div>
@@ -287,13 +295,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/01/10/%E8%BF%9C%E7%A8%8Bdebug/" rel="prev" title="远程debug">
-      <i class="fa fa-chevron-left"></i> 远程debug
+    <a href="/2020/01/11/mysql%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/" rel="prev" title="mysql事务隔离级别">
+      <i class="fa fa-chevron-left"></i> mysql事务隔离级别
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/01/11/mysql%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/" rel="next" title="mysql事务隔离级别">
-      mysql事务隔离级别 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -353,7 +358,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#synchronized"><span class="nav-number">1.</span> <span class="nav-text">synchronized</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ReentrantLock"><span class="nav-number">2.</span> <span class="nav-text">ReentrantLock</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#synchronized"><span class="nav-number">1.</span> <span class="nav-text">synchronized</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ReentrantLock"><span class="nav-number">2.</span> <span class="nav-text">ReentrantLock</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
