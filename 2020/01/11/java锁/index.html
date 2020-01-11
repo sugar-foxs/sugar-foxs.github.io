@@ -46,15 +46,15 @@
   };
 </script>
 
-  <meta name="description" content="java中锁的实现有两种：synchronized和ReentrantLock。">
+  <meta name="description" content="本文主要介绍java锁的实现和使用中会出现的问题，比如死锁，以及如何避免。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="java锁">
 <meta property="og:url" content="http://yoursite.com/2020/01/11/java%E9%94%81/index.html">
 <meta property="og:site_name" content="sugar_foxs&#39;s blog">
-<meta property="og:description" content="java中锁的实现有两种：synchronized和ReentrantLock。">
+<meta property="og:description" content="本文主要介绍java锁的实现和使用中会出现的问题，比如死锁，以及如何避免。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-01-10T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-01-11T06:11:47.719Z">
+<meta property="article:modified_time" content="2020-01-11T06:26:51.326Z">
 <meta property="article:author" content="sugar-foxs">
 <meta property="article:tag" content="java">
 <meta name="twitter:card" content="summary">
@@ -218,7 +218,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-01-11 00:00:00 / 修改时间：14:11:47" itemprop="dateCreated datePublished" datetime="2020-01-11T00:00:00+08:00">2020-01-11</time>
+              <time title="创建时间：2020-01-11 00:00:00 / 修改时间：14:26:51" itemprop="dateCreated datePublished" datetime="2020-01-11T00:00:00+08:00">2020-01-11</time>
             </span>
 
           
@@ -239,10 +239,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>java中锁的实现有两种：synchronized和ReentrantLock。</p>
+        <p>本文主要介绍java锁的实现和使用中会出现的问题，比如死锁，以及如何避免。</p>
 <a id="more"></a>
 
-<h1 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h1><ul>
+<h1 id="java中锁的实现"><a href="#java中锁的实现" class="headerlink" title="java中锁的实现"></a>java中锁的实现</h1><ul>
+<li>java中锁的实现有两种：synchronized和ReentrantLock。</li>
+</ul>
+<h2 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h2><ul>
 <li><p>synchronized是java虚拟机的内置锁</p>
 <ul>
 <li>对于同步块：编译之后，会在同步块的前后形成 monitorenter 和 monitorexit 两个字节码指令，每个对象都具有一个monitor与之关联，拥有了monitor的线程便锁住了对象。</li>
@@ -260,7 +263,7 @@
 </ul>
 </li>
 </ul>
-<h1 id="ReentrantLock"><a href="#ReentrantLock" class="headerlink" title="ReentrantLock"></a>ReentrantLock</h1><ul>
+<h2 id="ReentrantLock"><a href="#ReentrantLock" class="headerlink" title="ReentrantLock"></a>ReentrantLock</h2><ul>
 <li><p>ReentrantLock是基于AQS实现的，在AQS内部会保存一个共享状态变量state，通过CAS修改该变量的值，修改成功的线程表示获取到该锁，没有修改成功，或者发现状态state已经是加锁状态，则创建一个代表当前线程的结点加入到等待队列的尾部，如果前趋结点waitStuatus状态是SIGNAL，线程可以大胆挂起等待被唤醒，如果不是，向前遍历跳过被取消的结点，直到找到一个没有被取消的结点为止，将找到的这个结点作为它的前趋结点，将找到的这个结点的waitStatus位设置为SIGNAL，返回false表示线程不应该被挂起。AQS具体原理在其他文章中介绍。</p>
 </li>
 <li><p>ReentrantLock 也是可重入的。</p>
@@ -273,8 +276,24 @@
 </ul>
 </li>
 </ul>
+<h1 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h1><ul>
+<li>说到死锁一般都会想到底什么情况下才叫作死锁。下面看下死锁的4个必要条件，即这4个条件都满足的情况就是发生了死锁，只要其中一个条件不满足，死锁就不存在。<ul>
+<li>互斥：同一个资源每次只能一个进程使用。</li>
+<li>资源不可抢占：不可抢占其他进程持有的资源。</li>
+<li>循环等待：若干进程互相循环等待资源。</li>
+<li>请求与保持：持有一个资源，又在请求另一个资源，请求不到资源就一直保持这个资源。</li>
+</ul>
+</li>
+<li>既然说只要一个条件不满足就不是死锁，那为了不发生死锁，只要让其中一个条件不满足就行了。针对每一个条件，看看如何才能不发生死锁：<ul>
+<li>互斥：这个条件一般不可避免，因为加锁就是为了互斥。</li>
+<li>资源不可抢夺：只要准许抢夺，这个条件就不成立了</li>
+<li>循环等待：避免这个条件可以事先约定好锁的请求顺序，所有线程获取锁的顺序保持一致。</li>
+<li>请求与保持：持有一个资源，想要获取其他资源，必须先释放当前持有的资源，才能请求其他资源。</li>
+</ul>
+</li>
+</ul>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
-<li>在需要使用一些sychronized没有的功能时，一般使用ReentrantLock来实现同步，否则一般使用sychronized。</li>
+<li>在需要使用一些sychronized没有的功能时，一般使用ReentrantLock来实现同步，否则一般使用sychronized，在synchronized进行了优化之后，性能不再是优先选择ReentrantLock的条件。</li>
 </ul>
 
     </div>
@@ -358,7 +377,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#synchronized"><span class="nav-number">1.</span> <span class="nav-text">synchronized</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ReentrantLock"><span class="nav-number">2.</span> <span class="nav-text">ReentrantLock</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#java中锁的实现"><span class="nav-number">1.</span> <span class="nav-text">java中锁的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#synchronized"><span class="nav-number">1.1.</span> <span class="nav-text">synchronized</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ReentrantLock"><span class="nav-number">1.2.</span> <span class="nav-text">ReentrantLock</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#死锁"><span class="nav-number">2.</span> <span class="nav-text">死锁</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
