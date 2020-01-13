@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      flink之Checkpoint
+title:      flink-Checkpoint
 subtitle:   checkpoint
 date:       2019-02-26
 author:     sugar-foxs

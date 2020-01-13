@@ -175,7 +175,7 @@ void reExecutePeriodic(RunnableScheduledFuture<?> task) {
 
 - scheduleAtFixedRate和scheduleAtFixedDelay的相同点是：都是将任务放入延迟队列中来是实现周期性调度的效果，任务执行完计算下一次执行的时间并放入队列。
 
-- 后面还会研究下DelayedWorkQueue的实现。
+- 见{% post_link DelayedWorkQueue %}。
 
 
 

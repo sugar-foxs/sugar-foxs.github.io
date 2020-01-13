@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      Jobmanager处理SubmitJob
+title:      flink-jobmanager处理SubmitJob消息
 subtitle:   
 date:       2019-02-25
 author:     sugar-foxs

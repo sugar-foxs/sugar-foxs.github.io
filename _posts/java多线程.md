@@ -106,7 +106,7 @@ class MyCallable implements Callable<Integer>{
 
 ## 非阻塞同步
 
-- 使用CAS算法，CAS会在另外的文章中专门介绍。
+- 使用CAS算法，见{% post_link CAS %}。
 
 # 线程通信
 
