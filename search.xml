@@ -60,7 +60,7 @@
 <p>一个使用链表实现的阻塞队列，按FIFO顺序排序。队列大小不指定的话，最大值是Integer.MAX_VALUE。</p>
 </blockquote>
 <h1 id="DelayQueue"><a href="#DelayQueue" class="headerlink" title="DelayQueue"></a>DelayQueue</h1><blockquote>
-<p>延迟阻塞队列。内部使用优先级队列PriorityQueue，按延迟时间delay排序。和<a href="/2020/01/12/%E5%BB%B6%E8%BF%9F%E9%98%9F%E5%88%97DelayedWorkQueue(ScheduledThreadPoolExecutor%E4%B8%93%E7%94%A8)/" title="延迟队列DelayedWorkQueue(ScheduledThreadPoolExecutor专用)">延迟队列DelayedWorkQueue(ScheduledThreadPoolExecutor专用)</a>类似，都是BlockingQueue的子类，都是延迟阻塞队列。</p>
+<p>延迟阻塞队列。内部使用优先级队列PriorityQueue，按延迟时间delay排序。和类似，都是BlockingQueue的子类，都是延迟阻塞队列。</p>
 </blockquote>
 <h1 id="PriorityBlockingQueue"><a href="#PriorityBlockingQueue" class="headerlink" title="PriorityBlockingQueue"></a>PriorityBlockingQueue</h1><blockquote>
 <p>使用数组实现的优先级阻塞队列，按优先级排序。</p>
@@ -144,8 +144,8 @@
       </tags>
   </entry>
   <entry>
-    <title>延迟队列DelayedWorkQueue(ScheduledThreadPoolExecutor专用)</title>
-    <url>/2020/01/12/%E5%BB%B6%E8%BF%9F%E9%98%9F%E5%88%97DelayedWorkQueue(ScheduledThreadPoolExecutor%E4%B8%93%E7%94%A8)/</url>
+    <title>延迟队列DelayedWorkQueue</title>
+    <url>/2020/01/12/%E5%BB%B6%E8%BF%9F%E9%98%9F%E5%88%97DelayedWorkQueue/</url>
     <content><![CDATA[<p>本文主要介绍ScheduledThreadPoolExecutor的内部类DelayedWorkQueue，它是周期线程池专用的延迟队列。</p>
 <a id="more"></a>
 

@@ -48,18 +48,18 @@
 
   <meta name="description" content="本文主要介绍ScheduledThreadPoolExecutor的内部类DelayedWorkQueue，它是周期线程池专用的延迟队列。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="延迟队列DelayedWorkQueue(ScheduledThreadPoolExecutor专用)">
-<meta property="og:url" content="http://yoursite.com/2020/01/12/%E5%BB%B6%E8%BF%9F%E9%98%9F%E5%88%97DelayedWorkQueue(ScheduledThreadPoolExecutor%E4%B8%93%E7%94%A8)/index.html">
+<meta property="og:title" content="延迟队列DelayedWorkQueue">
+<meta property="og:url" content="http://yoursite.com/2020/01/12/%E5%BB%B6%E8%BF%9F%E9%98%9F%E5%88%97DelayedWorkQueue/index.html">
 <meta property="og:site_name" content="sugar_foxs&#39;s blog">
 <meta property="og:description" content="本文主要介绍ScheduledThreadPoolExecutor的内部类DelayedWorkQueue，它是周期线程池专用的延迟队列。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-01-11T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-01-12T07:16:00.007Z">
+<meta property="article:modified_time" content="2020-01-15T04:51:35.593Z">
 <meta property="article:author" content="sugar-foxs">
 <meta property="article:tag" content="java">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/2020/01/12/%E5%BB%B6%E8%BF%9F%E9%98%9F%E5%88%97DelayedWorkQueue(ScheduledThreadPoolExecutor%E4%B8%93%E7%94%A8)/">
+<link rel="canonical" href="http://yoursite.com/2020/01/12/%E5%BB%B6%E8%BF%9F%E9%98%9F%E5%88%97DelayedWorkQueue/">
 
 
 <script id="page-configurations">
@@ -71,7 +71,7 @@
   };
 </script>
 
-  <title>延迟队列DelayedWorkQueue(ScheduledThreadPoolExecutor专用) | sugar_foxs's blog</title>
+  <title>延迟队列DelayedWorkQueue | sugar_foxs's blog</title>
   
 
 
@@ -214,7 +214,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/12/%E5%BB%B6%E8%BF%9F%E9%98%9F%E5%88%97DelayedWorkQueue(ScheduledThreadPoolExecutor%E4%B8%93%E7%94%A8)/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/12/%E5%BB%B6%E8%BF%9F%E9%98%9F%E5%88%97DelayedWorkQueue/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpeg">
@@ -227,7 +227,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          延迟队列DelayedWorkQueue(ScheduledThreadPoolExecutor专用)
+          延迟队列DelayedWorkQueue
         </h1>
 
         <div class="post-meta">
@@ -236,10 +236,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-01-12 00:00:00 / 修改时间：15:16:00" itemprop="dateCreated datePublished" datetime="2020-01-12T00:00:00+08:00">2020-01-12</time>
+              <time title="创建时间：2020-01-12 00:00:00" itemprop="dateCreated datePublished" datetime="2020-01-12T00:00:00+08:00">2020-01-12</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-15 12:51:35" itemprop="dateModified" datetime="2020-01-15T12:51:35+08:00">2020-01-15</time>
+              </span>
 
           
             <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
