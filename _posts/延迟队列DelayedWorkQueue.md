@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      延迟队列DelayedWorkQueue(ScheduledThreadPoolExecutor专用)
+title:      延迟队列DelayedWorkQueue
 subtitle:   
 date:       2020-01-12
 author:     sugar-foxs
