@@ -80,29 +80,64 @@
 <h1 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h1><blockquote>
 <p>curl -L <a href="https://alibaba.github.io/arthas/install.sh" target="_blank" rel="noopener">https://alibaba.github.io/arthas/install.sh</a> | sh</p>
 </blockquote>
-<h1 id="监控某个进程"><a href="#监控某个进程" class="headerlink" title="监控某个进程"></a>监控某个进程</h1><blockquote>
+<h1 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h1><blockquote>
 <p>java -jar arthas-boot.jar 进程pid</p>
 </blockquote>
-<h1 id="dashboard"><a href="#dashboard" class="headerlink" title="dashboard"></a>dashboard</h1><ul>
+<h1 id="所有命令"><a href="#所有命令" class="headerlink" title="所有命令"></a>所有命令</h1><h2 id="dashboard"><a href="#dashboard" class="headerlink" title="dashboard"></a>dashboard</h2><ul>
 <li>当前系统的实时数据面板。包含线程、cpu、内存等内容。</li>
 </ul>
-<h1 id="tt"><a href="#tt" class="headerlink" title="tt"></a>tt</h1><ul>
-<li>方法执行数据的时空隧道，记录下指定方法每次调用的入参和返回信息，并能对这些不同的时间下调用进行观测。</li>
+<h2 id="thread"><a href="#thread" class="headerlink" title="thread"></a>thread</h2><ul>
+<li>thread 1 | grep ‘main’</li>
+<li>打印线程ID 1的栈, grep出自己想看的内容。</li>
 </ul>
-<h1 id="watch"><a href="#watch" class="headerlink" title="watch"></a>watch</h1><ul>
-<li>方法执行数据观测。让你能方便的观察到指定方法的调用情况。能观察到的范围为：返回值、抛出异常、入参，通过编写OGNL表达式进行对应变量的查看。</li>
-</ul>
-<h1 id="heapdump"><a href="#heapdump" class="headerlink" title="heapdump"></a>heapdump</h1><ul>
+<h2 id="heapdump"><a href="#heapdump" class="headerlink" title="heapdump"></a>heapdump</h2><ul>
 <li>dump java heap, 类似jmap命令的heap dump功能。</li>
 <li>heapdump /Users/guchunhui/dump.hprof  (dump到指定文件)</li>
 </ul>
-<h1 id="dump"><a href="#dump" class="headerlink" title="dump"></a>dump</h1><ul>
+<h2 id="jvm"><a href="#jvm" class="headerlink" title="jvm"></a>jvm</h2><ul>
+<li>查看当前 JVM 的信息</li>
+</ul>
+<h2 id="sysenv"><a href="#sysenv" class="headerlink" title="sysenv"></a>sysenv</h2><ul>
+<li>查看jvm的环境变量</li>
+</ul>
+<h2 id="sysprop"><a href="#sysprop" class="headerlink" title="sysprop"></a>sysprop</h2><ul>
+<li>查看或者修改jvm的系统属性<br>示例：<br>java.version=1.8.0_191<br>java.runtime.version=1.8.0_191-b12</li>
+</ul>
+<h2 id="vmoption"><a href="#vmoption" class="headerlink" title="vmoption"></a>vmoption</h2><ul>
+<li>查看和修改JVM里诊断相关的option</li>
+</ul>
+<h2 id="getstatic"><a href="#getstatic" class="headerlink" title="getstatic"></a>getstatic</h2><ul>
+<li>查看类的静态属性</li>
+</ul>
+<h2 id="jad"><a href="#jad" class="headerlink" title="jad"></a>jad</h2><ul>
+<li>反编译class</li>
+<li>jad 类路径</li>
+</ul>
+<h2 id="mc"><a href="#mc" class="headerlink" title="mc"></a>mc</h2><ul>
+<li>编译.java文件生成.class</li>
+</ul>
+<h2 id="tt"><a href="#tt" class="headerlink" title="tt"></a>tt</h2><ul>
+<li>方法执行数据的时空隧道，记录下指定方法每次调用的入参和返回信息，并能对这些不同的时间下调用进行观测。</li>
+</ul>
+<h2 id="watch"><a href="#watch" class="headerlink" title="watch"></a>watch</h2><ul>
+<li>方法执行数据观测。让你能方便的观察到指定方法的调用情况。能观察到的范围为：返回值、抛出异常、入参，通过编写OGNL表达式进行对应变量的查看。</li>
+</ul>
+<h2 id="trace"><a href="#trace" class="headerlink" title="trace"></a>trace</h2><ul>
+<li>trace class-pattern method-pattern condition-express</li>
+<li>condition-express：条件表达式是用来过滤的</li>
+<li>trace demo.Main main ‘#cost &gt; 10’    只展示Main类main方法调用耗时超过10ms的调用路径。</li>
+</ul>
+<h2 id="stack"><a href="#stack" class="headerlink" title="stack"></a>stack</h2><ul>
+<li>输出当前方法被调用的调用路径。</li>
+<li>stack class-pattern method-pattern condition-express</li>
+</ul>
+<h2 id="dump"><a href="#dump" class="headerlink" title="dump"></a>dump</h2><ul>
 <li>dump 已加载类的bytecode到特定目录。</li>
 </ul>
-<h1 id="sc"><a href="#sc" class="headerlink" title="sc"></a>sc</h1><ul>
+<h2 id="sc"><a href="#sc" class="headerlink" title="sc"></a>sc</h2><ul>
 <li>查看JVM已加载的类信息。</li>
 </ul>
-<h1 id="sm"><a href="#sm" class="headerlink" title="sm"></a>sm</h1><ul>
+<h2 id="sm"><a href="#sm" class="headerlink" title="sm"></a>sm</h2><ul>
 <li>查看已加载类的方法信息。</li>
 </ul>
 ]]></content>
