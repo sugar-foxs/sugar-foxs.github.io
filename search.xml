@@ -74,7 +74,7 @@
   <entry>
     <title>Arthas</title>
     <url>/2020/01/14/Arthas/</url>
-    <content><![CDATA[<p>本文记录一下Arthas的命令。</p>
+    <content><![CDATA[<p>本文记录一下Arthas的命令。Arthas是一个非常好的java诊断工具。在遇到线上问题时，能够在不停止应用的前提下观察应用状态。</p>
 <a id="more"></a>
 
 <h1 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h1><blockquote>
