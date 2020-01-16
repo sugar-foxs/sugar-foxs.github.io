@@ -1,12 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>druid参数配置</title>
+    <url>/2020/01/15/druid%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<p>本文介绍druid数据源的参数配置。</p>
+<a id="more"></a>
+
+<ul>
+<li>spring.druid.initialSize<ul>
+<li>初始化时建立物理连接的个数。初始化发生在显示调用init方法，或者第一次getConnection时。</li>
+</ul>
+</li>
+<li>spring.druid.minIdle <ul>
+<li>最小连接池数量</li>
+</ul>
+</li>
+<li>spring.druid.maxActive <ul>
+<li>最大连接池数量</li>
+</ul>
+</li>
+<li>spring.druid.maxWait <ul>
+<li>获取连接时最大等待时间，单位毫秒。配置了maxWait之后，缺省启用公平锁，并发效率会有所下降，如果需要可以通过配置useUnfairLock属性为true使用非公平锁。</li>
+</ul>
+</li>
+<li>spring.druid.testWhileIdle<ul>
+<li>建议配置为true，不影响性能，并且保证安全性。申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。</li>
+</ul>
+</li>
+<li>spring.druid.timeBetweenEvictionRunsMillis<ul>
+<li>Destroy线程会检测连接的间隔时间，如果连接空闲时间大于等于minEvictableIdleTimeMillis则关闭物理连接。</li>
+<li>testWhileIdle的判断依据，详细看testWhileIdle属性的说明</li>
+</ul>
+</li>
+<li>spring.druid.minEvictableIdleTimeMillis<ul>
+<li>连接保持空闲而不被驱逐的最小时间</li>
+</ul>
+</li>
+<li>spring.druid.validationQuery<ul>
+<li>用来检测连接是否有效的sql，要求是一个查询语句，常用SELECT 1 FROM DUAL。如果validationQuery为null，testOnBorrow、testOnReturn、testWhileIdle都不会起作用。</li>
+</ul>
+</li>
+<li>spring.druid.testOnBorrow<ul>
+<li>申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。</li>
+</ul>
+</li>
+<li>spring.druid.testOnReturn<ul>
+<li>归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。</li>
+</ul>
+</li>
+<li>spring.druid.poolPreparedStatements<ul>
+<li>是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭。</li>
+</ul>
+</li>
+<li>spring.druid.maxPoolPreparedStatementPerConnectionSize<ul>
+<li>要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true。在Druid中，不会存在Oracle下PSCache占用内存过多的问题，可以把这个数值配置大一些，比如说100</li>
+</ul>
+</li>
+<li>spring.druid.filters=stat,wall,log4j<ul>
+<li>属性类型是字符串，通过别名的方式配置扩展插件，常用的插件有：</li>
+<li>监控统计用的filter:stat</li>
+<li>日志用的filter:log4j</li>
+<li>防御sql注入的filter:wall</li>
+</ul>
+</li>
+<li>spring.druid.connectionProperties=druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>druid</tag>
+        <tag>spring</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Arthas</title>
     <url>/2020/01/14/Arthas/</url>
     <content><![CDATA[<p>本文记录一下Arthas的命令。</p>
 <a id="more"></a>
 
-<h1 id="dashboard"><a href="#dashboard" class="headerlink" title="dashboard"></a>dashboard</h1><h1 id="tt"><a href="#tt" class="headerlink" title="tt"></a>tt</h1><ul>
+<h1 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h1><blockquote>
+<p>curl -L <a href="https://alibaba.github.io/arthas/install.sh" target="_blank" rel="noopener">https://alibaba.github.io/arthas/install.sh</a> | sh</p>
+</blockquote>
+<h1 id="监控某个进程"><a href="#监控某个进程" class="headerlink" title="监控某个进程"></a>监控某个进程</h1><blockquote>
+<p>java -jar arthas-boot.jar 进程pid</p>
+</blockquote>
+<h1 id="dashboard"><a href="#dashboard" class="headerlink" title="dashboard"></a>dashboard</h1><ul>
+<li>当前系统的实时数据面板。包含线程、cpu、内存等内容。</li>
+</ul>
+<h1 id="tt"><a href="#tt" class="headerlink" title="tt"></a>tt</h1><ul>
 <li>方法执行数据的时空隧道，记录下指定方法每次调用的入参和返回信息，并能对这些不同的时间下调用进行观测。</li>
 </ul>
 <h1 id="watch"><a href="#watch" class="headerlink" title="watch"></a>watch</h1><ul>
@@ -14,7 +94,7 @@
 </ul>
 <h1 id="heapdump"><a href="#heapdump" class="headerlink" title="heapdump"></a>heapdump</h1><ul>
 <li>dump java heap, 类似jmap命令的heap dump功能。</li>
-<li>heapdump /Users/guchunhui/dump.hprof  (dump到指定路径)</li>
+<li>heapdump /Users/guchunhui/dump.hprof  (dump到指定文件)</li>
 </ul>
 <h1 id="dump"><a href="#dump" class="headerlink" title="dump"></a>dump</h1><ul>
 <li>dump 已加载类的bytecode到特定目录。</li>
@@ -37,8 +117,22 @@
 <a id="more"></a>
 
 <blockquote>
-<p>LinkedBlockingQueue使用链表实现。</p>
+<p>LinkedBlockingQueue是一个基于链表的、范围任意的阻塞队列。按FIFO排序元素，队列的头部是在队列中时间最长的元素。队列的尾部是在队列中时间最短的元素。新元素插入到队列的尾部，并且队列检索操作会获得位于队列头部的元素。链接队列的吞吐量通常要高于基于数组的队列，但是在大多数并发应用程序中，其可预知的性能要低。</p>
 </blockquote>
+<ul>
+<li>LinkedBlockingQueue多用于任务队列（单线程发布任务，任务满了就停止等待阻塞，当任务被完成消费少了又开始发布任务)如果不指定容量默认为Integer.MAX_VALUE。通过putLock和takeLock两个锁进行同步，两个锁分别实例化notFull和notEmpty两个Condtion，用来协调多线程的存取动作。</li>
+</ul>
+<h1 id="offer"><a href="#offer" class="headerlink" title="offer"></a>offer</h1><ul>
+<li>入队时使用putLock锁<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">offer</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (e == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">    <span class="keyword">final</span> AtomicInteger count = <span class="keyword">this</span>.count;</span><br><span class="line">    <span class="keyword">if</span> (count.get() == capacity)</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">int</span> c = -<span class="number">1</span>;</span><br><span class="line">    Node&lt;E&gt; node = <span class="keyword">new</span> Node&lt;E&gt;(e);</span><br><span class="line">    <span class="keyword">final</span> ReentrantLock putLock = <span class="keyword">this</span>.putLock;</span><br><span class="line">    putLock.lock();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (count.get() &lt; capacity) &#123;</span><br><span class="line">            enqueue(node);</span><br><span class="line">            c = count.getAndIncrement();</span><br><span class="line">            <span class="keyword">if</span> (c + <span class="number">1</span> &lt; capacity)</span><br><span class="line">                notFull.signal();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        putLock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (c == <span class="number">0</span>)</span><br><span class="line">        signalNotEmpty();</span><br><span class="line">    <span class="keyword">return</span> c &gt;= <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="enqueue"><a href="#enqueue" class="headerlink" title="enqueue"></a>enqueue</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">enqueue</span><span class="params">(Node&lt;E&gt; node)</span> </span>&#123; <span class="comment">//入队</span></span><br><span class="line">    last = last.next = node;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h1 id="poll"><a href="#poll" class="headerlink" title="poll"></a>poll</h1><ul>
+<li>出队时使用takeLock锁,队列头结点是一个空节点。<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> E <span class="title">poll</span><span class="params">(<span class="keyword">long</span> timeout, TimeUnit unit)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">    E x = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">int</span> c = -<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">long</span> nanos = unit.toNanos(timeout);</span><br><span class="line">    <span class="keyword">final</span> AtomicInteger count = <span class="keyword">this</span>.count;</span><br><span class="line">    <span class="keyword">final</span> ReentrantLock takeLock = <span class="keyword">this</span>.takeLock;</span><br><span class="line">    takeLock.lockInterruptibly();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">while</span> (count.get() == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (nanos &lt;= <span class="number">0</span>)</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">            nanos = notEmpty.awaitNanos(nanos);</span><br><span class="line">        &#125;</span><br><span class="line">        x = dequeue();</span><br><span class="line">        c = count.getAndDecrement();</span><br><span class="line">        <span class="keyword">if</span> (c &gt; <span class="number">1</span>)</span><br><span class="line">            notEmpty.signal();</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        takeLock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (c == capacity)</span><br><span class="line">        signalNotFull();</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="dequeue"><a href="#dequeue" class="headerlink" title="dequeue"></a>dequeue</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> E <span class="title">dequeue</span><span class="params">()</span> </span>&#123;   <span class="comment">//出队</span></span><br><span class="line">    Node&lt;E&gt; h = head;</span><br><span class="line">    Node&lt;E&gt; first = h.next;</span><br><span class="line">    h.next = h; <span class="comment">//循环引用，虚拟机的可达性分析算法帮助回收</span></span><br><span class="line">    head = first;</span><br><span class="line">    E x = first.item;</span><br><span class="line">    first.item = <span class="keyword">null</span>;   <span class="comment">//因为头结点是一个空节点</span></span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>其中某些方法(如remove,toArray,toString,clear等)的同步需要同时获得这两个锁，并且总是先putLock.lock紧接着takeLock.lock(在同一方法fullyLock中)，这样的顺序是为了避免可能出现的死锁情况。<h1 id="remove"><a href="#remove" class="headerlink" title="remove"></a>remove</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(Object o)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (o == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    fullyLock();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (Node&lt;E&gt; trail = head, p = trail.next;</span><br><span class="line">             p != <span class="keyword">null</span>;</span><br><span class="line">             trail = p, p = p.next) &#123;</span><br><span class="line">            <span class="keyword">if</span> (o.equals(p.item)) &#123;</span><br><span class="line">                unlink(p, trail);</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        fullyUnlock();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fullyLock</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    putLock.lock();</span><br><span class="line">    takeLock.lock();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
 ]]></content>
       <tags>
         <tag>java</tag>
@@ -683,8 +777,8 @@
 </ul>
 ]]></content>
       <tags>
-        <tag>mybatis</tag>
         <tag>spring</tag>
+        <tag>mybatis</tag>
       </tags>
   </entry>
   <entry>
@@ -711,8 +805,8 @@
 </blockquote>
 ]]></content>
       <tags>
-        <tag>mybatis</tag>
         <tag>spring</tag>
+        <tag>mybatis</tag>
       </tags>
   </entry>
   <entry>
