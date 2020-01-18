@@ -5,10 +5,8 @@ subtitle:
 date:       2020-01-10
 author:     sugar-foxs
 catalog: 	true
-tags:
-    - java
-categories:
-    - learn
+tags: java
+categories: learn
 ---
 
 本篇主要介绍远程debug的方法和原理。

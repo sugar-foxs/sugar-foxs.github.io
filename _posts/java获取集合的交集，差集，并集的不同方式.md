@@ -5,14 +5,14 @@ subtitle:
 date:       2020-01-18
 author:     sugar-foxs
 catalog: 	true
-tags:
-    - java
+tags: java
+categories: learn
 ---
 
 本文主要介绍java获取set的交集，差集，并集的不同方式。
 <!-- more -->
 
-# 使用java基础集合实现
+# 使用java原生集合实现
 
 ```java
 /**
