@@ -61,9 +61,12 @@ public class Test2 {
         Sets.SetView<Integer> intersection = Sets.intersection(set1, set2);
         System.out.println(intersection); //输出 [1]
 
-        // 差集
+        // 差集, 返回第一个集合有。但在第二个集合中没有的元素
         Sets.SetView<Integer> diff = Sets.difference(set1, set2);
         System.out.println(diff); // 输出 [2,3]
+
+        Sets.SetView<Integer> diff2 = Sets.difference(set2, set1);
+        System.out.println(diff2); // 输出 [4,5]
 
         // 并集
         Sets.SetView<Integer> union = Sets.union(set1, set2);
