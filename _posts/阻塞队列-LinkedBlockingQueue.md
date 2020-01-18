@@ -44,6 +44,7 @@ public boolean offer(E e) {
     return c >= 0;
 }
 ```
+
 # enqueue
 ```java
 private void enqueue(Node<E> node) { //入队
@@ -79,6 +80,7 @@ public E poll(long timeout, TimeUnit unit) throws InterruptedException {
     return x;
 }
 ```
+
 # dequeue
 ```java
 private E dequeue() {   //出队
@@ -92,6 +94,7 @@ private E dequeue() {   //出队
 }
 ```
 - 其中某些方法(如remove,toArray,toString,clear等)的同步需要同时获得这两个锁，并且总是先putLock.lock紧接着takeLock.lock(在同一方法fullyLock中)，这样的顺序是为了避免可能出现的死锁情况。
+
 # remove
 ```java
 public boolean remove(Object o) {
