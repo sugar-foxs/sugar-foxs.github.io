@@ -561,6 +561,9 @@
 <li>传输方式：mac和linux默认使用Socket进行数据传输，windows使用共享内存方式。</li>
 </ul>
 <h1 id="远程debug的原理"><a href="#远程debug的原理" class="headerlink" title="远程debug的原理"></a>远程debug的原理</h1><p>远程服务是用来上述的参数启动后，会在指定的端口上进行监听，等待调试客户端去连接。我们在idea使用remote debug时就是启了一个客户端，连接远程服务器。两者使用debug协议（jdwp）进行通信实现远程调试。</p>
+<h1 id="注意的问题"><a href="#注意的问题" class="headerlink" title="注意的问题"></a>注意的问题</h1><ul>
+<li>在远程debug时，打断点不要打在可能被其他请求也使用的方法中，这会造成混淆。</li>
+</ul>
 ]]></content>
       <categories>
         <category>learn</category>
@@ -594,14 +597,7 @@
 </li>
 <li>地理空间（Geospatial）及索引半径查询</li>
 </ul>
-<h1 id="redis持久化"><a href="#redis持久化" class="headerlink" title="redis持久化"></a>redis持久化</h1><blockquote>
-<p>redis 持久化有两种方式：</p>
-</blockquote>
-<ul>
-<li>RDB：在指定的时间间隔内对数据进行快照存储。</li>
-<li>AOF：记录每次对服务器写的操作，当服务器重启的时候会重新执行这些命令来恢复原始的数据。</li>
-</ul>
-<h2 id="RDB持久化原理"><a href="#RDB持久化原理" class="headerlink" title="RDB持久化原理"></a>RDB持久化原理</h2><h2 id="AOF持久化原理"><a href="#AOF持久化原理" class="headerlink" title="AOF持久化原理"></a>AOF持久化原理</h2><h1 id="redis为什么这么快"><a href="#redis为什么这么快" class="headerlink" title="redis为什么这么快"></a>redis为什么这么快</h1><ul>
+<h1 id="redis为什么这么快"><a href="#redis为什么这么快" class="headerlink" title="redis为什么这么快"></a>redis为什么这么快</h1><ul>
 <li><p>基于内存。数据存在内存中，类似于HashMap，查找和操作的时间复杂度都是O(1)</p>
 </li>
 <li><p>数据结构简单，对数据操作也简单，Redis中的数据结构是专门进行设计的。</p>
@@ -617,6 +613,24 @@
 <li>因为Redis是基于内存的操作，CPU不是Redis的瓶颈，Redis的瓶颈最有可能是机器内存的大小或者网络带宽。既然单线程容易实现，而且CPU不会成为瓶颈，那就顺理成章地采用单线程的方案了。</li>
 <li>单线程，只是说在处理我们的网络请求的时候只有一个线程来处理，一个正式的Redis服务器运行的时候肯定是不止一个线程的，例如Redis进行持久化的时候会以子进程或者子线程的方式执行。</li>
 </ul>
+<h1 id="键过期策略"><a href="#键过期策略" class="headerlink" title="键过期策略"></a>键过期策略</h1><p>保证Redis不会超过可用内存的方法是为键设置超时时间。<br>三种过期策略：</p>
+<ul>
+<li>定时删除：在设置key的过期时间的同时，创建一个定时器(timer)，让定时器在key的过期时间来临时，立即执行对key的删除操作。<ul>
+<li>优点：能及时删除过期key，内存被释放。</li>
+<li>缺点：占用太多CPU时间，影响服务器的响应时间和吞吐量</li>
+</ul>
+</li>
+<li>惰性删除：放任key过期不管，但是每次去数据库获取key的时候去检查是否过期，若过期，则删除，返回null。<ul>
+<li>优点：在进行get或setnx等操作时，先检查key是否过期，不会占用太多cpu。</li>
+<li>缺点：可能有大量过期的key没有再次被访问，不会被清除，这样会浪费太多内存，有内存泄漏的危险。</li>
+</ul>
+</li>
+<li>定期删除：每隔一段时间，程序就对数据库进行一次检查，删除里面过期的key。<ul>
+<li>是前两种策略的折中。</li>
+</ul>
+</li>
+</ul>
+<p>redis实现的是惰性删除和定期删除。</p>
 ]]></content>
       <tags>
         <tag>redis</tag>

@@ -54,7 +54,7 @@
 <meta property="og:description" content="本文主要介绍redis。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-01-05T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-01-11T08:04:54.196Z">
+<meta property="article:modified_time" content="2020-01-19T14:27:05.138Z">
 <meta property="article:author" content="sugar-foxs">
 <meta property="article:tag" content="redis">
 <meta name="twitter:card" content="summary">
@@ -244,7 +244,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-11 16:04:54" itemprop="dateModified" datetime="2020-01-11T16:04:54+08:00">2020-01-11</time>
+                <time title="修改时间：2020-01-19 22:27:05" itemprop="dateModified" datetime="2020-01-19T22:27:05+08:00">2020-01-19</time>
               </span>
 
           
@@ -287,14 +287,7 @@
 </li>
 <li>地理空间（Geospatial）及索引半径查询</li>
 </ul>
-<h1 id="redis持久化"><a href="#redis持久化" class="headerlink" title="redis持久化"></a>redis持久化</h1><blockquote>
-<p>redis 持久化有两种方式：</p>
-</blockquote>
-<ul>
-<li>RDB：在指定的时间间隔内对数据进行快照存储。</li>
-<li>AOF：记录每次对服务器写的操作，当服务器重启的时候会重新执行这些命令来恢复原始的数据。</li>
-</ul>
-<h2 id="RDB持久化原理"><a href="#RDB持久化原理" class="headerlink" title="RDB持久化原理"></a>RDB持久化原理</h2><h2 id="AOF持久化原理"><a href="#AOF持久化原理" class="headerlink" title="AOF持久化原理"></a>AOF持久化原理</h2><h1 id="redis为什么这么快"><a href="#redis为什么这么快" class="headerlink" title="redis为什么这么快"></a>redis为什么这么快</h1><ul>
+<h1 id="redis为什么这么快"><a href="#redis为什么这么快" class="headerlink" title="redis为什么这么快"></a>redis为什么这么快</h1><ul>
 <li><p>基于内存。数据存在内存中，类似于HashMap，查找和操作的时间复杂度都是O(1)</p>
 </li>
 <li><p>数据结构简单，对数据操作也简单，Redis中的数据结构是专门进行设计的。</p>
@@ -310,6 +303,24 @@
 <li>因为Redis是基于内存的操作，CPU不是Redis的瓶颈，Redis的瓶颈最有可能是机器内存的大小或者网络带宽。既然单线程容易实现，而且CPU不会成为瓶颈，那就顺理成章地采用单线程的方案了。</li>
 <li>单线程，只是说在处理我们的网络请求的时候只有一个线程来处理，一个正式的Redis服务器运行的时候肯定是不止一个线程的，例如Redis进行持久化的时候会以子进程或者子线程的方式执行。</li>
 </ul>
+<h1 id="键过期策略"><a href="#键过期策略" class="headerlink" title="键过期策略"></a>键过期策略</h1><p>保证Redis不会超过可用内存的方法是为键设置超时时间。<br>三种过期策略：</p>
+<ul>
+<li>定时删除：在设置key的过期时间的同时，创建一个定时器(timer)，让定时器在key的过期时间来临时，立即执行对key的删除操作。<ul>
+<li>优点：能及时删除过期key，内存被释放。</li>
+<li>缺点：占用太多CPU时间，影响服务器的响应时间和吞吐量</li>
+</ul>
+</li>
+<li>惰性删除：放任key过期不管，但是每次去数据库获取key的时候去检查是否过期，若过期，则删除，返回null。<ul>
+<li>优点：在进行get或setnx等操作时，先检查key是否过期，不会占用太多cpu。</li>
+<li>缺点：可能有大量过期的key没有再次被访问，不会被清除，这样会浪费太多内存，有内存泄漏的危险。</li>
+</ul>
+</li>
+<li>定期删除：每隔一段时间，程序就对数据库进行一次检查，删除里面过期的key。<ul>
+<li>是前两种策略的折中。</li>
+</ul>
+</li>
+</ul>
+<p>redis实现的是惰性删除和定期删除。</p>
 
     </div>
 
@@ -395,7 +406,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#redis支持的数据结构"><span class="nav-number">1.</span> <span class="nav-text">redis支持的数据结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#redis持久化"><span class="nav-number">2.</span> <span class="nav-text">redis持久化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#RDB持久化原理"><span class="nav-number">2.1.</span> <span class="nav-text">RDB持久化原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AOF持久化原理"><span class="nav-number">2.2.</span> <span class="nav-text">AOF持久化原理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#redis为什么这么快"><span class="nav-number">3.</span> <span class="nav-text">redis为什么这么快</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#redis-为什么是单线程"><span class="nav-number">4.</span> <span class="nav-text">redis 为什么是单线程</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#redis支持的数据结构"><span class="nav-number">1.</span> <span class="nav-text">redis支持的数据结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#redis为什么这么快"><span class="nav-number">2.</span> <span class="nav-text">redis为什么这么快</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#redis-为什么是单线程"><span class="nav-number">3.</span> <span class="nav-text">redis 为什么是单线程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#键过期策略"><span class="nav-number">4.</span> <span class="nav-text">键过期策略</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
