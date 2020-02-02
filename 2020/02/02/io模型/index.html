@@ -46,20 +46,20 @@
   };
 </script>
 
-  <meta name="description" content="本文记录一下Arthas的命令。Arthas是一个非常好的java诊断工具。在遇到线上问题时，能够在不停止应用的前提下观察应用状态。">
+  <meta name="description" content="本文主要介绍IO模型。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Arthas">
-<meta property="og:url" content="http://yoursite.com/2020/01/14/Arthas/index.html">
+<meta property="og:title" content="IO模型">
+<meta property="og:url" content="http://yoursite.com/2020/02/02/io%E6%A8%A1%E5%9E%8B/index.html">
 <meta property="og:site_name" content="sugar_foxs&#39;s blog">
-<meta property="og:description" content="本文记录一下Arthas的命令。Arthas是一个非常好的java诊断工具。在遇到线上问题时，能够在不停止应用的前提下观察应用状态。">
+<meta property="og:description" content="本文主要介绍IO模型。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-01-13T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-01-22T09:56:12.945Z">
+<meta property="article:published_time" content="2020-02-01T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-02-02T03:21:49.869Z">
 <meta property="article:author" content="sugar-foxs">
 <meta property="article:tag" content="java">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/2020/01/14/Arthas/">
+<link rel="canonical" href="http://yoursite.com/2020/02/02/io%E6%A8%A1%E5%9E%8B/">
 
 
 <script id="page-configurations">
@@ -71,7 +71,7 @@
   };
 </script>
 
-  <title>Arthas | sugar_foxs's blog</title>
+  <title>IO模型 | sugar_foxs's blog</title>
   
 
 
@@ -214,7 +214,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/14/Arthas/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/02/io%E6%A8%A1%E5%9E%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpeg">
@@ -227,7 +227,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Arthas
+          IO模型
         </h1>
 
         <div class="post-meta">
@@ -236,16 +236,10 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2020-01-14 00:00:00" itemprop="dateCreated datePublished" datetime="2020-01-14T00:00:00+08:00">2020-01-14</time>
+              <time title="创建时间：2020-02-02 00:00:00 / 修改时间：11:21:49" itemprop="dateCreated datePublished" datetime="2020-02-02T00:00:00+08:00">2020-02-02</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-22 17:56:12" itemprop="dateModified" datetime="2020-01-22T17:56:12+08:00">2020-01-22</time>
-              </span>
 
           
             <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
@@ -263,8 +257,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2020/01/14/Arthas/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/01/14/Arthas/" itemprop="commentCount"></span>
+    <a title="valine" href="/2020/02/02/io%E6%A8%A1%E5%9E%8B/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/02/02/io%E6%A8%A1%E5%9E%8B/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -279,86 +273,45 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>本文记录一下Arthas的命令。Arthas是一个非常好的java诊断工具。在遇到线上问题时，能够在不停止应用的前提下观察应用状态。</p>
+        <p>本文主要介绍IO模型。</p>
 <a id="more"></a>
 
-<h1 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h1><blockquote>
-<p>curl -L <a href="https://alibaba.github.io/arthas/install.sh" target="_blank" rel="noopener">https://alibaba.github.io/arthas/install.sh</a> | sh</p>
-</blockquote>
-<h1 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h1><blockquote>
-<p>java -jar arthas-boot.jar 进程pid</p>
-</blockquote>
-<h1 id="所有命令"><a href="#所有命令" class="headerlink" title="所有命令"></a>所有命令</h1><h2 id="dashboard"><a href="#dashboard" class="headerlink" title="dashboard"></a>dashboard</h2><ul>
-<li>当前系统的实时数据面板。包含线程、cpu、内存等内容。</li>
+<h1 id="Linux中IO模型"><a href="#Linux中IO模型" class="headerlink" title="Linux中IO模型"></a>Linux中IO模型</h1><ul>
+<li>在Linux操作系统中有5中IO模型：阻塞IO模型，非阻塞IO模型，IO复用模型，信号驱动IO模型，异步IO模型。</li>
 </ul>
-<h2 id="thread"><a href="#thread" class="headerlink" title="thread"></a>thread</h2><ul>
-<li>thread 1 | grep ‘main’</li>
-<li>打印线程ID 1的栈, grep出自己想看的内容。</li>
+<h2 id="阻塞IO模型"><a href="#阻塞IO模型" class="headerlink" title="阻塞IO模型"></a>阻塞IO模型</h2><ul>
+<li>应用进程通过系统调用 recvfrom 接收数据，但由于内核还未准备好数据报，应用进程就会阻塞住，直到内核准备好数据报，recvfrom 完成数据报复制工作，应用进程才能结束阻塞状态。</li>
+<li>在阻塞的时候什么也做不了，比较浪费时间。</li>
 </ul>
-<h2 id="heapdump"><a href="#heapdump" class="headerlink" title="heapdump"></a>heapdump</h2><ul>
-<li>dump java heap, 类似jmap命令的heap dump功能。</li>
-<li>heapdump /Users/guchunhui/dump.hprof  (dump到指定文件)</li>
+<h2 id="非阻塞IO模型"><a href="#非阻塞IO模型" class="headerlink" title="非阻塞IO模型"></a>非阻塞IO模型</h2><ul>
+<li>该模型在阻塞的时候可以做其他事情，提高了时间利用率。</li>
+<li>应用进程通过 recvfrom 调用不停的去和内核交互，直到内核准备好数据。如果没有准备好，内核会返回error，应用进程在得到error后，过一段时间再发送recvfrom请求。在两次发送请求的时间段，进程可以先做别的事情。</li>
 </ul>
-<h2 id="jvm"><a href="#jvm" class="headerlink" title="jvm"></a>jvm</h2><ul>
-<li>查看当前 JVM 的信息</li>
+<h2 id="信号驱动IO模型"><a href="#信号驱动IO模型" class="headerlink" title="信号驱动IO模型"></a>信号驱动IO模型</h2><ul>
+<li>非阻塞模型需要隔一段时间检查数据是否准备好，我们可以在数据准备好的时候通知应用进程。</li>
+<li>应用进程预先向内核注册一个信号处理函数，然后用户进程返回，并且不阻塞，当内核数据准备就绪时会发送一个信号给进程，用户进程便在信号处理函数中开始把数据拷贝的用户空间中。</li>
 </ul>
-<h2 id="sysenv"><a href="#sysenv" class="headerlink" title="sysenv"></a>sysenv</h2><ul>
-<li>查看jvm的环境变量</li>
+<h2 id="IO复用模型"><a href="#IO复用模型" class="headerlink" title="IO复用模型"></a>IO复用模型</h2><ul>
+<li>多个进程的IO可以注册到同一个管道上，这个管道会统一和内核进行交互。当管道中的某一个请求需要的数据准备好之后，进程再把对应的数据拷贝到用户空间中。</li>
+<li>IO多路复用是多了一个select函数，多个进程的IO可以注册到同一个select上，当用户进程调用该select，select会监听所有注册好的IO，如果所有被监听的IO需要的数据都没有准备好时，select调用进程会阻塞。当任意一个IO所需的数据准备好之后，select调用就会返回，然后进程在通过recvfrom来进行数据拷贝。</li>
+<li>IO复用模型，并没有向内核注册信号处理函数，所以并不是非阻塞的。进程在发出select后，要等到select监听的所有IO操作中至少有一个需要的数据准备好，才会有返回，并且也需要再次发送请求去进行文件的拷贝。</li>
 </ul>
-<h2 id="sysprop"><a href="#sysprop" class="headerlink" title="sysprop"></a>sysprop</h2><ul>
-<li>查看或者修改jvm的系统属性<br>示例：<br>java.version=1.8.0_191<br>java.runtime.version=1.8.0_191-b12</li>
+<h2 id="异步IO模型"><a href="#异步IO模型" class="headerlink" title="异步IO模型"></a>异步IO模型</h2><ul>
+<li>上述IO模型都是同步的，因为真正的数据拷贝过程是同步的。</li>
+<li>应用进程把IO请求传给内核后，完全由内核去操作文件拷贝。内核完成相关操作后，会发信号告诉应用进程本次IO已经完成。</li>
+<li>用户进程发起aio_read操作之后，给内核传递描述符、缓冲区指针、缓冲区大小等，告诉内核当整个操作完成时，如何通知进程，然后就立刻去做其他事情了。当内核收到aio_read后，会立刻返回，然后内核开始等待数据准备，数据准备好以后，直接把数据拷贝到用户空间，然后再通知进程本次IO已经完成。</li>
 </ul>
-<h2 id="vmoption"><a href="#vmoption" class="headerlink" title="vmoption"></a>vmoption</h2><ul>
-<li>查看和修改JVM里诊断相关的option</li>
+<h1 id="java中的IO模型"><a href="#java中的IO模型" class="headerlink" title="java中的IO模型"></a>java中的IO模型</h1><ul>
+<li>java中有3中IO模型：BIO,NIO,AIO。</li>
 </ul>
-<h2 id="getstatic"><a href="#getstatic" class="headerlink" title="getstatic"></a>getstatic</h2><ul>
-<li>查看类的静态属性</li>
+<h2 id="BIO-同步阻塞模型"><a href="#BIO-同步阻塞模型" class="headerlink" title="BIO 同步阻塞模型"></a>BIO 同步阻塞模型</h2><ul>
+<li>拿微波炉热饭举例，假设热饭结束没有响声，同步阻塞是一直在微波炉前面等待着，不做其他事情，直到饭热了。</li>
 </ul>
-<h2 id="jad"><a href="#jad" class="headerlink" title="jad"></a>jad</h2><ul>
-<li>反编译class</li>
-<li>jad 类路径</li>
+<h2 id="NIO-同步非阻塞模型"><a href="#NIO-同步非阻塞模型" class="headerlink" title="NIO 同步非阻塞模型"></a>NIO 同步非阻塞模型</h2><ul>
+<li>假设热饭结束没有响声，同步非阻塞是打开微波炉热饭，然后去做其他事情，比如炒菜，然后过一段时间去看下有没有热好，没好再去做其他事情。</li>
 </ul>
-<h2 id="mc"><a href="#mc" class="headerlink" title="mc"></a>mc</h2><ul>
-<li>编译.java文件生成.class</li>
-</ul>
-<h2 id="tt"><a href="#tt" class="headerlink" title="tt"></a>tt</h2><ul>
-<li>方法执行数据的时空隧道，记录下指定方法每次调用的入参和返回信息，并能对这些不同的时间下调用进行观测。</li>
-</ul>
-<h2 id="watch"><a href="#watch" class="headerlink" title="watch"></a>watch</h2><ul>
-<li>方法执行数据观测。让你能方便的观察到指定方法的调用情况。能观察到的范围为：返回值、抛出异常、入参，通过编写OGNL表达式进行对应变量的查看。</li>
-<li>watch class-pattern method-pattern express condition-express</li>
-<li>express是观察表达式，观察表达式的构成主要由 ognl 表达式组成，所以你可以这样写”{params,returnObj}”，只要是一个合法的 ognl 表达式，都能被正常支持。</li>
-<li>watch 命令定义了4个观察事件点，即 -b 方法调用前，-e 方法异常后，-s 方法返回后，-f 方法结束后。</li>
-<li>4个观察事件点 -b、-e、-s 默认关闭，-f 默认打开，当指定观察点被打开后，在相应事件点会对观察表达式进行求值并输出。</li>
-<li>观察异常信息例子：<ul>
-<li>watch 类名 方法 “{params[0],throwExp}” -e -x 2 -n 5</li>
-<li>-e 表示抛出异常才触发，throwExp表示异常信息</li>
-<li>-x 表示遍历深度。</li>
-<li>-n 只执行指定次数。</li>
-</ul>
-</li>
-</ul>
-<h2 id="trace"><a href="#trace" class="headerlink" title="trace"></a>trace</h2><ul>
-<li>trace class-pattern method-pattern condition-express</li>
-<li>condition-express：条件表达式是用来过滤的。</li>
-<li>trace demo.Main main ‘#cost &gt; 10’    只展示Main类main方法调用耗时超过10ms的调用路径。</li>
-</ul>
-<h2 id="stack"><a href="#stack" class="headerlink" title="stack"></a>stack</h2><ul>
-<li>输出当前方法被调用的调用路径。</li>
-<li>stack class-pattern method-pattern condition-express</li>
-</ul>
-<h2 id="ognl"><a href="#ognl" class="headerlink" title="ognl"></a>ognl</h2><ul>
-<li>ognl表达式官方指南：<a href="https://commons.apache.org/proper/commons-ognl/language-guide.html" target="_blank" rel="noopener">https://commons.apache.org/proper/commons-ognl/language-guide.html</a></li>
-<li></li>
-</ul>
-<h2 id="dump"><a href="#dump" class="headerlink" title="dump"></a>dump</h2><ul>
-<li>dump 已加载类的bytecode到特定目录。</li>
-</ul>
-<h2 id="sc"><a href="#sc" class="headerlink" title="sc"></a>sc</h2><ul>
-<li>查看JVM已加载的类信息。</li>
-</ul>
-<h2 id="sm"><a href="#sm" class="headerlink" title="sm"></a>sm</h2><ul>
-<li>查看已加载类的方法信息。</li>
+<h2 id="AIO-异步非阻塞模型"><a href="#AIO-异步非阻塞模型" class="headerlink" title="AIO 异步非阻塞模型"></a>AIO 异步非阻塞模型</h2><ul>
+<li>微波炉热好饭有响声通知饭热好了，异步非阻塞就是打开微波炉，饭放进去，就可以去做其他事情了，然后饭热好了会有响声通知你。</li>
 </ul>
 
     </div>
@@ -379,13 +332,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/01/13/%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97-LinkedBlockingQueue/" rel="prev" title="阻塞队列-LinkedBlockingQueue">
-      <i class="fa fa-chevron-left"></i> 阻塞队列-LinkedBlockingQueue
+    <a href="/2020/01/18/java%E8%8E%B7%E5%8F%96%E9%9B%86%E5%90%88%E7%9A%84%E4%BA%A4%E9%9B%86%EF%BC%8C%E5%B7%AE%E9%9B%86%EF%BC%8C%E5%B9%B6%E9%9B%86%E7%9A%84%E4%B8%8D%E5%90%8C%E6%96%B9%E5%BC%8F/" rel="prev" title="java获取集合的交集，差集，并集的不同方式">
+      <i class="fa fa-chevron-left"></i> java获取集合的交集，差集，并集的不同方式
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/01/15/druid%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE/" rel="next" title="druid参数配置">
-      druid参数配置 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -446,7 +396,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#下载"><span class="nav-number">1.</span> <span class="nav-text">下载</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#启动"><span class="nav-number">2.</span> <span class="nav-text">启动</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#所有命令"><span class="nav-number">3.</span> <span class="nav-text">所有命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#dashboard"><span class="nav-number">3.1.</span> <span class="nav-text">dashboard</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#thread"><span class="nav-number">3.2.</span> <span class="nav-text">thread</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#heapdump"><span class="nav-number">3.3.</span> <span class="nav-text">heapdump</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jvm"><span class="nav-number">3.4.</span> <span class="nav-text">jvm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sysenv"><span class="nav-number">3.5.</span> <span class="nav-text">sysenv</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sysprop"><span class="nav-number">3.6.</span> <span class="nav-text">sysprop</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vmoption"><span class="nav-number">3.7.</span> <span class="nav-text">vmoption</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#getstatic"><span class="nav-number">3.8.</span> <span class="nav-text">getstatic</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jad"><span class="nav-number">3.9.</span> <span class="nav-text">jad</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mc"><span class="nav-number">3.10.</span> <span class="nav-text">mc</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tt"><span class="nav-number">3.11.</span> <span class="nav-text">tt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#watch"><span class="nav-number">3.12.</span> <span class="nav-text">watch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#trace"><span class="nav-number">3.13.</span> <span class="nav-text">trace</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stack"><span class="nav-number">3.14.</span> <span class="nav-text">stack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ognl"><span class="nav-number">3.15.</span> <span class="nav-text">ognl</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dump"><span class="nav-number">3.16.</span> <span class="nav-text">dump</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sc"><span class="nav-number">3.17.</span> <span class="nav-text">sc</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sm"><span class="nav-number">3.18.</span> <span class="nav-text">sm</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux中IO模型"><span class="nav-number">1.</span> <span class="nav-text">Linux中IO模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#阻塞IO模型"><span class="nav-number">1.1.</span> <span class="nav-text">阻塞IO模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#非阻塞IO模型"><span class="nav-number">1.2.</span> <span class="nav-text">非阻塞IO模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#信号驱动IO模型"><span class="nav-number">1.3.</span> <span class="nav-text">信号驱动IO模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IO复用模型"><span class="nav-number">1.4.</span> <span class="nav-text">IO复用模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#异步IO模型"><span class="nav-number">1.5.</span> <span class="nav-text">异步IO模型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#java中的IO模型"><span class="nav-number">2.</span> <span class="nav-text">java中的IO模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#BIO-同步阻塞模型"><span class="nav-number">2.1.</span> <span class="nav-text">BIO 同步阻塞模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NIO-同步非阻塞模型"><span class="nav-number">2.2.</span> <span class="nav-text">NIO 同步非阻塞模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AIO-异步非阻塞模型"><span class="nav-number">2.3.</span> <span class="nav-text">AIO 异步非阻塞模型</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

@@ -46,20 +46,15 @@
   };
 </script>
 
-  <meta name="description" content="本文记录一下Arthas的命令。Arthas是一个非常好的java诊断工具。在遇到线上问题时，能够在不停止应用的前提下观察应用状态。">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Arthas">
-<meta property="og:url" content="http://yoursite.com/2020/01/14/Arthas/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="sugar_foxs&#39;s blog">
+<meta property="og:url" content="http://yoursite.com/archives/page/6/index.html">
 <meta property="og:site_name" content="sugar_foxs&#39;s blog">
-<meta property="og:description" content="本文记录一下Arthas的命令。Arthas是一个非常好的java诊断工具。在遇到线上问题时，能够在不停止应用的前提下观察应用状态。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-01-13T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-01-22T09:56:12.945Z">
 <meta property="article:author" content="sugar-foxs">
-<meta property="article:tag" content="java">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/2020/01/14/Arthas/">
+<link rel="canonical" href="http://yoursite.com/archives/page/6/">
 
 
 <script id="page-configurations">
@@ -67,11 +62,11 @@
   CONFIG.page = {
     sidebar: "",
     isHome: false,
-    isPost: true
+    isPost: false
   };
 </script>
 
-  <title>Arthas | sugar_foxs's blog</title>
+  <title>归档 | sugar_foxs's blog</title>
   
 
 
@@ -209,197 +204,56 @@
           <div class="content">
             
 
-  <div class="posts-expand">
-      
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/14/Arthas/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-      <meta itemprop="name" content="sugar-foxs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="sugar_foxs's blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          Arthas
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-01-14 00:00:00" itemprop="dateCreated datePublished" datetime="2020-01-14T00:00:00+08:00">2020-01-14</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-01-22 17:56:12" itemprop="dateModified" datetime="2020-01-22T17:56:12+08:00">2020-01-22</time>
-              </span>
-
-          
-            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span id="busuanzi_value_page_pv"></span>
-            </span>
   
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/01/14/Arthas/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/01/14/Arthas/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
+  <div class="post-block">
+    <div class="posts-collapse">
+      <div class="collection-title">
+        <span class="collection-header">赞! 目前共计 26 篇日志。 继续努力。</span>
+      </div>
 
       
-        <p>本文记录一下Arthas的命令。Arthas是一个非常好的java诊断工具。在遇到线上问题时，能够在不停止应用的前提下观察应用状态。</p>
-<a id="more"></a>
-
-<h1 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h1><blockquote>
-<p>curl -L <a href="https://alibaba.github.io/arthas/install.sh" target="_blank" rel="noopener">https://alibaba.github.io/arthas/install.sh</a> | sh</p>
-</blockquote>
-<h1 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h1><blockquote>
-<p>java -jar arthas-boot.jar 进程pid</p>
-</blockquote>
-<h1 id="所有命令"><a href="#所有命令" class="headerlink" title="所有命令"></a>所有命令</h1><h2 id="dashboard"><a href="#dashboard" class="headerlink" title="dashboard"></a>dashboard</h2><ul>
-<li>当前系统的实时数据面板。包含线程、cpu、内存等内容。</li>
-</ul>
-<h2 id="thread"><a href="#thread" class="headerlink" title="thread"></a>thread</h2><ul>
-<li>thread 1 | grep ‘main’</li>
-<li>打印线程ID 1的栈, grep出自己想看的内容。</li>
-</ul>
-<h2 id="heapdump"><a href="#heapdump" class="headerlink" title="heapdump"></a>heapdump</h2><ul>
-<li>dump java heap, 类似jmap命令的heap dump功能。</li>
-<li>heapdump /Users/guchunhui/dump.hprof  (dump到指定文件)</li>
-</ul>
-<h2 id="jvm"><a href="#jvm" class="headerlink" title="jvm"></a>jvm</h2><ul>
-<li>查看当前 JVM 的信息</li>
-</ul>
-<h2 id="sysenv"><a href="#sysenv" class="headerlink" title="sysenv"></a>sysenv</h2><ul>
-<li>查看jvm的环境变量</li>
-</ul>
-<h2 id="sysprop"><a href="#sysprop" class="headerlink" title="sysprop"></a>sysprop</h2><ul>
-<li>查看或者修改jvm的系统属性<br>示例：<br>java.version=1.8.0_191<br>java.runtime.version=1.8.0_191-b12</li>
-</ul>
-<h2 id="vmoption"><a href="#vmoption" class="headerlink" title="vmoption"></a>vmoption</h2><ul>
-<li>查看和修改JVM里诊断相关的option</li>
-</ul>
-<h2 id="getstatic"><a href="#getstatic" class="headerlink" title="getstatic"></a>getstatic</h2><ul>
-<li>查看类的静态属性</li>
-</ul>
-<h2 id="jad"><a href="#jad" class="headerlink" title="jad"></a>jad</h2><ul>
-<li>反编译class</li>
-<li>jad 类路径</li>
-</ul>
-<h2 id="mc"><a href="#mc" class="headerlink" title="mc"></a>mc</h2><ul>
-<li>编译.java文件生成.class</li>
-</ul>
-<h2 id="tt"><a href="#tt" class="headerlink" title="tt"></a>tt</h2><ul>
-<li>方法执行数据的时空隧道，记录下指定方法每次调用的入参和返回信息，并能对这些不同的时间下调用进行观测。</li>
-</ul>
-<h2 id="watch"><a href="#watch" class="headerlink" title="watch"></a>watch</h2><ul>
-<li>方法执行数据观测。让你能方便的观察到指定方法的调用情况。能观察到的范围为：返回值、抛出异常、入参，通过编写OGNL表达式进行对应变量的查看。</li>
-<li>watch class-pattern method-pattern express condition-express</li>
-<li>express是观察表达式，观察表达式的构成主要由 ognl 表达式组成，所以你可以这样写”{params,returnObj}”，只要是一个合法的 ognl 表达式，都能被正常支持。</li>
-<li>watch 命令定义了4个观察事件点，即 -b 方法调用前，-e 方法异常后，-s 方法返回后，-f 方法结束后。</li>
-<li>4个观察事件点 -b、-e、-s 默认关闭，-f 默认打开，当指定观察点被打开后，在相应事件点会对观察表达式进行求值并输出。</li>
-<li>观察异常信息例子：<ul>
-<li>watch 类名 方法 “{params[0],throwExp}” -e -x 2 -n 5</li>
-<li>-e 表示抛出异常才触发，throwExp表示异常信息</li>
-<li>-x 表示遍历深度。</li>
-<li>-n 只执行指定次数。</li>
-</ul>
-</li>
-</ul>
-<h2 id="trace"><a href="#trace" class="headerlink" title="trace"></a>trace</h2><ul>
-<li>trace class-pattern method-pattern condition-express</li>
-<li>condition-express：条件表达式是用来过滤的。</li>
-<li>trace demo.Main main ‘#cost &gt; 10’    只展示Main类main方法调用耗时超过10ms的调用路径。</li>
-</ul>
-<h2 id="stack"><a href="#stack" class="headerlink" title="stack"></a>stack</h2><ul>
-<li>输出当前方法被调用的调用路径。</li>
-<li>stack class-pattern method-pattern condition-express</li>
-</ul>
-<h2 id="ognl"><a href="#ognl" class="headerlink" title="ognl"></a>ognl</h2><ul>
-<li>ognl表达式官方指南：<a href="https://commons.apache.org/proper/commons-ognl/language-guide.html" target="_blank" rel="noopener">https://commons.apache.org/proper/commons-ognl/language-guide.html</a></li>
-<li></li>
-</ul>
-<h2 id="dump"><a href="#dump" class="headerlink" title="dump"></a>dump</h2><ul>
-<li>dump 已加载类的bytecode到特定目录。</li>
-</ul>
-<h2 id="sc"><a href="#sc" class="headerlink" title="sc"></a>sc</h2><ul>
-<li>查看JVM已加载的类信息。</li>
-</ul>
-<h2 id="sm"><a href="#sm" class="headerlink" title="sm"></a>sm</h2><ul>
-<li>查看已加载类的方法信息。</li>
-</ul>
-
+    <div class="collection-year">
+      <h1 class="collection-header">2017</h1>
     </div>
 
-    
-    
-    
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
 
-      <footer class="post-footer">
-          
-          <div class="post-tags">
-              <a href="/tags/java/" rel="tag"><i class="fa fa-tag"></i> java</a>
-          </div>
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2017-06-16T00:00:00+08:00"
+              content="2017-06-16">
+          06-16
+        </time>
+      </div>
 
-        
+      <h2 class="post-title">
+          <a class="post-title-link" href="/2017/06/16/java%E5%A4%9A%E7%BA%BF%E7%A8%8B/" itemprop="url">
+            <span itemprop="name">java多线程</span>
+          </a>
+      </h2>
 
-
-        
-    <div class="post-nav">
-      <div class="post-nav-item">
-    <a href="/2020/01/13/%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97-LinkedBlockingQueue/" rel="prev" title="阻塞队列-LinkedBlockingQueue">
-      <i class="fa fa-chevron-left"></i> 阻塞队列-LinkedBlockingQueue
-    </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/01/15/druid%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE/" rel="next" title="druid参数配置">
-      druid参数配置 <i class="fa fa-chevron-right"></i>
-    </a></div>
-    </div>
-      </footer>
-    
+    </header>
   </article>
+
+
+    </div>
+  </div>
   
   
   
 
-  </div>
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/archives/page/5/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/archives/">1</a><span class="space">&hellip;</span><a class="page-number" href="/archives/page/5/">5</a><span class="page-number current">6</span>
+  </nav>
+
 
 
           </div>
           
-    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -446,7 +300,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#下载"><span class="nav-number">1.</span> <span class="nav-text">下载</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#启动"><span class="nav-number">2.</span> <span class="nav-text">启动</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#所有命令"><span class="nav-number">3.</span> <span class="nav-text">所有命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#dashboard"><span class="nav-number">3.1.</span> <span class="nav-text">dashboard</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#thread"><span class="nav-number">3.2.</span> <span class="nav-text">thread</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#heapdump"><span class="nav-number">3.3.</span> <span class="nav-text">heapdump</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jvm"><span class="nav-number">3.4.</span> <span class="nav-text">jvm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sysenv"><span class="nav-number">3.5.</span> <span class="nav-text">sysenv</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sysprop"><span class="nav-number">3.6.</span> <span class="nav-text">sysprop</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vmoption"><span class="nav-number">3.7.</span> <span class="nav-text">vmoption</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#getstatic"><span class="nav-number">3.8.</span> <span class="nav-text">getstatic</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jad"><span class="nav-number">3.9.</span> <span class="nav-text">jad</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mc"><span class="nav-number">3.10.</span> <span class="nav-text">mc</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tt"><span class="nav-number">3.11.</span> <span class="nav-text">tt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#watch"><span class="nav-number">3.12.</span> <span class="nav-text">watch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#trace"><span class="nav-number">3.13.</span> <span class="nav-text">trace</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stack"><span class="nav-number">3.14.</span> <span class="nav-text">stack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ognl"><span class="nav-number">3.15.</span> <span class="nav-text">ognl</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dump"><span class="nav-number">3.16.</span> <span class="nav-text">dump</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sc"><span class="nav-number">3.17.</span> <span class="nav-text">sc</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sm"><span class="nav-number">3.18.</span> <span class="nav-text">sm</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
