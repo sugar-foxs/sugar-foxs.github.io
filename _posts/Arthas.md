@@ -62,17 +62,29 @@ java.runtime.version=1.8.0_191-b12
 
 ## watch
 - 方法执行数据观测。让你能方便的观察到指定方法的调用情况。能观察到的范围为：返回值、抛出异常、入参，通过编写OGNL表达式进行对应变量的查看。
+- watch class-pattern method-pattern express condition-express
+- express是观察表达式，观察表达式的构成主要由 ognl 表达式组成，所以你可以这样写"{params,returnObj}"，只要是一个合法的 ognl 表达式，都能被正常支持。
+- watch 命令定义了4个观察事件点，即 -b 方法调用前，-e 方法异常后，-s 方法返回后，-f 方法结束后。
+- 4个观察事件点 -b、-e、-s 默认关闭，-f 默认打开，当指定观察点被打开后，在相应事件点会对观察表达式进行求值并输出。
+- 观察异常信息例子：
+    - watch 类名 方法 "{params[0],throwExp}" -e -x 2 -n 5
+    - -e 表示抛出异常才触发，throwExp表示异常信息
+    - -x 表示遍历深度。
+    - -n 只执行指定次数。
+
 
 ## trace
 - trace class-pattern method-pattern condition-express
-- condition-express：条件表达式是用来过滤的
+- condition-express：条件表达式是用来过滤的。
 - trace demo.Main main '#cost > 10'    只展示Main类main方法调用耗时超过10ms的调用路径。
 
 ## stack
 - 输出当前方法被调用的调用路径。
 - stack class-pattern method-pattern condition-express
 
-
+## ognl
+- ognl表达式官方指南：https://commons.apache.org/proper/commons-ognl/language-guide.html
+- 
 
 ## dump
 - dump 已加载类的bytecode到特定目录。

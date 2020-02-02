@@ -1,12 +1,13 @@
 ---
 layout:     post
-title:      java-volatile关键字
+title:      java并发-volatile
 subtitle:   
-date:       2017-07-29
+date:       2018-07-29
 author:     sugar-foxs
 catalog: 	true
 tags:
     - java
+    - 并发编程
 ---
 
 volatile关键字能够保证变量的可见性，这就先要了解Java内存模型，Java内存模型是所有线程有一个共享的主内存，每个线程都有自己的工作内存，工作内存里都会保存一份共享变量的副本，

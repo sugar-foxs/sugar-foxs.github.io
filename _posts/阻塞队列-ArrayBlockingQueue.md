@@ -13,9 +13,10 @@ tags:
 本文主要介绍阻塞队列其中一种实现：ArrayBlockingQueue。
 <!-- more -->
 
-> ArrayBlockingQueue是用数组实现的线程安全的有界的阻塞队列。ArrayBlockingQueue实现了BlockingQueue接口，继承了AbstractQueue，内部使用Object数组存储元素，容量capacity在构造器中给出，之后不会自动扩容。其中包含ReentrantLock和两个Condition变量，用来实现互斥访问的。构造器中可以指定锁是公平锁还是非公平锁。使用两个变量putIndex，takeIndex表示入队和出队的位置。
+> ArrayBlockingQueue是用数组实现的线程安全的有界的阻塞队列。ArrayBlockingQueue实现了BlockingQueue接口，继承了AbstractQueue，内部使用Object数组存储元素，容量capacity在构造器中给出，之后不会自动扩容。使用ReentrantLock和两个Condition变量，实现互斥访问。构造器中可以指定锁是公平锁还是非公平锁。使用两个变量putIndex，takeIndex表示入队和出队的位置。
 
-# offer
+# 源码解析
+## offer
 ```java
 public boolean offer(E e) {
     checkNotNull(e);
@@ -38,7 +39,7 @@ public boolean offer(E e) {
 ```
 - 队列满了，返回false；不满，入队，返回true。
 
-# enqueue
+## enqueue
 - 入队
 ```java
 private void enqueue(E x) {
@@ -53,7 +54,7 @@ private void enqueue(E x) {
 ```
 - 队列的实现是一个循环数组，当数组最后一个有元素时，设置下一个入队的位置为0。
 
-# put
+## put
 - put和offer都是入队，但是不一样的地方是：put方法会一直阻塞到有空间加入，当收到notFull.signal()时，便可以入队，且入队的操作可能会被中断。
 ```java
 public void put(E e) throws InterruptedException {
@@ -71,7 +72,7 @@ public void put(E e) throws InterruptedException {
 }
 ```
 
-# poll
+## poll
 - 从队列中取出元素。
 - 第一个方法，队列中没有元素，直接返回null，否则返回第一个。
 ```java
@@ -102,7 +103,7 @@ public E poll(long timeout, TimeUnit unit) throws InterruptedException {
 }
 ```
 
-# dequeue
+## dequeue
 - 出队
 ```java
 private E dequeue() {
@@ -119,7 +120,7 @@ private E dequeue() {
 }
 ```
 
-# take
+## take
 - 一直阻塞，直到有队列中有元素。
 ```java
 public E take() throws InterruptedException {
@@ -138,7 +139,7 @@ public E take() throws InterruptedException {
 
 - offer和poll对应,put和take对应。
 
-# remove
+## remove
 - 删除元素
 ```java
 public boolean remove(Object o) {
@@ -167,7 +168,7 @@ public boolean remove(Object o) {
 }
 ```
 
-# removeAt
+## removeAt
 ```java
 void removeAt(final int removeIndex) {
     final Object[] items = this.items;
