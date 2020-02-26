@@ -1,6 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>markdown学习记录</title>
+    <url>/2020/02/26/markdown%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<p>本文是学习markdown过程中的一些记录。</p>
+<a id="more"></a>
+
+<h1 id="表格"><a href="#表格" class="headerlink" title="表格"></a>表格</h1><table>
+<thead>
+<tr>
+<th>列1</th>
+<th>列2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>aaa</td>
+<td>bbb</td>
+</tr>
+<tr>
+<td>ccc</td>
+<td>dddd</td>
+</tr>
+</tbody></table>
+<ul>
+<li>如果表格内字符串太长，需要换行，可使用</br></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>列1</th>
+<th>列2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>aaaaaaaaaaaaa</br>acaa</td>
+<td>bbb</td>
+</tr>
+<tr>
+<td>ccc</td>
+<td>dddd</td>
+</tr>
+</tbody></table>
+<ul>
+<li>设置表格列的宽度，在表格前加如下代码：<style> table th:first-of-type { width: 100px; } </style>
+<table>
+<thead>
+<tr>
+<th align="left">列1</th>
+<th align="left">列2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">aaaffff</td>
+<td align="left">bbb</td>
+</tr>
+<tr>
+<td align="left">ccc</td>
+<td align="left">dddd</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>markdown</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数仓</title>
+    <url>/2020/02/22/%E6%95%B0%E4%BB%93/</url>
+    <content><![CDATA[<p>本文是学习《大数据之路》的一些记录。</p>
+<a id="more"></a>
+
+<h1 id="层次结构"><a href="#层次结构" class="headerlink" title="层次结构"></a>层次结构</h1><ul>
+<li><p>ODS层：操作数据层。是最接近数据源中数据的一层，数据源中的数据，经过抽取、洗净、传输，即ETL之后，装入本层。本层的数据，总体上大多是按照源头业务系统的分类方式而分类的。但是，这一层面的数据却不等同于原始数据。在源数据装入这一层时，要进行诸如去噪（例如去掉明显偏离正常水平的银行刷卡信息）、去重（例如银行账户信息、公安局人口信息中均含有人的姓名，但是只保留一份即可）、提脏（例如有的人的银行卡被盗刷，在十分钟内同时有两笔分别在中国和日本的刷卡信息，这便是脏数据）、业务提取、单位统一、砍字段（例如用于支撑前端系统工作，但是在数据挖掘中不需要的字段）、业务判别等多项工作。</p>
+</li>
+<li><p>CMD层：公共维度模型层。细分为DWD层和DWS层，采用维度模型方法作为理论基础。更多地采用一些维度退化手法，将维度退化至事实表中，减少事实表和维表的关联，提高明细数据易用性，同时在汇总数据层，加强指标的维度退化，采取更多的宽表手段构建公共指标数据层，提升公共指标的复用性，减少重复加工。</p>
+<ul>
+<li><p>DWD层：明细数据层。</p>
+</li>
+<li><p>DWS层：汇总数据层。针对不同的维度对数据进行聚合。</p>
+</li>
+</ul>
+</li>
+<li><p>ADS层：应用数据层。存放数据产品个性化的统计指标数据，根据CDM层与ODS层加工生成。</p>
+</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>数仓</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>k8s学习--基础概念</title>
     <url>/2020/02/08/k8s%E5%AD%A6%E4%B9%A0--%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/</url>
     <content><![CDATA[<p>本文记录一些对于k8s的学习。</p>
@@ -80,6 +171,17 @@
 <blockquote>
 <p>摘自《Kuberetes权威指南》</p>
 </blockquote>
+]]></content>
+      <tags>
+        <tag>k8s</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>k8s学习--实践</title>
+    <url>/2020/02/08/k8s%E5%AD%A6%E4%B9%A0--%E5%AE%9E%E8%B7%B5/</url>
+    <content><![CDATA[<p>本文记录一些对于k8s的学习。</p>
+<a id="more"></a>
+
 ]]></content>
       <tags>
         <tag>k8s</tag>
