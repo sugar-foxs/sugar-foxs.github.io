@@ -122,7 +122,7 @@ Note over A:NOTE_A
 Note right of B:NOTE_B
 \```
 
-
+效果：
 ```sequence
 
 title:communication
