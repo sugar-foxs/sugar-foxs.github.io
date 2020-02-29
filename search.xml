@@ -61,6 +61,59 @@
 </tbody></table>
 </li>
 </ul>
+<h1 id="段落"><a href="#段落" class="headerlink" title="段落"></a>段落</h1><ul>
+<li>段落的换行是使用两个以上空格加上回车。示例：</li>
+<li>fggfg<br>kkkk</li>
+</ul>
+<h2 id="字体"><a href="#字体" class="headerlink" title="字体"></a>字体</h2><ul>
+<li>文字两边各1个<em>或者_,字体会变成斜体<br>示例： `*斜体</em> <em>斜体_`<br>效果： <em>斜体</em> _斜体</em></li>
+<li>文字两边各2个<em>或者_,字体会变成粗体<br>示例：`*</em>粗体** <strong>粗体</strong>`<br>效果：<strong>粗体</strong> <strong>粗体</strong></li>
+<li>文字两边各3个<em>或者_,字体会变成粗斜体<br>示例：`**</em>粗斜体** <strong><em>粗斜体</em></strong>`<br>效果：<strong><em>粗斜体</em></strong> <strong><em>粗斜体</em></strong></li>
+</ul>
+<h2 id="分割线"><a href="#分割线" class="headerlink" title="分割线"></a>分割线</h2><ul>
+<li>一行中用三个以上的星号、减号、底线来建立一个分隔线，行内不能有其他东西。你也可以在星号或是减号中间插入空格。<br><code>***</code><br><code>---</code><br><code>* * *</code><br><code>- - -</code><br>效果：  </li>
+</ul>
+<hr>
+<hr>
+<hr>
+<hr>
+<h2 id="删除线"><a href="#删除线" class="headerlink" title="删除线"></a>删除线</h2><ul>
+<li>只需要在文字的两端加上两个波浪线<del>。<br>示例：`</del>删除线<del>`<br>效果：</del>删除线~~</li>
+</ul>
+<h2 id="下划线"><a href="#下划线" class="headerlink" title="下划线"></a>下划线</h2><ul>
+<li>下划线可以通过HTML的&lt;u&gt;&lt;/u&gt;标签来实现。<br>示例： <code>&lt;u&gt;下划线&lt;/u&gt;</code><br>效果：<u>下划线</u></li>
+</ul>
+<h2 id="脚注"><a href="#脚注" class="headerlink" title="脚注"></a>脚注</h2><ul>
+<li>示例:<br><code>[^1]</code><br><code>[^1]:gch</code></li>
+</ul>
+<h1 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h1><h2 id="无序列表"><a href="#无序列表" class="headerlink" title="无序列表"></a>无序列表</h2><ul>
+<li>使用星号(*)、加号(+)或是减号(-)作为列表标记。我一般使用-。示例：<br><code>- 第1</code><br><code>- 第2</code><br><code>- 第3</code><br>效果：  </li>
+<li>第1 </li>
+<li>第2  </li>
+<li>第3 </li>
+</ul>
+<h2 id="有序列表"><a href="#有序列表" class="headerlink" title="有序列表"></a>有序列表</h2><ul>
+<li>使用数字并加上 . 号来表示。示例：<br><code>1. gg</code><br><code>2. ff</code><br><code>3. fff</code><br>效果：  </li>
+</ul>
+<ol>
+<li>gg </li>
+<li>ff  </li>
+<li>ff</li>
+</ol>
+<h1 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h1><ul>
+<li><code>[链接名称](链接地址)</code>或者<code>&lt;链接地址&gt;</code></li>
+<li>示例：<br><code>[百度](http://www.baidu.com)</code><br><code>&lt;http://www.baidu.com&gt;</code></li>
+<li>效果：<br><a href="http://www.baidu.com" target="_blank" rel="noopener">百度</a><br><a href="http://www.baidu.com" target="_blank" rel="noopener">http://www.baidu.com</a></li>
+</ul>
+<h1 id="时序图"><a href="#时序图" class="headerlink" title="时序图"></a>时序图</h1><ul>
+<li>在VScode中下载插件Markdown Preview Enhanced插件。</li>
+<li>示例：<br>```sequence<br>title:communication<br>participant main<br>participant FuncA as A<br>participant FuncB as B<br>A–&gt;B:<br>B-&gt;main:sendmessage<br>Note over A:NOTE_A<br>Note right of B:NOTE_B<br>```</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">title:communication</span><br><span class="line"></span><br><span class="line">participant main</span><br><span class="line">participant FuncA as A</span><br><span class="line">participant FuncB as B</span><br><span class="line"></span><br><span class="line">A--&gt;B:</span><br><span class="line">B-&gt;main:sendmessage</span><br><span class="line">Note over A:NOTE_A</span><br><span class="line">Note right of B:NOTE_B</span><br></pre></td></tr></table></figure>
+
+
+
+
 ]]></content>
       <tags>
         <tag>markdown</tag>
