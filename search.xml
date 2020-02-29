@@ -51,9 +51,12 @@
 <li>fggfg<br>kkkk</li>
 </ul>
 <h2 id="字体"><a href="#字体" class="headerlink" title="字体"></a>字体</h2><ul>
-<li>文字两边各1个<em>或者_,字体会变成斜体<br>示例： *斜体\</em> _斜体_<br>效果： <em>斜体</em> <em>斜体</em></li>
-<li>文字两边各2个<em>或者_,字体会变成粗体<br>示例：**粗体*\</em> __粗体__<br>效果：<strong>粗体</strong> <strong>粗体</strong></li>
-<li>文字两边各3个<em>或者_,字体会变成粗斜体<br>示例：***粗斜体**\</em> ___粗斜体___<br>效果：<strong><em>粗斜体</em></strong> <strong><em>粗斜体</em></strong></li>
+<li><p>文字两边各1个*或者_,字体会变成斜体<br>示例： <code>*</code>斜体<code>*</code> , _斜体_<br>效果： <em>斜体</em> , <em>斜体</em></p>
+</li>
+<li><p>文字两边各2个*或者_,字体会变成粗体<br>示例：<code>**</code>粗体<code>**</code> , __粗体__<br>效果：<strong>粗体</strong> , <strong>粗体</strong></p>
+</li>
+<li><p>文字两边各3个*或者_,字体会变成粗斜体<br>示例：<code>***</code>粗斜体<code>***</code> , ___粗斜体___<br>效果：<strong><em>粗斜体</em></strong> , <strong><em>粗斜体</em></strong></p>
+</li>
 </ul>
 <h2 id="分割线"><a href="#分割线" class="headerlink" title="分割线"></a>分割线</h2><ul>
 <li>一行中用三个以上的星号、减号、底线来建立一个分隔线，行内不能有其他东西。你也可以在星号或是减号中间插入空格。<br><code>***</code><br><code>---</code><br><code>* * *</code><br><code>- - -</code><br>效果：  </li>
@@ -63,7 +66,9 @@
 <hr>
 <hr>
 <h2 id="删除线"><a href="#删除线" class="headerlink" title="删除线"></a>删除线</h2><ul>
-<li>只需要在文字的两端加上两个波浪线~~。<br>示例：~~删除线<del>~<br>效果：</del>删除线~~</li>
+<li>只需要在文字的两端加上两个波浪线~~。  </li>
+<li>示例：~~删除线~~ </li>
+<li>效果：<del>删除线</del></li>
 </ul>
 <h2 id="下划线"><a href="#下划线" class="headerlink" title="下划线"></a>下划线</h2><ul>
 <li>下划线可以通过HTML的&lt;u&gt;&lt;/u&gt;标签来实现。<br>示例： &lt;u&gt;下划线&lt;/u&gt;<br>效果：<u>下划线</u></li>
