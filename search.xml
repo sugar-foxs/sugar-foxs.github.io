@@ -1175,6 +1175,22 @@
       </tags>
   </entry>
   <entry>
+    <title>mysql-问题</title>
+    <url>/2019/12/29/mysql-%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>本文主要记录一些工作中遇到的mysql相关的问题。</p>
+<a id="more"></a>
+
+<h2 id="字段大小写敏感问题"><a href="#字段大小写敏感问题" class="headerlink" title="字段大小写敏感问题"></a>字段大小写敏感问题</h2><ul>
+<li>问题是这样的：有个字符串类型字段且唯一，但是由于一个是’id’,一个是’ID’。查询时本来应该是一条记录，但是出现多条。</li>
+<li>这是由于字段大小写不敏感导致查询结果和预想不一致。</li>
+<li>解决方法：查询时在字段前加上BINARY。select * from [表名] where BINARY [条件]=’条件’;</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>mysql</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>docker命令</title>
     <url>/2019/12/25/docker%E5%91%BD%E4%BB%A4/</url>
     <content><![CDATA[<p>本文主要记录一些docker中使用到的命令。</p>
