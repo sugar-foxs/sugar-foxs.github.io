@@ -11,10 +11,20 @@ tags:
 
 本文主要记录一些docker中使用到的命令。
 <!-- more -->
+## docker search mysql
+- 搜索可用的镜像
 
 ## docker pull 
 - docker pull mysql:5.6
     - 拉取mysql镜像，版本是5.6
+    - 不加版本的话，默认是最新版本
+
+## docker images
+- 查看本地有哪些镜像
+
+## docker inspect [IMAGE ID]
+- 查看镜像的详情
+- 如果不是自己想要的版本，可以在docker pull时指定版本号
 
 ## docker ps
 - 列出所有在运行的容器信息
@@ -22,8 +32,8 @@ tags:
 
 - docker ps -n 5
     - 列出最近创建的5个容器信息
-
-- docker ps -f 根据条件过滤,默认是正在运行的，加上-a会显示所有符合条件单的，包括未运行的。
+- docker ps -a 显示所有符合条件的，包括未运行的
+- docker ps -f 根据条件过滤
     - docker ps -f ancestor=mysql  根据镜像过滤
     - docker ps -f status=running  根据状态过滤
     - docker ps -f name=mysql 根据名称过滤
@@ -40,13 +50,13 @@ tags:
 ## docker port 容器id/别名 [端口]
 - 查看端口绑定情况
 
-## docker start
+## docker start [容器id]
 - 启动容器
 
-## docker stop
+## docker stop [容器id/别名]
 - 停止容器
 
-## docker restart
+## docker restart [容器id/别名]
 - 重启容器
 
 ## docker exec -it [容器id/别名] /bin/bash
@@ -57,6 +67,10 @@ tags:
 
 ## docker rm -f 容器id
 - 删除容器
+
+## dcoker network ls 
+- 查看网络模式
+- 在你创建容器的时候，不指定--network默认是bridge。
 
 
 ## docker mysql 修改时区
@@ -74,6 +88,43 @@ tags:
 - 这时候便可以执行布隆过滤器的命令：
     - 增加一个值：BF.ADD newFilter foo
     - 查看是否存在：BF.EXISTS newFilter foo
+
+## zk
+- docker pull zookeeper
+- docker run --privileged=true -d --name zookeeper --publish 2181:2181 zookeeper:latest
+- 进入容器,name上条命令起的是zookeeper：docker exec -it zookeeper bash
+- 启动zk客户端：./bin/zkClient.sh
+
+### 本地创建zk集群
+- 先创建3个挂载目录
+    - mkdir zk-cluster
+    - mkdir ./zk-cluster/node1
+    - mkdir ./zk-cluster/node2
+    - mkdir ./zk-cluster/node3
+- 创建自己的bridge网络
+    - docker network create --driver bridge --subnet=172.18.0.0/16 --gateway=172.18.0.1 test-net
+- 创建运行容器
+
+> docker run -d -p 2181:2181 --name    zookeeper_node1 --privileged --restart always --network test-net --ip 172.18.0.2 \  
+-v /Users/guchunhui/zk-cluster/node1/volumes/data:/data \  
+-v /Users/guchunhui/zk-cluster/node1/volumes/datalog:/datalog \  
+-v /Users/guchunhui/zk-cluster/node1/volumes/logs:/logs \  
+-e ZOO_MY_ID=1 \  
+-e "ZOO_SERVERS=server.1=172.18.0.2:2888:3888;2181 server.2=172.18.0.3:2888:3888;2181 server.3=172.18.0.4:2888:3888;2181" bbebb888169c
+
+> docker run -d -p 2182:2181 --name zookeeper_node2 --privileged --restart always --network test-net --ip 172.18.0.3 \  
+-v /Users/guchunhui/zk-cluster/node2/volumes/data:/data \  
+-v /Users/guchunhui/zk-cluster/node2/volumes/datalog:/datalog \  
+-v /Users/guchunhui/zk-cluster/node2/volumes/logs:/logs \  
+-e ZOO_MY_ID=2 \  
+-e "ZOO_SERVERS=server.1=172.18.0.2:2888:3888;2181 server.2=172.18.0.3:2888:3888;2181 server.3=172.18.0.4:2888:3888;2181" bbebb888169c
+
+> docker run -d -p 2183:2181 --name   zookeeper_node3 --privileged --restart always --network test-net --ip 172.18.0.4 \  
+-v /Users/guchunhui/zk-cluster/node3/volumes/data:/data \  
+-v /Users/guchunhui/zk-cluster/node3/volumes/datalog:/datalog \  
+-v /Users/guchunhui/zk-cluster/node3/volumes/logs:/logs \  
+-e ZOO_MY_ID=3 \  
+-e "ZOO_SERVERS=server.1=172.18.0.2:2888:3888;2181 server.2=172.18.0.3:2888:3888;2181 server.3=172.18.0.4:2888:3888;2181" bbebb888169c
 
 
 
