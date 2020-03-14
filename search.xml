@@ -1378,10 +1378,10 @@
 <p>docker run -d -p 2181:2181 –name    zookeeper_node1 –privileged –restart always –network test-net –ip 172.18.0.2 \<br>-v /Users/guchunhui/zk-cluster/node1/volumes/data:/data \<br>-v /Users/guchunhui/zk-cluster/node1/volumes/datalog:/datalog \<br>-v /Users/guchunhui/zk-cluster/node1/volumes/logs:/logs \<br>-e ZOO_MY_ID=1 \<br>-e “ZOO_SERVERS=server.1=172.18.0.2:2888:3888;2181 server.2=172.18.0.3:2888:3888;2181 server.3=172.18.0.4:2888:3888;2181” bbebb888169c</p>
 </blockquote>
 <blockquote>
-<p>docker run -d -p 2182:2181 –name zookeeper_node2 –privileged –restart always –network test-net –ip 172.18.0.3 <br>-v /Users/guchunhui/zk-cluster/node2/volumes/data:/data <br>-v /Users/guchunhui/zk-cluster/node2/volumes/datalog:/datalog <br>-v /Users/guchunhui/zk-cluster/node2/volumes/logs:/logs <br>-e ZOO_MY_ID=2 <br>-e “ZOO_SERVERS=server.1=172.18.0.2:2888:3888;2181 server.2=172.18.0.3:2888:3888;2181 server.3=172.18.0.4:2888:3888;2181” bbebb888169c</p>
+<p>docker run -d -p 2182:2181 –name zookeeper_node2 –privileged –restart always –network test-net –ip 172.18.0.3 \<br>-v /Users/guchunhui/zk-cluster/node2/volumes/data:/data \<br>-v /Users/guchunhui/zk-cluster/node2/volumes/datalog:/datalog \<br>-v /Users/guchunhui/zk-cluster/node2/volumes/logs:/logs \<br>-e ZOO_MY_ID=2 \<br>-e “ZOO_SERVERS=server.1=172.18.0.2:2888:3888;2181 server.2=172.18.0.3:2888:3888;2181 server.3=172.18.0.4:2888:3888;2181” bbebb888169c</p>
 </blockquote>
 <blockquote>
-<p>docker run -d -p 2183:2181 –name zookeeper_node3 –privileged –restart always –network test-net –ip 172.18.0.4 <br>-v /Users/guchunhui/zk-cluster/node3/volumes/data:/data <br>-v /Users/guchunhui/zk-cluster/node3/volumes/datalog:/datalog <br>-v /Users/guchunhui/zk-cluster/node3/volumes/logs:/logs <br>-e ZOO_MY_ID=3 <br>-e “ZOO_SERVERS=server.1=172.18.0.2:2888:3888;2181 server.2=172.18.0.3:2888:3888;2181 server.3=172.18.0.4:2888:3888;2181” bbebb888169c</p>
+<p>docker run -d -p 2183:2181 –name   zookeeper_node3 –privileged –restart always –network test-net –ip 172.18.0.4 \<br>-v /Users/guchunhui/zk-cluster/node3/volumes/data:/data \<br>-v /Users/guchunhui/zk-cluster/node3/volumes/datalog:/datalog \<br>-v /Users/guchunhui/zk-cluster/node3/volumes/logs:/logs \<br>-e ZOO_MY_ID=3 \<br>-e “ZOO_SERVERS=server.1=172.18.0.2:2888:3888;2181 server.2=172.18.0.3:2888:3888;2181 server.3=172.18.0.4:2888:3888;2181” bbebb888169c</p>
 </blockquote>
 ]]></content>
       <tags>
