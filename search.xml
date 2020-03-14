@@ -198,17 +198,6 @@
       </tags>
   </entry>
   <entry>
-    <title>k8s学习--实践</title>
-    <url>/2020/02/08/k8s%E5%AD%A6%E4%B9%A0--%E5%AE%9E%E8%B7%B5/</url>
-    <content><![CDATA[<p>本文记录一些对于k8s的学习。</p>
-<a id="more"></a>
-
-]]></content>
-      <tags>
-        <tag>k8s</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>k8s学习--基础概念</title>
     <url>/2020/02/08/k8s%E5%AD%A6%E4%B9%A0--%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/</url>
     <content><![CDATA[<p>本文记录一些对于k8s的学习。</p>
@@ -288,6 +277,17 @@
 <blockquote>
 <p>摘自《Kuberetes权威指南》</p>
 </blockquote>
+]]></content>
+      <tags>
+        <tag>k8s</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>k8s学习--实践</title>
+    <url>/2020/02/08/k8s%E5%AD%A6%E4%B9%A0--%E5%AE%9E%E8%B7%B5/</url>
+    <content><![CDATA[<p>本文记录一些对于k8s的学习。</p>
+<a id="more"></a>
+
 ]]></content>
       <tags>
         <tag>k8s</tag>
@@ -1356,7 +1356,7 @@
 </ul>
 <h2 id="zk"><a href="#zk" class="headerlink" title="zk"></a>zk</h2><ul>
 <li>docker pull zookeeper</li>
-<li>docker run –privileged=true -d –name zookeeper –publish 2181:2181  -d zookeeper:latest</li>
+<li>docker run –privileged=true -d –name zookeeper –publish 2181:2181 zookeeper:latest</li>
 <li>进入容器,name上条命令起的是zookeeper：docker exec -it zookeeper bash</li>
 <li>启动zk客户端：./bin/zkClient.sh</li>
 </ul>
@@ -1372,16 +1372,11 @@
 <li>docker network create –driver bridge –subnet=172.18.0.0/16 –gateway=172.18.0.1 test-net</li>
 </ul>
 </li>
-<li>创建运行容器<blockquote>
-<p>docker run -d -p 2181:2181 –name zookeeper_node1 –privileged –restart always –network test-net –ip 172.18.0.2 \</p>
-</blockquote>
-</li>
-<li>v /Users/guchunhui/zk-cluster/node1/volumes/data:/data \</li>
-<li>v /Users/guchunhui/zk-cluster/node1/volumes/datalog:/datalog \</li>
-<li>v /Users/guchunhui/zk-cluster/node1/volumes/logs:/logs \</li>
-<li>e ZOO_MY_ID=1 \</li>
-<li>e “ZOO_SERVERS=server.1=172.18.0.2:2888:3888;2181 server.2=172.18.0.3:2888:3888;2181 server.3=172.18.0.4:2888:3888;2181” bbebb888169c</li>
+<li>创建运行容器</li>
 </ul>
+<blockquote>
+<p>docker run -d -p 2181:2181 –name    zookeeper_node1 –privileged –restart always –network test-net –ip 172.18.0.2 \<br>-v /Users/guchunhui/zk-cluster/node1/volumes/data:/data \<br>-v /Users/guchunhui/zk-cluster/node1/volumes/datalog:/datalog \<br>-v /Users/guchunhui/zk-cluster/node1/volumes/logs:/logs \<br>-e ZOO_MY_ID=1 \<br>-e “ZOO_SERVERS=server.1=172.18.0.2:2888:3888;2181 server.2=172.18.0.3:2888:3888;2181 server.3=172.18.0.4:2888:3888;2181” bbebb888169c</p>
+</blockquote>
 <blockquote>
 <p>docker run -d -p 2182:2181 –name zookeeper_node2 –privileged –restart always –network test-net –ip 172.18.0.3 <br>-v /Users/guchunhui/zk-cluster/node2/volumes/data:/data <br>-v /Users/guchunhui/zk-cluster/node2/volumes/datalog:/datalog <br>-v /Users/guchunhui/zk-cluster/node2/volumes/logs:/logs <br>-e ZOO_MY_ID=2 <br>-e “ZOO_SERVERS=server.1=172.18.0.2:2888:3888;2181 server.2=172.18.0.3:2888:3888;2181 server.3=172.18.0.4:2888:3888;2181” bbebb888169c</p>
 </blockquote>
