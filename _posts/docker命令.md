@@ -66,5 +66,14 @@ tags:
 - 复制当前文件夹下Shanghai：cp Shanghai /etc/localtime
 - 重启容器：docker restart [容器id/别名]
 
+## 使用redis的布隆过滤器插件
+- 安装布隆过滤器：docker pull redislabs/rebloom
+- 启动：docker run -p 6379:6379 --name redis-redisbloom redislabs/rebloom:latest
+- 打开另一个窗口，进入启动的容器：docker exec -it redis-redisbloom bash
+- 进入redis客户端：redis-cli
+- 这时候便可以执行布隆过滤器的命令：
+    - 增加一个值：BF.ADD newFilter foo
+    - 查看是否存在：BF.EXISTS newFilter foo
+
 
 

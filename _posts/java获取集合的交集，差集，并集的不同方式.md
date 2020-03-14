@@ -136,3 +136,71 @@ public class Test3 {
     }
 }
 ```
+
+## guava中其他集合实现
+- Multiset
+```java
+    Multiset<Long> set = HashMultiset.create();
+    set.add(1L);
+    set.add(1L);
+    set.add(2L);
+    set.add(4L);
+    for (Multiset.Entry<Long> entry:set.entrySet()) {
+        System.out.println(entry.getElement()+":"+entry.getCount());
+    }
+```
+>输出：  
+1:2  
+2:1  
+4:1  
+
+- BiMap
+```java
+    BiMap<String, String> biMap = HashBiMap.create();
+    biMap.put("a","b");
+    biMap.put("a","c");// 上一个b会被覆盖
+    biMap.put("b","c");// 这个会报错，因为value也不可重复
+    biMap.put("b","d");
+    for (BiMap.Entry<String,String> entry:biMap.entrySet()) {
+        System.out.println(entry.getKey()+":"+entry.getValue());
+    }
+```
+> 输出：  
+a:c  
+b:d  
+
+- Table
+```java
+    Table<String,String,String> table = HashBasedTable.create();
+    table.put("r1","c1","1");
+    table.put("r1","c2","2");
+    table.put("r1","c3","3");
+    table.put("r2","c1","4");
+    table.put("r2","c2","5");
+    table.put("r2","c3","6");
+    for (Map.Entry<String,Map<String,String>> entry:table.rowMap().entrySet()){
+        System.out.println(entry.getKey());
+        System.out.println(entry.getValue());
+    }
+    for (String s:table.columnKeySet()){
+        System.out.println(s);
+    }
+    for (Table.Cell<String,String,String> cell:table.cellSet()) {
+        System.out.println(cell);
+    }
+```
+>输出:  
+r1  
+{c1=1, c2=2, c3=3}  
+r2  
+{c1=4, c2=5, c3=6}  
+c1  
+c2  
+c3  
+(r1,c1)=1  
+(r1,c2)=2  
+(r1,c3)=3  
+(r2,c1)=4  
+(r2,c2)=5  
+(r2,c3)=6  
+
