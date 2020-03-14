@@ -1292,7 +1292,9 @@
 <li>列出最近创建的5个容器信息</li>
 </ul>
 </li>
-<li><p>docker ps -f 根据条件过滤,默认是正在运行的，加上-a会显示所有符合条件单的，包括未运行的。</p>
+<li><p>docker ps -a 显示所有符合条件的，包括未运行的</p>
+</li>
+<li><p>docker ps -f 根据条件过滤</p>
 <ul>
 <li>docker ps -f ancestor=mysql  根据镜像过滤</li>
 <li>docker ps -f status=running  根据状态过滤</li>
