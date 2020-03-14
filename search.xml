@@ -198,6 +198,17 @@
       </tags>
   </entry>
   <entry>
+    <title>k8s学习--实践</title>
+    <url>/2020/02/08/k8s%E5%AD%A6%E4%B9%A0--%E5%AE%9E%E8%B7%B5/</url>
+    <content><![CDATA[<p>本文记录一些对于k8s的学习。</p>
+<a id="more"></a>
+
+]]></content>
+      <tags>
+        <tag>k8s</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>k8s学习--基础概念</title>
     <url>/2020/02/08/k8s%E5%AD%A6%E4%B9%A0--%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/</url>
     <content><![CDATA[<p>本文记录一些对于k8s的学习。</p>
@@ -277,17 +288,6 @@
 <blockquote>
 <p>摘自《Kuberetes权威指南》</p>
 </blockquote>
-]]></content>
-      <tags>
-        <tag>k8s</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>k8s学习--实践</title>
-    <url>/2020/02/08/k8s%E5%AD%A6%E4%B9%A0--%E5%AE%9E%E8%B7%B5/</url>
-    <content><![CDATA[<p>本文记录一些对于k8s的学习。</p>
-<a id="more"></a>
-
 ]]></content>
       <tags>
         <tag>k8s</tag>
@@ -852,7 +852,7 @@
 </li>
 <li>既然说只要一个条件不满足就不是死锁，那为了不发生死锁，只要让其中一个条件不满足就行了。针对每一个条件，看看如何才能不发生死锁：<ul>
 <li>互斥：这个条件一般不可避免，因为加锁就是为了互斥。</li>
-<li>资源不可抢夺：只要准许抢夺，这个条件就不成立了</li>
+<li>资源不可抢夺：只要准许抢夺，这个条件就不成立了。</li>
 <li>循环等待：避免这个条件可以事先约定好锁的请求顺序，所有线程获取锁的顺序保持一致。</li>
 <li>请求与保持：持有一个资源，想要获取其他资源，必须先释放当前持有的资源，才能请求其他资源。</li>
 </ul>
@@ -1267,12 +1267,22 @@
     <url>/2019/12/25/docker%E5%91%BD%E4%BB%A4/</url>
     <content><![CDATA[<p>本文主要记录一些docker中使用到的命令。</p>
 <a id="more"></a>
-
+<h2 id="docker-search-mysql"><a href="#docker-search-mysql" class="headerlink" title="docker search mysql"></a>docker search mysql</h2><ul>
+<li>搜索可用的镜像</li>
+</ul>
 <h2 id="docker-pull"><a href="#docker-pull" class="headerlink" title="docker pull"></a>docker pull</h2><ul>
 <li>docker pull mysql:5.6<ul>
 <li>拉取mysql镜像，版本是5.6</li>
+<li>不加版本的话，默认是最新版本</li>
 </ul>
 </li>
+</ul>
+<h2 id="docker-images"><a href="#docker-images" class="headerlink" title="docker images"></a>docker images</h2><ul>
+<li>查看本地有哪些镜像</li>
+</ul>
+<h2 id="docker-inspect-IMAGE-ID"><a href="#docker-inspect-IMAGE-ID" class="headerlink" title="docker inspect [IMAGE ID]"></a>docker inspect [IMAGE ID]</h2><ul>
+<li>查看镜像的详情</li>
+<li>如果不是自己想要的版本，可以在docker pull时指定版本号</li>
 </ul>
 <h2 id="docker-ps"><a href="#docker-ps" class="headerlink" title="docker ps"></a>docker ps</h2><ul>
 <li><p>列出所有在运行的容器信息<br><img src="http://ww1.sinaimg.cn/large/dbf344a4ly1gacqxc6dxfj22iq04ytav.jpg" alt="hello"></p>
@@ -1322,6 +1332,10 @@
 <h2 id="docker-rm-f-容器id"><a href="#docker-rm-f-容器id" class="headerlink" title="docker rm -f 容器id"></a>docker rm -f 容器id</h2><ul>
 <li>删除容器</li>
 </ul>
+<h2 id="dcoker-network-ls"><a href="#dcoker-network-ls" class="headerlink" title="dcoker network ls"></a>dcoker network ls</h2><ul>
+<li>查看网络模式</li>
+<li>在你创建容器的时候，不指定–network默认是bridge。</li>
+</ul>
 <h2 id="docker-mysql-修改时区"><a href="#docker-mysql-修改时区" class="headerlink" title="docker mysql 修改时区"></a>docker mysql 修改时区</h2><ul>
 <li>查看时区：docker exec [容器id/别名]  date  </li>
 <li>进入容器：docker exec -it [容器id/别名] /bin/bash</li>
@@ -1346,6 +1360,34 @@
 <li>进入容器,name上条命令起的是zookeeper：docker exec -it zookeeper bash</li>
 <li>启动zk客户端：./bin/zkClient.sh</li>
 </ul>
+<h3 id="本地创建zk集群"><a href="#本地创建zk集群" class="headerlink" title="本地创建zk集群"></a>本地创建zk集群</h3><ul>
+<li>先创建3个文件夹<ul>
+<li>mkdir zk-cluster</li>
+<li>mkdir ./zk-cluster/node1</li>
+<li>mkdir ./zk-cluster/node2</li>
+<li>mkdir ./zk-cluster/node3</li>
+</ul>
+</li>
+<li>创建自己的bridge网络<ul>
+<li>docker network create –driver bridge –subnet=172.18.0.0/16 –gateway=172.18.0.1 test-net</li>
+</ul>
+</li>
+<li>创建运行容器<blockquote>
+<p>docker run -d -p 2181:2181 –name zookeeper_node1 –privileged –restart always –network test-net –ip 172.18.0.2 \</p>
+</blockquote>
+</li>
+<li>v /Users/guchunhui/zk-cluster/node1/volumes/data:/data \</li>
+<li>v /Users/guchunhui/zk-cluster/node1/volumes/datalog:/datalog \</li>
+<li>v /Users/guchunhui/zk-cluster/node1/volumes/logs:/logs \</li>
+<li>e ZOO_MY_ID=1 \</li>
+<li>e “ZOO_SERVERS=server.1=172.18.0.2:2888:3888;2181 server.2=172.18.0.3:2888:3888;2181 server.3=172.18.0.4:2888:3888;2181” bbebb888169c</li>
+</ul>
+<blockquote>
+<p>docker run -d -p 2182:2181 –name zookeeper_node2 –privileged –restart always –network test-net –ip 172.18.0.3 <br>-v /Users/guchunhui/zk-cluster/node2/volumes/data:/data <br>-v /Users/guchunhui/zk-cluster/node2/volumes/datalog:/datalog <br>-v /Users/guchunhui/zk-cluster/node2/volumes/logs:/logs <br>-e ZOO_MY_ID=2 <br>-e “ZOO_SERVERS=server.1=172.18.0.2:2888:3888;2181 server.2=172.18.0.3:2888:3888;2181 server.3=172.18.0.4:2888:3888;2181” bbebb888169c</p>
+</blockquote>
+<blockquote>
+<p>docker run -d -p 2183:2181 –name zookeeper_node3 –privileged –restart always –network test-net –ip 172.18.0.4 <br>-v /Users/guchunhui/zk-cluster/node3/volumes/data:/data <br>-v /Users/guchunhui/zk-cluster/node3/volumes/datalog:/datalog <br>-v /Users/guchunhui/zk-cluster/node3/volumes/logs:/logs <br>-e ZOO_MY_ID=3 <br>-e “ZOO_SERVERS=server.1=172.18.0.2:2888:3888;2181 server.2=172.18.0.3:2888:3888;2181 server.3=172.18.0.4:2888:3888;2181” bbebb888169c</p>
+</blockquote>
 ]]></content>
       <tags>
         <tag>docker</tag>
