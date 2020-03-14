@@ -46,20 +46,19 @@
   };
 </script>
 
-  <meta name="description" content="本文主要记录一些不常用的git命令。">
-<meta property="og:type" content="article">
-<meta property="og:title" content="git">
-<meta property="og:url" content="http://yoursite.com/2020/03/14/git/index.html">
+  <meta name="description" content="Computed reversed message: &quot;&quot;                               鼠标悬停几秒钟查看此处动态绑定的提示信息！                          现在你看到我了             嘿嘿">
+<meta property="og:type" content="website">
+<meta property="og:title" content="sugar_foxs&#39;s blog">
+<meta property="og:url" content="http://yoursite.com/vue/hello.html">
 <meta property="og:site_name" content="sugar_foxs&#39;s blog">
-<meta property="og:description" content="本文主要记录一些不常用的git命令。">
+<meta property="og:description" content="Computed reversed message: &quot;&quot;                               鼠标悬停几秒钟查看此处动态绑定的提示信息！                          现在你看到我了             嘿嘿">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-03-13T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-03-14T14:56:24.713Z">
+<meta property="article:published_time" content="2020-03-14T14:45:56.785Z">
+<meta property="article:modified_time" content="2020-03-14T14:45:56.785Z">
 <meta property="article:author" content="sugar-foxs">
-<meta property="article:tag" content="git">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/2020/03/14/git/">
+<link rel="canonical" href="http://yoursite.com/vue/hello">
 
 
 <script id="page-configurations">
@@ -67,11 +66,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome: false,
-    isPost: true
+    isPost: false
   };
 </script>
 
-  <title>git | sugar_foxs's blog</title>
+  <title> | sugar_foxs's blog
+  </title>
   
 
 
@@ -205,112 +205,213 @@
       <div class="main-inner">
         <div class="content-wrap">
           
+  
+  
 
           <div class="content">
             
 
   <div class="posts-expand">
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/14/git/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpeg">
-      <meta itemprop="name" content="sugar-foxs">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="sugar_foxs's blog">
-    </span>
+    
+    
+    
+    <div class="post-block" lang="zh-CN">
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          git
-        </h1>
 
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
+<h1 class="post-title" itemprop="name headline">
+</h1>
 
-              <time title="创建时间：2020-03-14 00:00:00 / 修改时间：22:56:24" itemprop="dateCreated datePublished" datetime="2020-03-14T00:00:00+08:00">2020-03-14</time>
-            </span>
-
-          
-            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span id="busuanzi_value_page_pv"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/03/14/git/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/03/14/git/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
+<div class="post-meta">
   
 
-        </div>
-      </header>
+</div>
 
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
+</header>
 
       
-        <p>本文主要记录一些不常用的git命令。</p>
-<a id="more"></a>
+      
+      
+      <div class="post-body">
+          <!DOCTYPE html>
+<html>
+    <header>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    </header>
+    <body>
+        <div id="app" :style="styleObject">
+            
+            <p>Computed reversed message: ""</p>
 
-<h1 id="Git-命令"><a href="#Git-命令" class="headerlink" title="Git 命令"></a>Git 命令</h1><h2 id="git-blame"><a href="#git-blame" class="headerlink" title="git blame"></a>git blame</h2><ul>
-<li>查看文件中每行的author等信息</li>
-<li>git blame [filename]</li>
-</ul>
-<h2 id=""><a href="#" class="headerlink" title=""></a></h2>
-    </div>
+            <span :title="reversedMessage">
+                鼠标悬停几秒钟查看此处动态绑定的提示信息！
+            </span>
+            <p v-if="seen">现在你看到我了</p>
+            <p v-else>嘿嘿</p>
 
-    
-    
-    
+            <p v-show="seen">现在你看到我了</p>
+            <ol>
+                <li v-for="(todo,index) of todos">
+                    --
+                </li>
+                <li v-for="(value, name, index) in styleObject">
+                    , :
+                </li>
+            </ol>
+            <button v-on:click="reverseMessage">反转消息</button>
+            <input v-model="message">
 
-      <footer class="post-footer">
-          
-          <div class="post-tags">
-              <a href="/tags/git/" rel="tag"><i class="fa fa-tag"></i> git</a>
-          </div>
+
+            <ol>
+            <!--
+                现在我们为每个 todo-item 提供 todo 对象
+                todo 对象是变量，即其内容可以是动态的。
+                我们也需要为每个组件提供一个“key”，稍后再
+                作详细解释。
+            -->
+                <todo-item
+                    v-for="item in groceryList"
+                    v-bind:todo="item"
+                    v-bind:key="item.id"></todo-item>
+            </ol>
+
+            <button v-bind:disabled="isButtonDisabled">Button</button>
+
+            <div v-if="seen">
+                Now you see me
+            </div>
+            <div v-else>
+                Now you don't
+            </div>
+            <template v-if="loginType === 'username'">
+                <label>Username</label>
+                <input placeholder="Enter your username" key="username-input">
+              </template>
+              <template v-else>
+                <label>Email</label>
+                <input placeholder="Enter your email address" key="email-input">
+              </template>
+        </div>
+        
+        <script type="text/javascript">
+            Vue.component('todo-item', {
+                props: ['todo'],
+                template: '<li>id,</li>'
+            })
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    loginType: 'username',
+                    styleObject: {
+                        color: 'red',
+                        fontSize: '13px'
+                    },
+                    event: 'click',
+                    isButtonDisabled:false,
+                    message: '页面加载于 ' + new Date().toLocaleString(),
+                    seen: true,
+                    todos: [
+                        { text: '学习 JavaScript' },
+                        { text: '学习 Vue' },
+                        { text: '整个牛项目' }
+                    ],
+                    groceryList: [
+                        { id: 0, text: '蔬菜' },
+                        { id: 1, text: '奶酪' },
+                        { id: 2, text: '随便其它什么人吃的东西' }
+                    ]
+                },
+                computed: {
+                    // 计算属性的 getter
+                    reversedMessage: function () {
+                    // `this` 指向 vm 实例
+                    return Date.now()
+                    }
+                },
+                methods:{
+                    reverseMessage: function () {
+                        this.message = this.message.split('').reverse().join('')
+                    }
+                },
+                created: function () {
+                    // `this` 指向 vm 实例
+                    console.log('a is: ' + this.message)
+                },
+                beforeCreate: function() {
+                    console.log('before create.' + new Date().toLocaleString())
+                }
+            })
+        </script>
+        
+
+        <div id="watch-example">
+        <p>
+            Ask a yes/no question:
+            <input v-model="question">
+        </p>
+        <p></p>
+        </div>
 
         
 
 
-        
-    <div class="post-nav">
-      <div class="post-nav-item">
-    <a href="/2020/03/12/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" rel="prev" title="分布式锁">
-      <i class="fa fa-chevron-left"></i> 分布式锁
-    </a></div>
-      <div class="post-nav-item"></div>
-    </div>
-      </footer>
-    
-  </article>
-  
-  
-  
 
+
+
+<script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+<script>
+var watchExampleVM = new Vue({
+  el: '#watch-example',
+  data: {
+    question: '',
+    answer: 'I cannot give you an answer until you ask a question!'
+  },
+  watch: {
+    // 如果 `question` 发生改变，这个函数就会运行
+    question: function (newQuestion, oldQuestion) {
+      this.answer = 'Waiting for you to stop typing...'
+      this.debouncedGetAnswer()
+    }
+  },
+  created: function () {
+    // `_.debounce` 是一个通过 Lodash 限制操作频率的函数。
+    // 在这个例子中，我们希望限制访问 yesno.wtf/api 的频率
+    // AJAX 请求直到用户输入完毕才会发出。想要了解更多关于
+    // `_.debounce` 函数 (及其近亲 `_.throttle`) 的知识，
+    // 请参考：https://lodash.com/docs#debounce
+    this.debouncedGetAnswer = _.debounce(this.getAnswer, 500)
+  },
+  methods: {
+    getAnswer: function () {
+      if (this.question.indexOf('?') === -1) {
+        this.answer = 'Questions usually contain a question mark. ;-)'
+        return
+      }
+      this.answer = 'Thinking...'
+      var vm = this
+      axios.get('https://yesno.wtf/api')
+        .then(function (response) {
+          vm.answer = _.capitalize(response.data.answer)
+        })
+        .catch(function (error) {
+          vm.answer = 'Error! Could not reach the API. ' + error
+        })
+    }
+  }
+})
+</script>
+    </body>
+</html>
+      </div>
+      
+      
+      
+    </div>
+    
+
+    
+    
+    
   </div>
 
 
@@ -363,7 +464,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Git-命令"><span class="nav-number">1.</span> <span class="nav-text">Git 命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#git-blame"><span class="nav-number">1.1.</span> <span class="nav-text">git blame</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">1.2.</span> <span class="nav-text"></span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
