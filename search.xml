@@ -198,17 +198,6 @@
       </tags>
   </entry>
   <entry>
-    <title>k8s学习--实践</title>
-    <url>/2020/02/08/k8s%E5%AD%A6%E4%B9%A0--%E5%AE%9E%E8%B7%B5/</url>
-    <content><![CDATA[<p>本文记录一些对于k8s的学习。</p>
-<a id="more"></a>
-
-]]></content>
-      <tags>
-        <tag>k8s</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>k8s学习--基础概念</title>
     <url>/2020/02/08/k8s%E5%AD%A6%E4%B9%A0--%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/</url>
     <content><![CDATA[<p>本文记录一些对于k8s的学习。</p>
@@ -288,6 +277,17 @@
 <blockquote>
 <p>摘自《Kuberetes权威指南》</p>
 </blockquote>
+]]></content>
+      <tags>
+        <tag>k8s</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>k8s学习--实践</title>
+    <url>/2020/02/08/k8s%E5%AD%A6%E4%B9%A0--%E5%AE%9E%E8%B7%B5/</url>
+    <content><![CDATA[<p>本文记录一些对于k8s的学习。</p>
+<a id="more"></a>
+
 ]]></content>
       <tags>
         <tag>k8s</tag>
