@@ -1314,13 +1314,13 @@
 <h2 id="docker-port-容器id-别名-端口"><a href="#docker-port-容器id-别名-端口" class="headerlink" title="docker port 容器id/别名 [端口]"></a>docker port 容器id/别名 [端口]</h2><ul>
 <li>查看端口绑定情况</li>
 </ul>
-<h2 id="docker-start"><a href="#docker-start" class="headerlink" title="docker start"></a>docker start</h2><ul>
+<h2 id="docker-start-容器id"><a href="#docker-start-容器id" class="headerlink" title="docker start [容器id]"></a>docker start [容器id]</h2><ul>
 <li>启动容器</li>
 </ul>
-<h2 id="docker-stop"><a href="#docker-stop" class="headerlink" title="docker stop"></a>docker stop</h2><ul>
+<h2 id="docker-stop-容器id-别名"><a href="#docker-stop-容器id-别名" class="headerlink" title="docker stop [容器id/别名]"></a>docker stop [容器id/别名]</h2><ul>
 <li>停止容器</li>
 </ul>
-<h2 id="docker-restart"><a href="#docker-restart" class="headerlink" title="docker restart"></a>docker restart</h2><ul>
+<h2 id="docker-restart-容器id-别名"><a href="#docker-restart-容器id-别名" class="headerlink" title="docker restart [容器id/别名]"></a>docker restart [容器id/别名]</h2><ul>
 <li>重启容器</li>
 </ul>
 <h2 id="docker-exec-it-容器id-别名-bin-bash"><a href="#docker-exec-it-容器id-别名-bin-bash" class="headerlink" title="docker exec -it [容器id/别名] /bin/bash"></a>docker exec -it [容器id/别名] /bin/bash</h2><ul>
@@ -1361,7 +1361,7 @@
 <li>启动zk客户端：./bin/zkClient.sh</li>
 </ul>
 <h3 id="本地创建zk集群"><a href="#本地创建zk集群" class="headerlink" title="本地创建zk集群"></a>本地创建zk集群</h3><ul>
-<li>先创建3个文件夹<ul>
+<li>先创建3个挂载目录<ul>
 <li>mkdir zk-cluster</li>
 <li>mkdir ./zk-cluster/node1</li>
 <li>mkdir ./zk-cluster/node2</li>
