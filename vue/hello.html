@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+    <header>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    </header>
+    <body>
+        <div id="app" :style="styleObject">
+            {{ message }}
+            <p>Computed reversed message: "{{ reversedMessage }}"</p>
+
+            <span :title="reversedMessage">
+                鼠标悬停几秒钟查看此处动态绑定的提示信息！
+            </span>
+            <p v-if="seen">现在你看到我了</p>
+            <p v-else>嘿嘿</p>
+
+            <p v-show="seen">现在你看到我了</p>
+            <ol>
+                <li v-for="(todo,index) of todos">
+                    {{ todo.text }}-{{index}}-{{seen}}
+                </li>
+                <li v-for="(value, name, index) in styleObject">
+                    {{index}}, {{ name }}:{{value}}
+                </li>
+            </ol>
+            <button v-on:click="reverseMessage">反转消息</button>
+            <input v-model="message">
+
+
+            <ol>
+            <!--
+                现在我们为每个 todo-item 提供 todo 对象
+                todo 对象是变量，即其内容可以是动态的。
+                我们也需要为每个组件提供一个“key”，稍后再
+                作详细解释。
+            -->
+                <todo-item
+                    v-for="item in groceryList"
+                    v-bind:todo="item"
+                    v-bind:key="item.id"></todo-item>
+            </ol>
+
+            <button v-bind:disabled="isButtonDisabled">Button</button>
+
+            <div v-if="seen">
+                Now you see me
+            </div>
+            <div v-else>
+                Now you don't
+            </div>
+            <template v-if="loginType === 'username'">
+                <label>Username</label>
+                <input placeholder="Enter your username" key="username-input">
+              </template>
+              <template v-else>
+                <label>Email</label>
+                <input placeholder="Enter your email address" key="email-input">
+              </template>
+        </div>
+        
+        <script type="text/javascript">
+            Vue.component('todo-item', {
+                props: ['todo'],
+                template: '<li>id{{todo.id}},{{ todo.text }}</li>'
+            })
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    loginType: 'username',
+                    styleObject: {
+                        color: 'red',
+                        fontSize: '13px'
+                    },
+                    event: 'click',
+                    isButtonDisabled:false,
+                    message: '页面加载于 ' + new Date().toLocaleString(),
+                    seen: true,
+                    todos: [
+                        { text: '学习 JavaScript' },
+                        { text: '学习 Vue' },
+                        { text: '整个牛项目' }
+                    ],
+                    groceryList: [
+                        { id: 0, text: '蔬菜' },
+                        { id: 1, text: '奶酪' },
+                        { id: 2, text: '随便其它什么人吃的东西' }
+                    ]
+                },
+                computed: {
+                    // 计算属性的 getter
+                    reversedMessage: function () {
+                    // `this` 指向 vm 实例
+                    return Date.now()
+                    }
+                },
+                methods:{
+                    reverseMessage: function () {
+                        this.message = this.message.split('').reverse().join('')
+                    }
+                },
+                created: function () {
+                    // `this` 指向 vm 实例
+                    console.log('a is: ' + this.message)
+                },
+                beforeCreate: function() {
+                    console.log('before create.' + new Date().toLocaleString())
+                }
+            })
+        </script>
+        
+
+        <div id="watch-example">
+        <p>
+            Ask a yes/no question:
+            <input v-model="question">
+        </p>
+        <p>{{ answer }}</p>
+        </div>
+
+        
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+<script>
+var watchExampleVM = new Vue({
+  el: '#watch-example',
+  data: {
+    question: '',
+    answer: 'I cannot give you an answer until you ask a question!'
+  },
+  watch: {
+    // 如果 `question` 发生改变，这个函数就会运行
+    question: function (newQuestion, oldQuestion) {
+      this.answer = 'Waiting for you to stop typing...'
+      this.debouncedGetAnswer()
+    }
+  },
+  created: function () {
+    // `_.debounce` 是一个通过 Lodash 限制操作频率的函数。
+    // 在这个例子中，我们希望限制访问 yesno.wtf/api 的频率
+    // AJAX 请求直到用户输入完毕才会发出。想要了解更多关于
+    // `_.debounce` 函数 (及其近亲 `_.throttle`) 的知识，
+    // 请参考：https://lodash.com/docs#debounce
+    this.debouncedGetAnswer = _.debounce(this.getAnswer, 500)
+  },
+  methods: {
+    getAnswer: function () {
+      if (this.question.indexOf('?') === -1) {
+        this.answer = 'Questions usually contain a question mark. ;-)'
+        return
+      }
+      this.answer = 'Thinking...'
+      var vm = this
+      axios.get('https://yesno.wtf/api')
+        .then(function (response) {
+          vm.answer = _.capitalize(response.data.answer)
+        })
+        .catch(function (error) {
+          vm.answer = 'Error! Could not reach the API. ' + error
+        })
+    }
+  }
+})
+</script>
+    </body>
+</html>

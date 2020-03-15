@@ -97,6 +97,10 @@ class MyCallable implements Callable<Integer>{
     - synchronized是一个内置锁的加锁机制，当某个方法加上synchronized关键字后，就表明要获得该内置锁才能执行，但并不能阻止其他线程访问不需要获得该内置锁的方法。
     - synchronized可以加在方法上，也可以直接加在对象上，从而保证一段代码只能有一个线程在运行，保证线程的同步。
 
+    - 加在对象和加在方法上有什么不同？
+        - 方法的同步底层是使用ACC_SYNCHRONIZED标识符实现的
+        - 对象的同步底层是使用monitorenter和monitorexit两条指令实现的，即每个对象都有一个监视器锁。
+
     - synchronized加在不同方法上有什么不同？
         - 如果synchronized加在一个类的普通方法上，那么相当于synchronized(this)。是一个对象锁。
         - 如果synchronized加载一个类的静态方法上，那么相当于synchronized(Class对象)。是一个类锁，一个类只有一个类锁。
