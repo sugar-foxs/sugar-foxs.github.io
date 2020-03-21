@@ -1,6 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>java类加载</title>
+    <url>/2020/03/15/java%E7%B1%BB%E5%8A%A0%E8%BD%BD/</url>
+    <content><![CDATA[<p>本文介绍下java类加载的过程。</p>
+<a id="more"></a>
+
+<h1 id="类加载的过程"><a href="#类加载的过程" class="headerlink" title="类加载的过程"></a>类加载的过程</h1><h2 id="加载阶段"><a href="#加载阶段" class="headerlink" title="加载阶段"></a>加载阶段</h2><ul>
+<li>加载二进制字节流，将这个字节流代表的静态存储结构转化为方法区的运行时数据结构，在内存中生成Class对象，作为方法区这个类的各种数据的访问入口。<h2 id="验证阶段"><a href="#验证阶段" class="headerlink" title="验证阶段"></a>验证阶段</h2></li>
+<li>文件格式验证，元数据验证，字节码验证，符号引用验证。<h2 id="准备阶段"><a href="#准备阶段" class="headerlink" title="准备阶段"></a>准备阶段</h2></li>
+<li>为类变量分配内存并设置类变量初始值。这里的初始值是数据类型的零值。程序员设置的值在初始化阶段设置。<h2 id="解析阶段"><a href="#解析阶段" class="headerlink" title="解析阶段"></a>解析阶段</h2></li>
+<li>将常量池内的符号引用转化为直接引用。类或接口的解析，字段解析，类方法解析，接口方法解析。<h2 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h2></li>
+<li>初始化类变量和其他资源。即执行类构造器clinit方法的过程。clinit方法是由类中所有类变量的赋值动作和静态语句块中的语句合并产生。</li>
+<li>遇到以下5种情况时，必须立即对类进行初始化。<ul>
+<li>遇到new,getstatic,putstatic,invokestati这4条字节码指令时，如果类没有进行过初始化，需要先触发初始化。对应这4条字节码指令的场景是：new一个对象，获取或者设置一个类的静态字段时，调用一个类的静态方法时。</li>
+<li>使用反射包的方法对类进行反射调用时，如果类没有进行过初始化，需要先触发初始化。</li>
+<li>当初始化一个类时，如果发现它的父类没有初始化，需要先初始化其父类。</li>
+<li>虚拟机启动时执行的主类，需要先进行初始化。</li>
+<li>当使用动态语言支持时，如果一个java.lang.invoke.MethodHandler 实例最后的解析结果的方法句柄对应的类没有进行过初始化，需要先进行初始化。</li>
+</ul>
+</li>
+</ul>
+<h1 id="双亲委派"><a href="#双亲委派" class="headerlink" title="双亲委派"></a>双亲委派</h1><ul>
+<li>如果一个类加载器收到了加载某个类的请求,则该类加载器并不会去加载该类,而是把这个请求委派给父类加载器,每一个层次的类加载器都是如此,因此所有的类加载请求最终都会传送到顶端的启动类加载器;只有当父类加载器在其搜索范围内无法找到所需的类,并将该结果反馈给子类加载器,子类加载器会尝试去自己加载。</li>
+</ul>
+<h1 id="破坏双亲委派"><a href="#破坏双亲委派" class="headerlink" title="破坏双亲委派"></a>破坏双亲委派</h1><ul>
+<li>破坏双亲委派的例子：<ol>
+<li>在某些情况下，父类加载器需要委托子类加载器去加载class文件。受到加载范围的限制，父类加载器无法加载到需要的文件。以Driver接口为例，由于Driver接口定义在jdk当中，而其实现由各个数据库的服务商来提供，比如mysql的就写了MySQL Connector，那么问题就来了，DriverManager（也由jdk提供）要加载各个实现了Driver接口的实现类，然后进行管理，但是DriverManager由启动类加载器加载，只能加载JAVA_HOME的lib下文件，而其实现是由服务商提供的，由系统类加载器加载，这个时候就需要启动类加载器来委托子类来加载Driver实现，使用的是线程上下文类加载器，从而破坏了双亲委派，这里仅仅是举了破坏双亲委派的其中一个情况。</li>
+<li>由于用户对程序动态性的追求导致的，比如：代码热替换，模块热部署。OSG实现模块热部署的关键是它自定义的类加载器机制的实现。每一个程序模块都有自己的类加载器，当需要更换一个Bundle时，就把Bundle连同类加载器一起换掉以实现代码的热替换。</li>
+</ol>
+</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>java</tag>
+        <tag>jvm</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>spring监听器（观察者模式的应用）</title>
     <url>/2020/03/15/spring%E7%9B%91%E5%90%AC%E5%99%A8(%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%BA%94%E7%94%A8)/</url>
     <content><![CDATA[<p>本文介绍spring中观察者模式的具体实践：spring监听器。</p>
@@ -1403,6 +1440,9 @@
 <h2 id="docker-restart-容器id-别名"><a href="#docker-restart-容器id-别名" class="headerlink" title="docker restart [容器id/别名]"></a>docker restart [容器id/别名]</h2><ul>
 <li>重启容器</li>
 </ul>
+<h2 id="docker-logs-容器id"><a href="#docker-logs-容器id" class="headerlink" title="docker logs [容器id]"></a>docker logs [容器id]</h2><ul>
+<li>查看日志</li>
+</ul>
 <h2 id="docker-exec-it-容器id-别名-bin-bash"><a href="#docker-exec-it-容器id-别名-bin-bash" class="headerlink" title="docker exec -it [容器id/别名] /bin/bash"></a>docker exec -it [容器id/别名] /bin/bash</h2><ul>
 <li>进入容器,使用这个命令进入容器有个好处，在exit退出时不会导致容器停止。</li>
 <li>-i:交互式操作</li>
@@ -1551,16 +1591,19 @@
     <content><![CDATA[<p>本文主要介绍java垃圾回收，包括：可回收对象判定，垃圾回收算法，垃圾回收器。</p>
 <a id="more"></a>
 
-<h1 id="可回收对象判定"><a href="#可回收对象判定" class="headerlink" title="可回收对象判定"></a>可回收对象判定</h1><ul>
-<li>引用计数器<ul>
+<h1 id="可回收对象判定"><a href="#可回收对象判定" class="headerlink" title="可回收对象判定"></a>可回收对象判定</h1><h2 id="引用计数器"><a href="#引用计数器" class="headerlink" title="引用计数器"></a>引用计数器</h2><ul>
 <li>为每个对象维护一个引用计数器，当对象被引用，计数器值就加1；引用失效时，计数器值就减1，当计数器的值为0时，此对象就是可回收对象。</li>
 <li>缺点：会有循环引用问题，导致两个本来可以回收的对象回收不了。</li>
 </ul>
-</li>
-<li>可达性分析<ul>
+<h2 id="可达性分析"><a href="#可达性分析" class="headerlink" title="可达性分析"></a>可达性分析</h2><ul>
 <li>选取GC Roots,判断对象是否存在到任意GC Roots的引用链，没有则是可回收对象。</li>
-<li>可作为GC Roots的有：虚拟机栈中引用的对象，方法区中类静态属性引用的对象，方法区中常量引用的对象，本地方法区JNI引用的对象。</li>
+<li>可作为GC Roots的有：虚拟机栈中引用的对象，方法区中类静态属性引用的对象，方法区中常量引用的对象，本地方法区JNI引用的对象。<ul>
 <li>因为这些都是当前存活对象。其他的比如被classloader加载的class对象，monitor的对象，被JVM持有的对象也可能是GC Roots对象。</li>
+</ul>
+</li>
+<li>真正宣告一个对象死亡，至少要经过两次标记的的过程。<ul>
+<li>如果对象在经过可达性分析后发现没有和GC Roots连接的路径，那它将会被第一次标记并且进行一次筛选，筛选的条件是：此对象是否有必要执行finalize方法，即对象覆盖了finalize方法或者finalize方法还没被虚拟机执行过，称为有必要执行。如果有必要执行finalize方法，那这个对象会被放入F-Queue队列中，由虚拟机自动建立的低优先级的Finalizer线程去执行。这里的执行是指挥触发这个finalize方法，但是不能保证会等待它结束。(因为如果其中一个对象的finalize方法执行缓慢，或者出现了死循环，将可能导致内存回收系统崩溃)</li>
+<li>稍后GC将对F-Queue队列中的对象进行第二次标记，如果这时候对象和GC Roots有了和引用链,则这次不会被回收。</li>
 </ul>
 </li>
 </ul>
