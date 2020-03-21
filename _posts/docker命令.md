@@ -59,6 +59,9 @@ tags:
 ## docker restart [容器id/别名]
 - 重启容器
 
+## docker logs [容器id]
+- 查看日志
+
 ## docker exec -it [容器id/别名] /bin/bash
 - 进入容器,使用这个命令进入容器有个好处，在exit退出时不会导致容器停止。
 - -i:交互式操作
