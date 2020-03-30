@@ -46,19 +46,20 @@
   };
 </script>
 
-  <meta name="description" content="个人信息   姓名：顾春辉 出生年月： 1993&#x2F;11    职位：java高级开发工程师 博客：技术博客   邮箱：chgu1209@126.com 最高学历：硕士   教育背景   年份 学校 专业    2015.9 - 2018.6 东南大学 硕士-自动化   2011.9 - 2015.6 扬州大学 本科-自动化   工作经历   时间      2019.11 - 至今 网易杭研 网易">
-<meta property="og:type" content="website">
-<meta property="og:title" content="about">
-<meta property="og:url" content="http://yoursite.com/about/index.html">
+  <meta name="description" content="spring cloud中支持服务发现的组件有很多：consul,euerka,zookeeper,etcd。本文主要学习下consul。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sping-cloud-consul注册中心">
+<meta property="og:url" content="http://yoursite.com/2020/03/22/spring-cloud-consul/index.html">
 <meta property="og:site_name" content="sugar_foxs&#39;s blog">
-<meta property="og:description" content="个人信息   姓名：顾春辉 出生年月： 1993&#x2F;11    职位：java高级开发工程师 博客：技术博客   邮箱：chgu1209@126.com 最高学历：硕士   教育背景   年份 学校 专业    2015.9 - 2018.6 东南大学 硕士-自动化   2011.9 - 2015.6 扬州大学 本科-自动化   工作经历   时间      2019.11 - 至今 网易杭研 网易">
+<meta property="og:description" content="spring cloud中支持服务发现的组件有很多：consul,euerka,zookeeper,etcd。本文主要学习下consul。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2019-12-28T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-01-05T06:24:59.957Z">
+<meta property="article:published_time" content="2020-03-21T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-03-29T12:58:35.534Z">
 <meta property="article:author" content="sugar-foxs">
+<meta property="article:tag" content="微服务">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/about/">
+<link rel="canonical" href="http://yoursite.com/2020/03/22/spring-cloud-consul/">
 
 
 <script id="page-configurations">
@@ -66,12 +67,11 @@
   CONFIG.page = {
     sidebar: "",
     isHome: false,
-    isPost: false
+    isPost: true
   };
 </script>
 
-  <title>about | sugar_foxs's blog
-  </title>
+  <title>sping-cloud-consul注册中心 | sugar_foxs's blog</title>
   
 
 
@@ -205,137 +205,137 @@
       <div class="main-inner">
         <div class="content-wrap">
           
-  
-  
 
           <div class="content">
             
 
   <div class="posts-expand">
-    
-    
-    
-    <div class="post-block" lang="zh-CN">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/22/spring-cloud-consul/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="sugar-foxs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="sugar_foxs's blog">
+    </span>
       <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          sping-cloud-consul注册中心
+        </h1>
 
-<h1 class="post-title" itemprop="name headline">about
-</h1>
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
 
-<div class="post-meta">
+              <time title="创建时间：2020-03-22 00:00:00" itemprop="dateCreated datePublished" datetime="2020-03-22T00:00:00+08:00">2020-03-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-03-29 20:58:35" itemprop="dateModified" datetime="2020-03-29T20:58:35+08:00">2020-03-29</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/03/22/spring-cloud-consul/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/03/22/spring-cloud-consul/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
   
 
-</div>
+        </div>
+      </header>
 
-</header>
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-      
-      
-      <div class="post-body">
-          <h2 id="个人信息"><a href="#个人信息" class="headerlink" title="个人信息"></a>个人信息</h2><table>
-<thead>
-<tr>
-<th>姓名：顾春辉</th>
-<th>出生年月： 1993/11</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>职位：java高级开发工程师</td>
-<td>博客：<a href="https://sugar-foxs.github.io" target="_blank" rel="noopener">技术博客</a></td>
-</tr>
-<tr>
-<td>邮箱：<a href="mailto:chgu1209@126.com">chgu1209@126.com</a></td>
-<td>最高学历：硕士</td>
-</tr>
-</tbody></table>
-<h2 id="教育背景"><a href="#教育背景" class="headerlink" title="教育背景"></a>教育背景</h2><table>
-<thead>
-<tr>
-<th>年份</th>
-<th>学校</th>
-<th>专业</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>2015.9 - 2018.6</td>
-<td>东南大学</td>
-<td>硕士-自动化</td>
-</tr>
-<tr>
-<td>2011.9 - 2015.6</td>
-<td>扬州大学</td>
-<td>本科-自动化</td>
-</tr>
-</tbody></table>
-<h2 id="工作经历"><a href="#工作经历" class="headerlink" title="工作经历"></a>工作经历</h2><table>
-<thead>
-<tr>
-<th>时间</th>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>2019.11 - 至今</td>
-<td>网易杭研</td>
-<td>网易大数据猛犸平台开发</td>
-</tr>
-<tr>
-<td>2018.6 - 2019.11</td>
-<td>网易严选</td>
-<td>流计算平台开发</td>
-</tr>
-</tbody></table>
-<h2 id="项目经历"><a href="#项目经历" class="headerlink" title="项目经历"></a>项目经历</h2><table>
-<thead>
-<tr>
-<th>时间</th>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>2017.7 - 2017.8</td>
-<td>携程</td>
-<td>机票查询组</td>
-</tr>
-</tbody></table>
-<h2 id="专业技能"><a href="#专业技能" class="headerlink" title="专业技能"></a>专业技能</h2><table>
-<thead>
-<tr>
-<th>语言</th>
-<th>掌握程度</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Java</td>
-<td>熟练</td>
-</tr>
-<tr>
-<td>SpringBoot</td>
-<td>熟练</td>
-</tr>
-<tr>
-<td>Mysql</td>
-<td>熟练</td>
-</tr>
-<tr>
-<td>Flink</td>
-<td>了解</td>
-</tr>
-</tbody></table>
-<h2 id="自我评价"><a href="#自我评价" class="headerlink" title="自我评价"></a>自我评价</h2><p>1、 本人做事认真，对待工作负责，责任心较强，保持学习<br>2、 有较强的学习能力和团队协作精神，能够很快适应工作环境</p>
+        <p>spring cloud中支持服务发现的组件有很多：consul,euerka,zookeeper,etcd。本文主要学习下consul。</p>
+<a id="more"></a>
 
-      </div>
-      
-      
-      
+<h1 id="consul是什么"><a href="#consul是什么" class="headerlink" title="consul是什么"></a>consul是什么</h1><ul>
+<li>consul是一个分布式高可用的系统，每个提供服务给Consul的节点都运行了一个Consul agent。发现服务或者设置和获取key/value存储的数据不是必须运行agent。这个agent是负责对节点自身和节点上的服务进行健康检查的。Agent与一个和多个Consul Server进行交互。Consul Server用于存放和复制数据，server自行选举一个领袖。虽然Consul可以运行在一台server, 但是建议使用3到5台来避免失败情况下数据的丢失。每个数据中心建议配置一个server集群。</li>
+<li>consul整体可提供的功能：<ul>
+<li>服务发现：通过consul可以找到其他服务的提供者</li>
+<li>健康检查：监控应用集群的状态</li>
+<li>k/v存储：存储一些配置</li>
+<li>多数据中心：用户不需要担心需要建立额外的抽象层让业务扩展到多个区域。这个功能是和其他类似组件的最大不同。</li>
+</ul>
+</li>
+</ul>
+<h1 id="Gossip协议和Raft协议"><a href="#Gossip协议和Raft协议" class="headerlink" title="Gossip协议和Raft协议"></a>Gossip协议和Raft协议</h1><h2 id="Gossip协议"><a href="#Gossip协议" class="headerlink" title="Gossip协议"></a>Gossip协议</h2><ul>
+<li>Gossip算法如其名，灵感来自办公室八卦，只要一个人八卦一下，在有限的时间内所有的人都会知道该八卦的信息。</li>
+</ul>
+<h2 id="Raft协议"><a href="#Raft协议" class="headerlink" title="Raft协议"></a>Raft协议</h2><ul>
+<li>Raft是一个共识算法。所谓共识，就是多个节点对某个事情达成一致的看法，即使是在部分节点故障、网络延时、网络分割的情况下。</li>
+<li>raft会先选举出leader，leader完全负责replicated log的管理。leader负责接受所有客户端更新请求，然后复制到follower节点，并在“安全”的时候执行这些请求。如果leader故障，followes会重新选举出新的leader。</li>
+</ul>
+<ul>
+<li>引用自<a href="https://www.cnblogs.com/xybaby/p/10124083.html" target="_blank" rel="noopener">一文搞懂Raft算法</a></li>
+</ul>
+
     </div>
-    
 
     
     
     
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" rel="tag"><i class="fa fa-tag"></i> 微服务</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/03/22/zk/" rel="prev" title="zookeeper学习">
+      <i class="fa fa-chevron-left"></i> zookeeper学习
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/03/24/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E5%9C%A8%E5%B7%A5%E4%BD%9C%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/" rel="next" title="设计模式在工作中的应用">
+      设计模式在工作中的应用 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
   </div>
 
 
@@ -388,7 +388,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#个人信息"><span class="nav-number">1.</span> <span class="nav-text">个人信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#教育背景"><span class="nav-number">2.</span> <span class="nav-text">教育背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工作经历"><span class="nav-number">3.</span> <span class="nav-text">工作经历</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#项目经历"><span class="nav-number">4.</span> <span class="nav-text">项目经历</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#专业技能"><span class="nav-number">5.</span> <span class="nav-text">专业技能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自我评价"><span class="nav-number">6.</span> <span class="nav-text">自我评价</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#consul是什么"><span class="nav-number">1.</span> <span class="nav-text">consul是什么</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Gossip协议和Raft协议"><span class="nav-number">2.</span> <span class="nav-text">Gossip协议和Raft协议</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Gossip协议"><span class="nav-number">2.1.</span> <span class="nav-text">Gossip协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Raft协议"><span class="nav-number">2.2.</span> <span class="nav-text">Raft协议</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
