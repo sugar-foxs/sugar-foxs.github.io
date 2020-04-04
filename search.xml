@@ -32,37 +32,6 @@
       </tags>
   </entry>
   <entry>
-    <title>sping-cloud-consul注册中心</title>
-    <url>/2020/03/22/spring-cloud-consul/</url>
-    <content><![CDATA[<p>spring cloud中支持服务发现的组件有很多：consul,euerka,zookeeper,etcd。本文主要学习下consul。</p>
-<a id="more"></a>
-
-<h1 id="consul是什么"><a href="#consul是什么" class="headerlink" title="consul是什么"></a>consul是什么</h1><ul>
-<li>consul是一个分布式高可用的系统，每个提供服务给Consul的节点都运行了一个Consul agent。发现服务或者设置和获取key/value存储的数据不是必须运行agent。这个agent是负责对节点自身和节点上的服务进行健康检查的。Agent与一个和多个Consul Server进行交互。Consul Server用于存放和复制数据，server自行选举一个领袖。虽然Consul可以运行在一台server, 但是建议使用3到5台来避免失败情况下数据的丢失。每个数据中心建议配置一个server集群。</li>
-<li>consul整体可提供的功能：<ul>
-<li>服务发现：通过consul可以找到其他服务的提供者</li>
-<li>健康检查：监控应用集群的状态</li>
-<li>k/v存储：存储一些配置</li>
-<li>多数据中心：用户不需要担心需要建立额外的抽象层让业务扩展到多个区域。这个功能是和其他类似组件的最大不同。</li>
-</ul>
-</li>
-</ul>
-<h1 id="Gossip协议和Raft协议"><a href="#Gossip协议和Raft协议" class="headerlink" title="Gossip协议和Raft协议"></a>Gossip协议和Raft协议</h1><h2 id="Gossip协议"><a href="#Gossip协议" class="headerlink" title="Gossip协议"></a>Gossip协议</h2><ul>
-<li>Gossip算法如其名，灵感来自办公室八卦，只要一个人八卦一下，在有限的时间内所有的人都会知道该八卦的信息。</li>
-</ul>
-<h2 id="Raft协议"><a href="#Raft协议" class="headerlink" title="Raft协议"></a>Raft协议</h2><ul>
-<li>Raft是一个共识算法。所谓共识，就是多个节点对某个事情达成一致的看法，即使是在部分节点故障、网络延时、网络分割的情况下。</li>
-<li>raft会先选举出leader，leader完全负责replicated log的管理。leader负责接受所有客户端更新请求，然后复制到follower节点，并在“安全”的时候执行这些请求。如果leader故障，followes会重新选举出新的leader。</li>
-</ul>
-<ul>
-<li>引用自<a href="https://www.cnblogs.com/xybaby/p/10124083.html" target="_blank" rel="noopener">一文搞懂Raft算法</a></li>
-</ul>
-]]></content>
-      <tags>
-        <tag>微服务</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>zookeeper学习</title>
     <url>/2020/03/22/zk/</url>
     <content><![CDATA[<p>本文是关于zookepper学习的记录。</p>
