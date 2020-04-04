@@ -54,7 +54,7 @@
 <meta property="og:description" content="本文是关于zookepper学习的记录。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-03-21T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-04-04T05:40:23.351Z">
+<meta property="article:modified_time" content="2020-04-04T05:57:05.080Z">
 <meta property="article:author" content="sugar-foxs">
 <meta property="article:tag" content="分布式">
 <meta name="twitter:card" content="summary">
@@ -244,7 +244,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-04 13:40:23" itemprop="dateModified" datetime="2020-04-04T13:40:23+08:00">2020-04-04</time>
+                <time title="修改时间：2020-04-04 13:57:05" itemprop="dateModified" datetime="2020-04-04T13:57:05+08:00">2020-04-04</time>
               </span>
 
           
@@ -314,9 +314,13 @@
 <li>需要确保丢弃那些只在Leader服务器上被提出的事务。</li>
 </ul>
 </li>
-<li><p>Leader选举算法：让具有最高事务编号的机器成为Leader。可以保证新选举出来的Leader服务器一定具有所有已经提交的提案。</p>
+<li><p>Leader选举算法：让具有最高事务编号ZXID的机器成为Leader。可以保证新选举出来的Leader服务器一定具有所有已经提交的提案。</p>
 </li>
-<li><p>数据同步：Leader选举之后，</p>
+<li><p>数据同步：Leader选举之后，在正式工作开始之前，Leader服务器首先会确认事务日志中所有的Proposal是否都被集群中过半的机器提交了，即是否完成数据同步。数据同步过程如下：</p>
+<ul>
+<li>Leader服务器为每个Follower准备一个队列，将没有被Follower提交的事务发送给Follower，并在每个事务消息之后紧接着一个Commit消息，表示该事务已经提交。等到Follwer将所有未同步的事务从leader上同步过来并应用到本地数据库中，Leader服务器就将该Follower加入到真正可用的Follower列表中。</li>
+<li>在处理一些需要被丢弃的事务时，是这样处理的：因为事务id能够区分Leader周期变化，能避免leader错误的使用相同的事务id创建不同的事务的情况，当包含了上一个leader周期ongoing尚未提交的事务的服务器启动时，首先它肯定无法成为leader，因为当前集群中一定包含一个Quorum集合，该集合中集群一定包含了更高epoch的事务。当这台机器加入到集群中时，leader服务器会根据自己服务器最后被提交的事务和Follower服务器的事务进行比较，让follower进行回退操作，回退到一个确实被集群中过半机器提交的最新事务。</li>
+</ul>
 </li>
 </ul>
 <h2 id="ZooKeeper"><a href="#ZooKeeper" class="headerlink" title="ZooKeeper"></a>ZooKeeper</h2><ul>
