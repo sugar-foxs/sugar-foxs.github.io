@@ -54,7 +54,7 @@
 <meta property="og:description" content="本文是关于zookepper学习的记录。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-03-21T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-03-29T09:11:19.204Z">
+<meta property="article:modified_time" content="2020-04-04T05:40:23.351Z">
 <meta property="article:author" content="sugar-foxs">
 <meta property="article:tag" content="分布式">
 <meta name="twitter:card" content="summary">
@@ -244,7 +244,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-03-29 17:11:19" itemprop="dateModified" datetime="2020-03-29T17:11:19+08:00">2020-03-29</time>
+                <time title="修改时间：2020-04-04 13:40:23" itemprop="dateModified" datetime="2020-04-04T13:40:23+08:00">2020-04-04</time>
               </span>
 
           
@@ -348,39 +348,11 @@
 <h4 id="Observer"><a href="#Observer" class="headerlink" title="Observer"></a>Observer</h4><ul>
 <li>除了不参与Proposal投票和Leader选举，其他功能和Follower一样。</li>
 </ul>
-<ul>
-<li><p>ZNode<br>数据模型中的数据单元，ZNode分为持久节点和临时节点。节点还有一个特殊的属性：SEQUENTIAL，一旦节点被标记上这个属性，便成为有序节点，在这个节点被创建的时候，Zookeeper会自动在其节点名后面追加上一个整型数字，这个整型数字是一个由父节点维护的自增数字。</p>
-</li>
-<li><p>Stat<br>zookeeper会为每个znode维护一个叫做Stat的数据结构，其中记录了znode的3个数据版本，分别是version(当前znode版本),cversion（当前znode子节点版本）,aversion（当前znode的ACL版本）。</p>
-</li>
-<li><p>Watcher<br>事件监听器。在一些特定事件被触发时，服务端将事件通知到感兴趣的客户端。</p>
-</li>
-<li><p>ACL<br>权限控制列表</p>
-<ul>
-<li>create：创建子节点的权限</li>
-<li>read：读取节点数据和子节点列表的权限</li>
-<li>write：更新节点数据的权限</li>
-<li>delete：删除子节点的权限</li>
-<li>admin:设置节点ACL的权限</li>
-</ul>
-</li>
-<li><p>为什么最好使用奇数台服务器构成ZooKeeper集群？</p>
-<blockquote>
-<p>zookeeper容错是指，当宕掉几个zookeeper服务器之后，剩下的个数必须大于宕掉的个数的话整个zookeeper才依然可用。假如我们的集群中有n台zookeeper服务器，那么也就是剩下的服务数必须大于n/2。比如假如我们有3台，那么最大允许宕掉1台zookeeper服务器，如果我们有4台的的时候也同样只允许宕掉1台。所以肯定选择3台较于4台是更优的选择。</p>
-</blockquote>
-</li>
-</ul>
 <h3 id="服务器状态"><a href="#服务器状态" class="headerlink" title="服务器状态"></a>服务器状态</h3><ul>
 <li>LOOKING 不确定Leader状态。该状态下的服务器认为当前集群中没有Leader，会发起Leader选举。</li>
 <li>FOLLOWING 跟随者状态。表明当前服务器角色是Follower，并且它知道Leader是谁。</li>
 <li>LEADING 领导者状态。表明当前服务器角色是Leader，它会维护与Follower间的心跳。</li>
 <li>OBSERVING 观察者状态。表明当前服务器角色是Observer，与Folower唯一的不同在于不参与选举，也不参与集群写操作时的投票。</li>
-</ul>
-<h3 id="zid"><a href="#zid" class="headerlink" title="zid"></a>zid</h3><ul>
-<li>类似于RDBMS中的事务ID，用于标识一次更新操作的Proposal ID。为了保证顺序性，该zkid必须单调递增。因此ZooKeeper使用一个64位的数来表示，高32位是Leader的epoch，从1开始，每次选出新的Leader，epoch加一。低32位为该epoch内的序号，每次epoch变化，都将低32位的序号重置。这样保证了zkid的全局递增性。</li>
-</ul>
-<h3 id="mutliupdate"><a href="#mutliupdate" class="headerlink" title="mutliupdate"></a>mutliupdate</h3><ul>
-<li>批量更新也具有原子性，要么都成功，要么都失败。</li>
 </ul>
 <h3 id="羊群效应"><a href="#羊群效应" class="headerlink" title="羊群效应"></a>羊群效应</h3><p>像这样，大量的client都会获得相同的事件通知，而只有很小的一部分client会对 事件通知有响应。我们这里，只有一个client将获得锁，但是所有的client都得到了通知。那么 这就像在网络公路上撒了把钉子，增加了ZooKeeper服务器的压力。</p>
 <h3 id="zookeeper应用场景"><a href="#zookeeper应用场景" class="headerlink" title="zookeeper应用场景"></a>zookeeper应用场景</h3><h4 id="数据发布与订阅（配置中心）"><a href="#数据发布与订阅（配置中心）" class="headerlink" title="数据发布与订阅（配置中心）"></a>数据发布与订阅（配置中心）</h4><ul>
@@ -405,6 +377,34 @@
 </ul>
 </li>
 </ul>
+<h3 id="系统模型"><a href="#系统模型" class="headerlink" title="系统模型"></a>系统模型</h3><h4 id="数据模型"><a href="#数据模型" class="headerlink" title="数据模型"></a>数据模型</h4><ul>
+<li>zk的试图视图结构和Unix的文件系统很类似，使用了数据节点的概念，称之为znode。znode是zk中数据的最小单元，每个znode都可以保存数据，同时还可以挂载子节点，因此形成了一棵数据节点组成的树。</li>
+<li>事务ID：在zk中，事务是指能够改变zk状态的操作，一般包括节点的创建和删除，节点内容的更新和客户端会话创建与失效等。对于每一个事务操作，zk都会分配一个全局唯一的事务id，称之为ZXID。</li>
+<li>类似于RDBMS中的事务ID，用于标识一次更新操作的Proposal ID。为了保证顺序性，该zxid必须单调递增。因此ZooKeeper使用一个64位的数来表示，高32位是Leader的epoch，从1开始，每次选出新的Leader，epoch加一。低32位为该epoch内的序号，每次epoch变化，都将低32位的序号重置。这样保证了zxid的全局递增性。</li>
+</ul>
+<h4 id="节点特性"><a href="#节点特性" class="headerlink" title="节点特性"></a>节点特性</h4><ul>
+<li>节点分为持久节点，临时节点，顺序节点。可以组合成四种节点类型。</li>
+<li>一旦节点被标记上SEQUENTIAL属性，便成为有序节点，在这个节点被创建的时候，Zookeeper会自动在其节点名后面追加上一个整型数字，这个整型数字是一个由父节点维护的自增数字。</li>
+<li>节点状态信息：保存了Stat类的数据结构，包括事务ID，版本信息，子节点个数等。</li>
+</ul>
+<h4 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h4><ul>
+<li>每个数据节点具有3种版本信息：当前节点的数据内容的版本号version，当前节点的子节点的版本号cversion，当前节点的ACL变更的版本号aversion。</li>
+<li>version代表数据节点的变更次数，初始为0，表示没有变更。version是用来实现乐观锁的写入校验的。</li>
+</ul>
+<h4 id="Watcher"><a href="#Watcher" class="headerlink" title="Watcher"></a>Watcher</h4><ul>
+<li>watcher用来实现分布式的通知功能。客户端注册对不同事件的watcher，当事件发生时，服务端会通知监听了此事件的客户端。</li>
+<li>watcher被触发后就会失效，如果客户端还想监听，需要再次注册事件。</li>
+</ul>
+<h4 id="ACL"><a href="#ACL" class="headerlink" title="ACL"></a>ACL</h4><ul>
+<li>create：创建子节点的权限</li>
+<li>read：读取节点数据和子节点列表的权限</li>
+<li>write：更新节点数据的权限</li>
+<li>delete：删除子节点的权限</li>
+<li>admin:设置节点ACL的权限</li>
+</ul>
+<h1 id="为什么最好使用奇数台服务器构成ZooKeeper集群？"><a href="#为什么最好使用奇数台服务器构成ZooKeeper集群？" class="headerlink" title="为什么最好使用奇数台服务器构成ZooKeeper集群？"></a>为什么最好使用奇数台服务器构成ZooKeeper集群？</h1><blockquote>
+<p>zookeeper容错是指，当宕掉几个zookeeper服务器之后，剩下的个数必须大于宕掉的个数的话整个zookeeper才依然可用。假如我们的集群中有n台zookeeper服务器，那么也就是剩下的服务数必须大于n/2。比如假如我们有3台，那么最大允许宕掉1台zookeeper服务器，如果我们有4台的的时候也同样只允许宕掉1台。所以肯定选择3台较于4台是更优的选择。</p>
+</blockquote>
 
     </div>
 
@@ -491,7 +491,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Paxos协议"><span class="nav-number">1.</span> <span class="nav-text">Paxos协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZAB协议"><span class="nav-number">2.</span> <span class="nav-text">ZAB协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZooKeeper"><span class="nav-number">3.</span> <span class="nav-text">ZooKeeper</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#服务器角色"><span class="nav-number">3.1.</span> <span class="nav-text">服务器角色</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Leader"><span class="nav-number">3.1.1.</span> <span class="nav-text">Leader</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Follower"><span class="nav-number">3.1.2.</span> <span class="nav-text">Follower</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Observer"><span class="nav-number">3.1.3.</span> <span class="nav-text">Observer</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务器状态"><span class="nav-number">3.2.</span> <span class="nav-text">服务器状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zid"><span class="nav-number">3.3.</span> <span class="nav-text">zid</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mutliupdate"><span class="nav-number">3.4.</span> <span class="nav-text">mutliupdate</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#羊群效应"><span class="nav-number">3.5.</span> <span class="nav-text">羊群效应</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zookeeper应用场景"><span class="nav-number">3.6.</span> <span class="nav-text">zookeeper应用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据发布与订阅（配置中心）"><span class="nav-number">3.6.1.</span> <span class="nav-text">数据发布与订阅（配置中心）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#负载均衡"><span class="nav-number">3.6.2.</span> <span class="nav-text">负载均衡</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#命名服务"><span class="nav-number">3.6.3.</span> <span class="nav-text">命名服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分布式协调与通知"><span class="nav-number">3.6.4.</span> <span class="nav-text">分布式协调与通知</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#集群管理"><span class="nav-number">3.6.5.</span> <span class="nav-text">集群管理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#master选举"><span class="nav-number">3.6.6.</span> <span class="nav-text">master选举</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分布式锁"><span class="nav-number">3.6.7.</span> <span class="nav-text">分布式锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分布式队列"><span class="nav-number">3.6.8.</span> <span class="nav-text">分布式队列</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Paxos协议"><span class="nav-number">1.</span> <span class="nav-text">Paxos协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZAB协议"><span class="nav-number">2.</span> <span class="nav-text">ZAB协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZooKeeper"><span class="nav-number">3.</span> <span class="nav-text">ZooKeeper</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#服务器角色"><span class="nav-number">3.1.</span> <span class="nav-text">服务器角色</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Leader"><span class="nav-number">3.1.1.</span> <span class="nav-text">Leader</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Follower"><span class="nav-number">3.1.2.</span> <span class="nav-text">Follower</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Observer"><span class="nav-number">3.1.3.</span> <span class="nav-text">Observer</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务器状态"><span class="nav-number">3.2.</span> <span class="nav-text">服务器状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#羊群效应"><span class="nav-number">3.3.</span> <span class="nav-text">羊群效应</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zookeeper应用场景"><span class="nav-number">3.4.</span> <span class="nav-text">zookeeper应用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据发布与订阅（配置中心）"><span class="nav-number">3.4.1.</span> <span class="nav-text">数据发布与订阅（配置中心）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#负载均衡"><span class="nav-number">3.4.2.</span> <span class="nav-text">负载均衡</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#命名服务"><span class="nav-number">3.4.3.</span> <span class="nav-text">命名服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分布式协调与通知"><span class="nav-number">3.4.4.</span> <span class="nav-text">分布式协调与通知</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#集群管理"><span class="nav-number">3.4.5.</span> <span class="nav-text">集群管理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#master选举"><span class="nav-number">3.4.6.</span> <span class="nav-text">master选举</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分布式锁"><span class="nav-number">3.4.7.</span> <span class="nav-text">分布式锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分布式队列"><span class="nav-number">3.4.8.</span> <span class="nav-text">分布式队列</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#系统模型"><span class="nav-number">3.5.</span> <span class="nav-text">系统模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据模型"><span class="nav-number">3.5.1.</span> <span class="nav-text">数据模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#节点特性"><span class="nav-number">3.5.2.</span> <span class="nav-text">节点特性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#版本"><span class="nav-number">3.5.3.</span> <span class="nav-text">版本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Watcher"><span class="nav-number">3.5.4.</span> <span class="nav-text">Watcher</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ACL"><span class="nav-number">3.5.5.</span> <span class="nav-text">ACL</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#为什么最好使用奇数台服务器构成ZooKeeper集群？"><span class="nav-number"></span> <span class="nav-text">为什么最好使用奇数台服务器构成ZooKeeper集群？</span></a></div>
       </div>
       <!--/noindex-->
 
