@@ -88,11 +88,11 @@
 </li>
 <li><p>ZAB协议是为分布式协调服务Zookeeper专门设计的一种支持崩溃恢复的原子广播协议。</p>
 </li>
-<li><p>ZAB协议的核心：所有事务请求必须由一个全局唯一的服务器爱协调处理，这样的服务器被称为Leader服务器，而余下的其他服务器则成为Follower服务器。Leader服务器负责将一个客户端事务请求转换成一个事务Proosal,并将该Proposal分发给集群中其他的Follower服务器。之后Leader服务器需要等待所有Follower服务器的反馈，一旦超过半数的Follower服务器进行了正确的反馈后，那么Leader就会再次向所有的Follower服务器分发Commit消息，要求其将前一个Proposal进行提交。</p>
+<li><p>ZAB协议的核心：所有事务请求必须由一个全局唯一的服务器来协调处理，这样的服务器被称为Leader服务器，而余下的其他服务器则成为Follower服务器。Leader服务器负责将一个客户端事务请求转换成一个事务Proosal,并将该Proposal分发给集群中其他的Follower服务器。之后Leader服务器需要等待所有Follower服务器的反馈，一旦超过半数的Follower服务器进行了正确的反馈后，那么Leader就会再次向所有的Follower服务器分发Commit消息，要求其将前一个Proposal进行提交。</p>
 </li>
 <li><p>ZAB协议包括两种基本的模式：崩溃恢复和消息广播。</p>
 </li>
-<li><p>消息广播<br>针对客户端的事务请求，Leader服务器会为其生成Proposal，并将其发送给集群中其他机器，然后再分别收集各自的选票，最后进行事务提交。ZAB协议在集群中过半Follower机器已经反馈ACK之后，就开始提交事务了，而不需要等待所有Follower都反馈。所以需要崩溃恢复来解决Leader服务器崩溃退出而导致的数据不一致的问题。在广播事务Proposal之前，Leader服务器会先为这个事务生成一个全局递增的诶一ID，称为事务ID。Leader服务器会为每个Follower分配一个队列，需要广播的事务放入对应的队列就可以发送出去。</p>
+<li><p>消息广播<br>针对客户端的事务请求，Leader服务器会为其生成Proposal，并将其发送给集群中其他机器，然后再分别收集各自的选票，最后进行事务提交。ZAB协议在集群中过半Follower机器已经反馈ACK之后，就开始提交事务了，而不需要等待所有Follower都反馈。所以需要崩溃恢复来解决Leader服务器崩溃退出而导致的数据不一致的问题。在广播事务Proposal之前，Leader服务器会先为这个事务生成一个全局递增的唯一ID，称为事务ID。Leader服务器会为每个Follower分配一个队列，需要广播的事务放入对应的队列就可以发送出去。每个Follower接收到事务之后，首先会将其以事务日志的形式写入到本地磁盘中去，并且在成功写入之后反馈给Leader服务器一个ACK响应。当Leader服务器接收到过半Follower的ACK响应后，就会广播一个Commit消息给所有的Follower服务器，以通知其进行事务提交，同时Leader也进行事务提交。每一个Follower服务器接收到Commit消息后会进行事务提交。</p>
 </li>
 <li><p>崩溃恢复<br>消息广播在正常情况下运行非常良好，但是当Leader服务器出现崩溃，或者由于网络原因Leader服务器失去了与过半Follower的联系，便会进入崩溃恢复模式。即重新选举出一个Leader。 </p>
 <ul>
@@ -169,7 +169,7 @@
 </ul>
 <h3 id="系统模型"><a href="#系统模型" class="headerlink" title="系统模型"></a>系统模型</h3><h4 id="数据模型"><a href="#数据模型" class="headerlink" title="数据模型"></a>数据模型</h4><ul>
 <li>zk的试图视图结构和Unix的文件系统很类似，使用了数据节点的概念，称之为znode。znode是zk中数据的最小单元，每个znode都可以保存数据，同时还可以挂载子节点，因此形成了一棵数据节点组成的树。</li>
-<li>事务ID：在zk中，事务是指能够改变zk状态的操作，一般包括节点的创建和删除，节点内容的更新和客户端会话创建与失效等。对于每一个事务操作，zk都会分配一个全局唯一的事务id，称之为ZXID。</li>
+<li>事务ID：在zk中，事务是指能够改变zk状态的操作，一般包括节点的创建和删除，节点内容的更新和客户端会话创建与失效等。对于每一个事务操作，zk都会分配一个全局单调递增的唯一的事务id，称之为ZXID。</li>
 <li>类似于RDBMS中的事务ID，用于标识一次更新操作的Proposal ID。为了保证顺序性，该zxid必须单调递增。因此ZooKeeper使用一个64位的数来表示，高32位是Leader的epoch，从1开始，每次选出新的Leader，epoch加一。低32位为该epoch内的序号，每次epoch变化，都将低32位的序号重置。这样保证了zxid的全局递增性。</li>
 </ul>
 <h4 id="节点特性"><a href="#节点特性" class="headerlink" title="节点特性"></a>节点特性</h4><ul>
