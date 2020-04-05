@@ -49,7 +49,7 @@
 </li>
 </ul>
 </li>
-<li>和AtomicLong比较，LongAdder通过在高并发时将对单一变量的CAS操作分散为对cells中多个元素的CAS操作，取值时进行求和，并发较低时仅对base变量进行CAS操作，与AtomicLong类原理相同。</li>
+<li>和AtomicLong比较，LongAdder通过在高并发时将对单一变量的CAS操作分散为对cells中多个元素的CAS操作，取值时进行求和，但是因为增加了数组，使用了更多的空间。并发较低时仅对base变量进行CAS操作，与AtomicLong类原理相同。</li>
 </ul>
 ]]></content>
       <tags>
