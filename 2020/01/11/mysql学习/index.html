@@ -46,21 +46,21 @@
   };
 </script>
 
-  <meta name="description" content="本篇介绍mysql InnodDB引擎的事务隔离级别。">
+  <meta name="description" content="本篇介绍mysql。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="mysql事务隔离级别">
-<meta property="og:url" content="http://yoursite.com/2020/01/11/mysql%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/index.html">
+<meta property="og:title" content="mysql学习">
+<meta property="og:url" content="http://yoursite.com/2020/01/11/mysql%E5%AD%A6%E4%B9%A0/index.html">
 <meta property="og:site_name" content="sugar_foxs&#39;s blog">
-<meta property="og:description" content="本篇介绍mysql InnodDB引擎的事务隔离级别。">
+<meta property="og:description" content="本篇介绍mysql。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-01-10T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-01-11T05:31:27.636Z">
+<meta property="article:modified_time" content="2020-04-05T05:17:45.459Z">
 <meta property="article:author" content="sugar-foxs">
 <meta property="article:tag" content="java">
 <meta property="article:tag" content="mysql">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/2020/01/11/mysql%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/">
+<link rel="canonical" href="http://yoursite.com/2020/01/11/mysql%E5%AD%A6%E4%B9%A0/">
 
 
 <script id="page-configurations">
@@ -72,7 +72,7 @@
   };
 </script>
 
-  <title>mysql事务隔离级别 | sugar_foxs's blog</title>
+  <title>mysql学习 | sugar_foxs's blog</title>
   
 
 
@@ -215,7 +215,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/11/mysql%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/11/mysql%E5%AD%A6%E4%B9%A0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpeg">
@@ -228,7 +228,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          mysql事务隔离级别
+          mysql学习
         </h1>
 
         <div class="post-meta">
@@ -237,10 +237,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-01-11 00:00:00 / 修改时间：13:31:27" itemprop="dateCreated datePublished" datetime="2020-01-11T00:00:00+08:00">2020-01-11</time>
+              <time title="创建时间：2020-01-11 00:00:00" itemprop="dateCreated datePublished" datetime="2020-01-11T00:00:00+08:00">2020-01-11</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-05 13:17:45" itemprop="dateModified" datetime="2020-04-05T13:17:45+08:00">2020-04-05</time>
+              </span>
 
           
             <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
@@ -258,8 +264,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2020/01/11/mysql%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/01/11/mysql%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/" itemprop="commentCount"></span>
+    <a title="valine" href="/2020/01/11/mysql%E5%AD%A6%E4%B9%A0/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/01/11/mysql%E5%AD%A6%E4%B9%A0/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -274,9 +280,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>本篇介绍mysql InnodDB引擎的事务隔离级别。</p>
+        <p>本篇介绍mysql。</p>
 <a id="more"></a>
 
+<h1 id="MyISAM和InnoDB的区别"><a href="#MyISAM和InnoDB的区别" class="headerlink" title="MyISAM和InnoDB的区别"></a>MyISAM和InnoDB的区别</h1><ol>
+<li>MyISAM只支持表锁，InnoDB支持表锁和行锁。</li>
+<li>MyISAM 强调的是性能，每次查询具有原子性，其执行速度比InnoDB类型更快，但是不提供事务支持。InnoDB支持事务，外部键等高级数据库功能。 具有事务、回滚和崩溃修复能力。</li>
+<li>MyISAM不支持外键，而InnoDB支持外键。</li>
+<li>InnoDB支持MVVC多版本控制。应对高并发事务，MVCC比单纯的加锁更高效;MVCC只在<strong>读已提交</strong>和<strong>可重复读</strong>两个隔离级别下工作;MVCC可以使用乐观锁和悲观锁来实现;各数据库中MVCC实现并不统一。</li>
+</ol>
 <h1 id="事务隔离级别"><a href="#事务隔离级别" class="headerlink" title="事务隔离级别"></a>事务隔离级别</h1><ul>
 <li>mysql的InnodDB引擎有4种隔离级别：未提交读、已提交读、可重复读、串行化。隔离级别是为了定义各个事务之间是否会有影响，有什么影响。</li>
 </ul>
@@ -383,7 +395,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#事务隔离级别"><span class="nav-number">1.</span> <span class="nav-text">事务隔离级别</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#未提交读"><span class="nav-number">1.1.</span> <span class="nav-text">未提交读</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#已提交读"><span class="nav-number">1.2.</span> <span class="nav-text">已提交读</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可重复读-默认"><span class="nav-number">1.3.</span> <span class="nav-text">可重复读(默认)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#串行化"><span class="nav-number">1.4.</span> <span class="nav-text">串行化</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MyISAM和InnoDB的区别"><span class="nav-number">1.</span> <span class="nav-text">MyISAM和InnoDB的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#事务隔离级别"><span class="nav-number">2.</span> <span class="nav-text">事务隔离级别</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#未提交读"><span class="nav-number">2.1.</span> <span class="nav-text">未提交读</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#已提交读"><span class="nav-number">2.2.</span> <span class="nav-text">已提交读</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可重复读-默认"><span class="nav-number">2.3.</span> <span class="nav-text">可重复读(默认)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#串行化"><span class="nav-number">2.4.</span> <span class="nav-text">串行化</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -399,7 +411,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-count">39</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
