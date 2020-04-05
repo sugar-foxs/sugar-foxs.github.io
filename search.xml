@@ -4,11 +4,11 @@
     <title>LongAdder</title>
     <url>/2020/04/05/LongAdder/</url>
     <content><![CDATA[<p>本文是关于LongAdder的原理学习。</p>
-<a id="more"></a>
-
 <blockquote>
 <p>由于AtomicLong在高并发下CAS会大概率的进行重试而导致性能不佳，Doug Lea大神又增加了LongAdder类来处理这种情况，下面我们来看看LongAdder是如何来解决高并发下的性能问题的。</p>
 </blockquote>
+<a id="more"></a>
+
 <h1 id="LongAdder"><a href="#LongAdder" class="headerlink" title="LongAdder"></a>LongAdder</h1><ul>
 <li>先看下LongAdder的定义和基础属性<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LongAdder</span> <span class="keyword">extends</span> <span class="title">Striped64</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">7249069246863182397L</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">LongAdder</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 <li>可以看到LongAdder继承自Striped64抽象类。所以需要看下Striped64类的基础属性。<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// cpu核数, 用来约束cells数组的大小</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> NCPU = Runtime.getRuntime().availableProcessors();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 用来存放cell,数组size是2的n次方</span></span><br><span class="line"><span class="keyword">transient</span> <span class="keyword">volatile</span> Cell[] cells;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 基础值，除了cells数组中的值，base值也是总和的一部分</span></span><br><span class="line"><span class="keyword">transient</span> <span class="keyword">volatile</span> <span class="keyword">long</span> base;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在初始化和扩容时作为锁使用</span></span><br><span class="line"><span class="keyword">transient</span> <span class="keyword">volatile</span> <span class="keyword">int</span> cellsBusy;</span><br></pre></td></tr></table></figure></li>
