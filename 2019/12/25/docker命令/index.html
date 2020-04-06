@@ -647,6 +647,16 @@
   
 
   
+  <script src="//cdn.jsdelivr.net/npm/quicklink@1/dist/quicklink.umd.js"></script>
+  <script>
+      window.addEventListener('load', () => {
+      quicklink({
+        timeout: 3000,
+        priority: true,
+        ignores: [uri => uri.includes('#'),uri => uri == 'http://yoursite.com/2019/12/25/docker%E5%91%BD%E4%BB%A4/',]
+      });
+      });
+  </script>
 
 
 <script>

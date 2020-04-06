@@ -546,6 +546,16 @@
   
 
   
+  <script src="//cdn.jsdelivr.net/npm/quicklink@1/dist/quicklink.umd.js"></script>
+  <script>
+      window.addEventListener('load', () => {
+      quicklink({
+        timeout: 3000,
+        priority: true,
+        ignores: [uri => uri.includes('#'),uri => uri == 'http://yoursite.com/2020/03/15/java%E7%B1%BB%E5%8A%A0%E8%BD%BD/',]
+      });
+      });
+  </script>
 
 
 <script>

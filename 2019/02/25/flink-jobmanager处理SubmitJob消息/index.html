@@ -654,6 +654,16 @@
   
 
   
+  <script src="//cdn.jsdelivr.net/npm/quicklink@1/dist/quicklink.umd.js"></script>
+  <script>
+      window.addEventListener('load', () => {
+      quicklink({
+        timeout: 3000,
+        priority: true,
+        ignores: [uri => uri.includes('#'),uri => uri == 'http://yoursite.com/2019/02/25/flink-jobmanager%E5%A4%84%E7%90%86SubmitJob%E6%B6%88%E6%81%AF/',]
+      });
+      });
+  </script>
 
 
 <script>

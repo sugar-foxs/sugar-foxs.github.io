@@ -575,6 +575,16 @@
   
 
   
+  <script src="//cdn.jsdelivr.net/npm/quicklink@1/dist/quicklink.umd.js"></script>
+  <script>
+      window.addEventListener('load', () => {
+      quicklink({
+        timeout: 3000,
+        priority: true,
+        ignores: [uri => uri.includes('#'),uri => uri == 'http://yoursite.com/2020/01/01/%E5%91%A8%E6%9C%9F%E8%B0%83%E5%BA%A6%E7%BA%BF%E7%A8%8B%E6%B1%A0ScheduledThreadPoolExecutor/',]
+      });
+      });
+  </script>
 
 
 <script>
