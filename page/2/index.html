@@ -406,7 +406,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-03-22 19:42:48" itemprop="dateModified" datetime="2020-03-22T19:42:48+08:00">2020-03-22</time>
+                <time title="修改时间：2020-04-06 14:45:43" itemprop="dateModified" datetime="2020-04-06T14:45:43+08:00">2020-04-06</time>
               </span>
 
           
@@ -440,30 +440,15 @@
 </ol>
 <ul>
 <li>应用服务器开启web容器的session复制功能，在集群中的几台服务器之间同步session对象，使得每台服务器上都保存所有的session信息，这样任何一台宕机都不会导致session的数据丢失，服务器使用session时，直接从本地获取。</li>
-<li>缺点：这种方式在应用集群达到数千台的时候，就会出现瓶颈，每台都需要备份session，出现内存不够用的情况。</li>
-</ul>
-<ol start="2">
-<li>session绑定</li>
-</ol>
-<ul>
-<li>利用hash算法，比如nginx的ip_hash,使得同一个ip的请求分发到同一台服务器上。</li>
-<li>缺点：一旦某台服务器宕机，该机器上的session就不存在了，用户请求切换到其他机器后没有session，无法完成业务处理。</li>
-</ul>
-<ol start="3">
-<li>利用cookie记录session</li>
-</ol>
-<ul>
-<li>缺点是：受cookie大小的限制，能记录的信息有限；每次请求响应都需要传递cookie，影响性能，如果用户关闭cookie，访问就不正常。</li>
-</ul>
-<ol start="4">
-<li>session服务器</li>
-</ol>
-<ul>
-<li>利用独立部署的session服务器（集群）统一管理session，服务器每次读写session时，都访问session服务器。</li>
-<li>利用分布式缓存（redis), 数据库等统一存储session。</li>
-<li>构建单点登录系统（sso)</li>
-</ul>
-
+<li>缺点：这种方式在应用集群达到数千台的时候，就会出现瓶颈，每台都需要备份session，出现内存不够用的情况。
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/03/12/%E5%88%86%E5%B8%83%E5%BC%8Fsession/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
