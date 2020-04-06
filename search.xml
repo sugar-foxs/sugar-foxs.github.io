@@ -6,7 +6,7 @@
     <content><![CDATA[<p>本文通过对ConcurrentHashMap1.8版本的代码进行解读来了解其原理。</p>
 <a id="more"></a>
 <h1 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h1><ul>
-<li>待写…<h2 id="put"><a href="#put" class="headerlink" title="put"></a>put</h2><h2 id="get"><a href="#get" class="headerlink" title="get"></a>get</h2></li>
+<li>待写… 可先参考<a href="https://crossoverjie.top/2018/07/23/java-senior/ConcurrentHashMap/" target="_blank" rel="noopener">HashMap? ConcurrentHashMap? 相信看完这篇没人能难住你！</a><h2 id="put"><a href="#put" class="headerlink" title="put"></a>put</h2><h2 id="get"><a href="#get" class="headerlink" title="get"></a>get</h2></li>
 </ul>
 <h2 id="size"><a href="#size" class="headerlink" title="size"></a>size</h2><ul>
 <li>今天在学习LongAdder的时候，突然发现ConcurrentHashMap中获取size的方法和LongAdder获取值的方法竟然是一样的。OMG… 详情可参考<a href="/2020/04/05/LongAdder/" title="LongAdder">LongAdder</a></li>
