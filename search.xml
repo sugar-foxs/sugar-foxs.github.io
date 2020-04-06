@@ -293,8 +293,8 @@
 </ul>
 ]]></content>
       <tags>
-        <tag>spring</tag>
         <tag>java</tag>
+        <tag>spring</tag>
       </tags>
   </entry>
   <entry>
@@ -1414,8 +1414,8 @@
 <li>因为Redis是基于内存的操作，CPU不是Redis的瓶颈，Redis的瓶颈最有可能是机器内存的大小或者网络带宽。既然单线程容易实现，而且CPU不会成为瓶颈，那就顺理成章地采用单线程的方案了。</li>
 <li>单线程，只是说在处理我们的网络请求的时候只有一个线程来处理，一个正式的Redis服务器运行的时候肯定是不止一个线程的，例如Redis进行持久化的时候会以子进程或者子线程的方式执行。</li>
 </ul>
-<h1 id="键过期策略"><a href="#键过期策略" class="headerlink" title="键过期策略"></a>键过期策略</h1><p>保证Redis不会超过可用内存的方法是为键设置超时时间。<br>三种过期策略：</p>
-<ul>
+<h1 id="键过期策略"><a href="#键过期策略" class="headerlink" title="键过期策略"></a>键过期策略</h1><ul>
+<li>保证Redis不会超过可用内存的方法是为键设置超时时间。三种过期策略：<ul>
 <li>定时删除：在设置key的过期时间的同时，创建一个定时器(timer)，让定时器在key的过期时间来临时，立即执行对key的删除操作。<ul>
 <li>优点：能及时删除过期key，内存被释放。</li>
 <li>缺点：占用太多CPU时间，影响服务器的响应时间和吞吐量</li>
@@ -1431,10 +1431,17 @@
 </ul>
 </li>
 </ul>
-<p>redis实现的是惰性删除和定期删除。</p>
+</li>
+<li>redis实现的是惰性删除和定期删除。</li>
+</ul>
 <h1 id="缓存雪崩"><a href="#缓存雪崩" class="headerlink" title="缓存雪崩"></a>缓存雪崩</h1><ul>
 <li>缓存宕机或缓存同时失效，请求都打到数据库，造成数据库崩溃，这是缓存雪崩。</li>
-<li>解决方法：<br>事前：redis 高可用，避免全盘崩溃；失效时间加随机值<br>事中：本地缓存 + hystrix限流&amp;降级，避免MySQL被打死<br>事后：redis持久化，快速恢复缓存数据</li>
+<li>解决方法：<ul>
+<li>事前：redis 高可用，避免全盘崩溃；失效时间加随机值</li>
+<li>事中：本地缓存 + hystrix限流&amp;降级，避免MySQL被打死</li>
+<li>事后：redis持久化，快速恢复缓存数据</li>
+</ul>
+</li>
 </ul>
 <h1 id="缓存穿透"><a href="#缓存穿透" class="headerlink" title="缓存穿透"></a>缓存穿透</h1><ul>
 <li>恶意查找数据库一定不存在的数据，缓存不起作用，数据库被打死。</li>
@@ -1535,8 +1542,8 @@
 </ul>
 ]]></content>
       <tags>
-        <tag>spring</tag>
         <tag>java</tag>
+        <tag>spring</tag>
       </tags>
   </entry>
   <entry>
@@ -1903,8 +1910,8 @@
 </ul>
 ]]></content>
       <tags>
-        <tag>spring</tag>
         <tag>java</tag>
+        <tag>spring</tag>
       </tags>
   </entry>
   <entry>
@@ -1925,8 +1932,8 @@
 <h2 id="mysql事务隔离级别"><a href="#mysql事务隔离级别" class="headerlink" title="mysql事务隔离级别"></a>mysql事务隔离级别</h2><p>见</p>
 ]]></content>
       <tags>
-        <tag>spring</tag>
         <tag>java</tag>
+        <tag>spring</tag>
       </tags>
   </entry>
   <entry>
@@ -2252,8 +2259,8 @@
 </ul>
 ]]></content>
       <tags>
-        <tag>spring</tag>
         <tag>java</tag>
+        <tag>spring</tag>
       </tags>
   </entry>
   <entry>
