@@ -1232,7 +1232,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #c32b78;
+  background: #8cc128;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -1982,6 +1982,7 @@ pre .javascript .function {
 }
 .rtl.post-title {
   font-family: UKIJ Ekran;
+  color: #eb6d39;
 }
 .post-tags {
   margin-top: 40px;
