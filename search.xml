@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>ConcurrentHashMap1.8原理解读</title>
+    <url>/2020/04/06/ConcurrentHashMap1.8/</url>
+    <content><![CDATA[<p>本文通过对ConcurrentHashMap1.8版本的代码进行解读来了解其原理。</p>
+<a id="more"></a>
+<h1 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h1><ul>
+<li>待写…<h2 id="put"><a href="#put" class="headerlink" title="put"></a>put</h2><h2 id="get"><a href="#get" class="headerlink" title="get"></a>get</h2></li>
+</ul>
+<h2 id="size"><a href="#size" class="headerlink" title="size"></a>size</h2><ul>
+<li>今天在学习LongAdder的时候，突然发现ConcurrentHashMap中获取size的方法和LongAdder获取值的方法竟然是一样的。OMG… 详情可参考<a href="/2020/04/05/LongAdder/" title="LongAdder">LongAdder</a></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>LongAdder</title>
     <url>/2020/04/05/LongAdder/</url>
     <content><![CDATA[<p>本文是关于LongAdder的原理学习。</p>
@@ -1473,6 +1489,11 @@
 <li>主从服务器分别维护一个复制偏移量，传播N个字节数据，偏移量增加N。通过比较偏移量，可以很容易知道主从服务器是否一致。</li>
 <li>复制积压缓冲区：是一个由主服务器维护的固定长度的先进先出的队列，默认大小为1MB。保存着一部分最近传播的写命令。所以根据从服务器的偏移量是否在复制积压缓冲区中存在来决定使用哪种同步。如果在使用部分重同步，否则使用完整重同步。</li>
 <li>服务器运行ID：redis服务器都会有自己的运行ID,在启动时自动生成，由40个随机的十六进制字符组成。断线重连之后，如果从服务器保存的主服务器运行ID和重写连接的主服务器运行Id不一样，则使用完整重同步。</li>
+</ul>
+<h1 id="哨兵模式sentinel"><a href="#哨兵模式sentinel" class="headerlink" title="哨兵模式sentinel"></a>哨兵模式sentinel</h1><h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><ul>
+<li>redis通过MULTI,EXEC,WATCH，DISCARD命令实现事务的功能。</li>
+<li>在MUTLI命令之后的命令会放入到一个事务队列中去，当遇到MULTI,ISCARD,EXEC,WATCH命令时 ，会立即执行。遇到EXEC命令，会将事务队列中的命令都执行。</li>
+<li>WATCH命令可以在EXEC命令执行之前，监视任意数量的数据库键，并在EXEC命令执行时，检查被监视的键是否至少有一个被修改过，如果是的话，服务器将拒绝执行事务。</li>
 </ul>
 ]]></content>
       <tags>
