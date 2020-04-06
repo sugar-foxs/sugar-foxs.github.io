@@ -9,7 +9,7 @@
 <li>待写… 可先参考<a href="https://crossoverjie.top/2018/07/23/java-senior/ConcurrentHashMap/" target="_blank" rel="noopener">HashMap? ConcurrentHashMap? 相信看完这篇没人能难住你！</a> ,但是该篇文章中关于ConcurrentHashMap1.8死循环的内容持怀疑态度。<h2 id="put"><a href="#put" class="headerlink" title="put"></a>put</h2><h2 id="get"><a href="#get" class="headerlink" title="get"></a>get</h2></li>
 </ul>
 <h2 id="size"><a href="#size" class="headerlink" title="size"></a>size</h2><ul>
-<li>今天在学习LongAdder的时候，突然发现ConcurrentHashMap中获取size的方法和LongAdder获取值的方法竟然是一样的。OMG… 详情可参考<a href="/2020/04/05/LongAdder/" title="LongAdder">LongAdder</a></li>
+<li>今天在学习LongAdder的时候，突然发现ConcurrentHashMap中获取size的方法和LongAdder获取值的方法竟然是一样的。OMG… 详情可参考<a href="/2020/04/05/java%E5%B9%B6%E5%8F%91%E5%8C%85-LongAdder/" title="java并发包-LongAdder">java并发包-LongAdder</a></li>
 </ul>
 ]]></content>
       <tags>
@@ -58,8 +58,8 @@
       </tags>
   </entry>
   <entry>
-    <title>LongAdder</title>
-    <url>/2020/04/05/LongAdder/</url>
+    <title>java并发包-LongAdder</title>
+    <url>/2020/04/05/java%E5%B9%B6%E5%8F%91%E5%8C%85-LongAdder/</url>
     <content><![CDATA[<p>本文是关于LongAdder的原理学习。</p>
 <blockquote>
 <p>由于AtomicLong在高并发下CAS会大概率的进行重试而导致性能不佳，Doug Lea大神又增加了LongAdder类来处理这种情况，下面我们来看看LongAdder是如何来解决高并发下的性能问题的。</p>
