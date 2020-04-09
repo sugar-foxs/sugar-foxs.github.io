@@ -58,6 +58,18 @@
       </tags>
   </entry>
   <entry>
+    <title>阻塞队列-SynchronousQueue</title>
+    <url>/2020/04/06/%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97-SynchronousQueue/</url>
+    <content><![CDATA[<p>本文主要介绍阻塞队列其中一种实现：SynchronousQueue。</p>
+<a id="more"></a>
+
+]]></content>
+      <tags>
+        <tag>java</tag>
+        <tag>并发编程</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>java并发-LongAdder</title>
     <url>/2020/04/05/java%E5%B9%B6%E5%8F%91-LongAdder/</url>
     <content><![CDATA[<p>本文是关于LongAdder的原理学习。</p>
@@ -645,6 +657,17 @@
       </tags>
   </entry>
   <entry>
+    <title>k8s学习--实践</title>
+    <url>/2020/02/08/k8s%E5%AD%A6%E4%B9%A0--%E5%AE%9E%E8%B7%B5/</url>
+    <content><![CDATA[<p>本文记录一些对于k8s的学习。</p>
+<a id="more"></a>
+
+]]></content>
+      <tags>
+        <tag>k8s</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>k8s学习--基础概念</title>
     <url>/2020/02/08/k8s%E5%AD%A6%E4%B9%A0--%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/</url>
     <content><![CDATA[<p>本文记录一些对于k8s的学习。</p>
@@ -724,17 +747,6 @@
 <blockquote>
 <p>摘自《Kuberetes权威指南》</p>
 </blockquote>
-]]></content>
-      <tags>
-        <tag>k8s</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>k8s学习--实践</title>
-    <url>/2020/02/08/k8s%E5%AD%A6%E4%B9%A0--%E5%AE%9E%E8%B7%B5/</url>
-    <content><![CDATA[<p>本文记录一些对于k8s的学习。</p>
-<a id="more"></a>
-
 ]]></content>
       <tags>
         <tag>k8s</tag>
@@ -1246,8 +1258,8 @@
       </tags>
   </entry>
   <entry>
-    <title>java锁</title>
-    <url>/2020/01/11/java%E9%94%81/</url>
+    <title>java并发-锁</title>
+    <url>/2020/01/11/java%E5%B9%B6%E5%8F%91-%E9%94%81/</url>
     <content><![CDATA[<p>本文主要介绍java锁的实现和使用中会出现的问题，比如死锁，以及如何避免。</p>
 <a id="more"></a>
 
@@ -1859,7 +1871,7 @@
 <h2 id="docker-rm-f-容器id"><a href="#docker-rm-f-容器id" class="headerlink" title="docker rm -f 容器id"></a>docker rm -f 容器id</h2><ul>
 <li>删除容器</li>
 </ul>
-<h2 id="dcoker-network-ls"><a href="#dcoker-network-ls" class="headerlink" title="dcoker network ls"></a>dcoker network ls</h2><ul>
+<h2 id="docker-network-ls"><a href="#docker-network-ls" class="headerlink" title="docker network ls"></a>docker network ls</h2><ul>
 <li>查看网络模式</li>
 <li>在你创建容器的时候，不指定–network默认是bridge。</li>
 </ul>
