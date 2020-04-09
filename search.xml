@@ -123,6 +123,7 @@
 ]]></content>
       <tags>
         <tag>java</tag>
+        <tag>并发编程</tag>
       </tags>
   </entry>
   <entry>
@@ -158,7 +159,7 @@
   </entry>
   <entry>
     <title>zookeeper学习</title>
-    <url>/2020/03/22/zk/</url>
+    <url>/2020/03/22/zookeeper/</url>
     <content><![CDATA[<p>本文是关于zookepper学习的记录。</p>
 <a id="more"></a>
 
@@ -362,7 +363,6 @@
 </ul>
 ]]></content>
       <tags>
-        <tag>java</tag>
         <tag>spring</tag>
       </tags>
   </entry>
@@ -657,17 +657,6 @@
       </tags>
   </entry>
   <entry>
-    <title>k8s学习--实践</title>
-    <url>/2020/02/08/k8s%E5%AD%A6%E4%B9%A0--%E5%AE%9E%E8%B7%B5/</url>
-    <content><![CDATA[<p>本文记录一些对于k8s的学习。</p>
-<a id="more"></a>
-
-]]></content>
-      <tags>
-        <tag>k8s</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>k8s学习--基础概念</title>
     <url>/2020/02/08/k8s%E5%AD%A6%E4%B9%A0--%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/</url>
     <content><![CDATA[<p>本文记录一些对于k8s的学习。</p>
@@ -747,6 +736,17 @@
 <blockquote>
 <p>摘自《Kuberetes权威指南》</p>
 </blockquote>
+]]></content>
+      <tags>
+        <tag>k8s</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>k8s学习--实践</title>
+    <url>/2020/02/08/k8s%E5%AD%A6%E4%B9%A0--%E5%AE%9E%E8%B7%B5/</url>
+    <content><![CDATA[<p>本文记录一些对于k8s的学习。</p>
+<a id="more"></a>
+
 ]]></content>
       <tags>
         <tag>k8s</tag>
@@ -1208,8 +1208,8 @@
       </tags>
   </entry>
   <entry>
-    <title>CAS</title>
-    <url>/2020/01/11/CAS/</url>
+    <title>java并发-CAS</title>
+    <url>/2020/01/11/java%E5%B9%B6%E5%8F%91-CAS/</url>
     <content><![CDATA[<p>本文主要介绍CAS的原理，存在的问题及解决方法，CAS在操作系统级别是如何实现的。</p>
 <a id="more"></a>
 
@@ -1538,7 +1538,7 @@
 <li>服务器运行ID：redis服务器都会有自己的运行ID,在启动时自动生成，由40个随机的十六进制字符组成。断线重连之后，如果从服务器保存的主服务器运行ID和重写连接的主服务器运行Id不一样，则使用完整重同步。</li>
 </ul>
 <h1 id="哨兵模式sentinel"><a href="#哨兵模式sentinel" class="headerlink" title="哨兵模式sentinel"></a>哨兵模式sentinel</h1><h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><ul>
-<li>redis通过MULTI,EXEC,WATCH，DISCARD命令实现事务的功能。</li>
+<li>redis通过MULTI,EXEC,WATCH,DISCARD命令实现事务的功能。</li>
 <li>在MUTLI命令之后的命令会放入到一个事务队列中去，当遇到MULTI,ISCARD,EXEC,WATCH命令时 ，会立即执行。遇到EXEC命令，会将事务队列中的命令都执行。</li>
 <li>WATCH命令可以在EXEC命令执行之前，监视任意数量的数据库键，并在EXEC命令执行时，检查被监视的键是否至少有一个被修改过，如果是的话，服务器将拒绝执行事务。</li>
 </ul>
@@ -1610,7 +1610,6 @@
 </ul>
 ]]></content>
       <tags>
-        <tag>java</tag>
         <tag>spring</tag>
       </tags>
   </entry>
@@ -1764,7 +1763,6 @@
 </ul>
 ]]></content>
       <tags>
-        <tag>spring</tag>
         <tag>mybatis</tag>
       </tags>
   </entry>
@@ -1792,7 +1790,6 @@
 </blockquote>
 ]]></content>
       <tags>
-        <tag>spring</tag>
         <tag>mybatis</tag>
       </tags>
   </entry>
@@ -1978,7 +1975,6 @@
 </ul>
 ]]></content>
       <tags>
-        <tag>java</tag>
         <tag>spring</tag>
       </tags>
   </entry>
@@ -2399,7 +2395,7 @@
 </li>
 </ul>
 <h2 id="非阻塞同步"><a href="#非阻塞同步" class="headerlink" title="非阻塞同步"></a>非阻塞同步</h2><ul>
-<li>使用CAS算法，见<a href="/2020/01/11/CAS/" title="CAS">CAS</a>。</li>
+<li>使用CAS算法，见。</li>
 </ul>
 <h1 id="线程通信"><a href="#线程通信" class="headerlink" title="线程通信"></a>线程通信</h1><ul>
 <li><p>Object的wait和notify机制</p>
