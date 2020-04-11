@@ -88,12 +88,12 @@
 </li>
 </ul>
 <h2 id="图解"><a href="#图解" class="headerlink" title="图解"></a>图解</h2><ol>
-<li>初始状态<br><img src="http://ww1.sinaimg.cn/large/dbf344a4ly1gdpvmmann9j20fa07o0to.jpg" alt="1.jpg"></li>
+<li>初始状态,false代表是消费线程，true代表是生成线程<br><img src="http://ww1.sinaimg.cn/large/dbf344a4ly1gdpvmmann9j20fa07o0to.jpg" alt="1.jpg"></li>
 <li>消费线程a来消费数据，但是现在没有生产线程在阻塞，所以线程a阻塞<br><img src="http://ww1.sinaimg.cn/large/dbf344a4ly1gdpvn0ky7lj20lg0ck0v3.jpg" alt="2.jpg"></li>
 <li>消费线程b来消费数据，也进入阻塞状态<br><img src="http://ww1.sinaimg.cn/large/dbf344a4ly1gdpvnbalc4j20wu0dawi7.jpg" alt="3.jpg"></li>
 <li>现在来了一个生产线程c,唤醒第一个阻塞的消费线程，生产的元素被线程a获取<br><img src="http://ww1.sinaimg.cn/large/dbf344a4ly1gdpvnkjr32j20uk0e2jvt.jpg" alt="4.jpg"></li>
 <li>生产线程又生产了一个元素，线程b被唤醒，获取到生产的元素<br><img src="http://ww1.sinaimg.cn/large/dbf344a4ly1gdpvnrp44dj20uq08iwgq.jpg" alt="5.jpg"></li>
-<li>生产线程c又生产数据的话，如果目前没有消费线程阻塞，生产线程c会阻塞<br><img src="http://ww1.sinaimg.cn/large/dbf344a4ly1gdpvudmj5oj20mq0e0wh9.jpg" alt="6.jpg"></li>
+<li>生产线程c又生产数据的话，如果目前没有消费线程阻塞，生产线程c会阻塞<br><img src="http://ww1.sinaimg.cn/large/dbf344a4ly1gdpwr3a6mij20m80eaq5y.jpg" alt="6.jpg"></li>
 </ol>
 <ul>
 <li>阻塞也可以指定超时时间，阻塞超时的话相当于操作失败，会从队列中去除。</li>
