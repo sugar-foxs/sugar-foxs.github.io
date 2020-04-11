@@ -98,7 +98,7 @@
 <ul>
 <li>阻塞也可以指定超时时间，阻塞超时的话相当于操作失败，会从队列中去除。</li>
 </ul>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1>]]></content>
+]]></content>
       <tags>
         <tag>java</tag>
         <tag>并发编程</tag>
