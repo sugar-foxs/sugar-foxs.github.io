@@ -1,22 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>ConcurrentHashMap1.8原理解读</title>
-    <url>/2020/04/06/ConcurrentHashMap1.8/</url>
-    <content><![CDATA[<p>本文通过对ConcurrentHashMap1.8版本的代码进行解读来了解其原理。</p>
-<a id="more"></a>
-<h1 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h1><ul>
-<li>待写… 可先参考<a href="https://crossoverjie.top/2018/07/23/java-senior/ConcurrentHashMap/" target="_blank" rel="noopener">HashMap? ConcurrentHashMap? 相信看完这篇没人能难住你！</a> ,但是该篇文章中关于ConcurrentHashMap1.8死循环的内容持怀疑态度。<h2 id="put"><a href="#put" class="headerlink" title="put"></a>put</h2><h2 id="get"><a href="#get" class="headerlink" title="get"></a>get</h2></li>
-</ul>
-<h2 id="size"><a href="#size" class="headerlink" title="size"></a>size</h2><ul>
-<li>今天在学习LongAdder的时候，突然发现ConcurrentHashMap中获取size的方法和LongAdder获取值的方法竟然是一样的。OMG… 详情可参考<a href="/2020/04/05/java%E5%B9%B6%E5%8F%91-LongAdder/" title="java并发-LongAdder">java并发-LongAdder</a></li>
-</ul>
-]]></content>
-      <tags>
-        <tag>java</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>JDK命令行工具记录</title>
     <url>/2020/04/06/JDK%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7%E8%AE%B0%E5%BD%95/</url>
     <content><![CDATA[<p>本文主要记录JDK命令行工具的使用。</p>
@@ -58,6 +42,22 @@
       </tags>
   </entry>
   <entry>
+    <title>ConcurrentHashMap1.8原理解读</title>
+    <url>/2020/04/06/ConcurrentHashMap1.8/</url>
+    <content><![CDATA[<p>本文通过对ConcurrentHashMap1.8版本的代码进行解读来了解其原理。</p>
+<a id="more"></a>
+<h1 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h1><ul>
+<li>待写… 可先参考<a href="https://crossoverjie.top/2018/07/23/java-senior/ConcurrentHashMap/" target="_blank" rel="noopener">HashMap? ConcurrentHashMap? 相信看完这篇没人能难住你！</a> ,但是该篇文章中关于ConcurrentHashMap1.8死循环的内容持怀疑态度。<h2 id="put"><a href="#put" class="headerlink" title="put"></a>put</h2><h2 id="get"><a href="#get" class="headerlink" title="get"></a>get</h2></li>
+</ul>
+<h2 id="size"><a href="#size" class="headerlink" title="size"></a>size</h2><ul>
+<li>今天在学习LongAdder的时候，突然发现ConcurrentHashMap中获取size的方法和LongAdder获取值的方法竟然是一样的。OMG… 详情可参考<a href="/2020/04/05/java%E5%B9%B6%E5%8F%91-LongAdder/" title="java并发-LongAdder">java并发-LongAdder</a></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>阻塞队列-SynchronousQueue</title>
     <url>/2020/04/06/%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97-SynchronousQueue/</url>
     <content><![CDATA[<p>本文主要介绍阻塞队列其中一种实现：SynchronousQueue。</p>
@@ -71,7 +71,7 @@
 </ul>
 <h1 id="SynchronousQueue"><a href="#SynchronousQueue" class="headerlink" title="SynchronousQueue"></a>SynchronousQueue</h1><h2 id="构造函数和属性"><a href="#构造函数和属性" class="headerlink" title="构造函数和属性"></a>构造函数和属性</h2><ul>
 <li><p>先看下SynchronousQueue的构造函数：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/** The number of CPUs, for spin control */</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> NCPUS = Runtime.getRuntime().availableProcessors();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 设置超时的最大自旋次数</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> maxTimedSpins = (NCPUS &lt; <span class="number">2</span>) ? <span class="number">0</span> : <span class="number">32</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 没设置超时的最大自旋次数</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> maxUntimedSpins = maxTimedSpins * <span class="number">16</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// </span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> spinForTimeoutThreshold = <span class="number">1000L</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">transient</span> <span class="keyword">volatile</span> Transferer&lt;E&gt; transferer;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 默认是不公平队列</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">SynchronousQueue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>(<span class="keyword">false</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// TransferQueue是公平队列，TransferStack是不公平队列，它们都继承自Transferer</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">SynchronousQueue</span><span class="params">(<span class="keyword">boolean</span> fair)</span> </span>&#123;</span><br><span class="line">    transferer = fair ? <span class="keyword">new</span> TransferQueue&lt;E&gt;() : <span class="keyword">new</span> TransferStack&lt;E&gt;();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">abstract</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Transferer</span>&lt;<span class="title">E</span>&gt; </span>&#123;</span><br><span class="line">    <span class="comment">// 此方法既负责put,也负责take,下面看如何做到的。TransferQueue和TransferStack分别实现此方法。</span></span><br><span class="line">    <span class="function"><span class="keyword">abstract</span> E <span class="title">transfer</span><span class="params">(E e, <span class="keyword">boolean</span> timed, <span class="keyword">long</span> nanos)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// cpu核数</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> NCPUS = Runtime.getRuntime().availableProcessors();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 设置超时的最大自旋次数</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> maxTimedSpins = (NCPUS &lt; <span class="number">2</span>) ? <span class="number">0</span> : <span class="number">32</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 没设置超时的最大自旋次数</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> maxUntimedSpins = maxTimedSpins * <span class="number">16</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// </span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> spinForTimeoutThreshold = <span class="number">1000L</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">transient</span> <span class="keyword">volatile</span> Transferer&lt;E&gt; transferer;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 默认是不公平队列</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">SynchronousQueue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>(<span class="keyword">false</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// TransferQueue是公平队列，TransferStack是不公平队列，它们都继承自Transferer</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">SynchronousQueue</span><span class="params">(<span class="keyword">boolean</span> fair)</span> </span>&#123;</span><br><span class="line">    transferer = fair ? <span class="keyword">new</span> TransferQueue&lt;E&gt;() : <span class="keyword">new</span> TransferStack&lt;E&gt;();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">abstract</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Transferer</span>&lt;<span class="title">E</span>&gt; </span>&#123;</span><br><span class="line">    <span class="comment">// 此方法既负责put,也负责take,下面看如何做到的。TransferQueue和TransferStack分别实现此方法。</span></span><br><span class="line">    <span class="function"><span class="keyword">abstract</span> E <span class="title">transfer</span><span class="params">(E e, <span class="keyword">boolean</span> timed, <span class="keyword">long</span> nanos)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>上面的解释只是给一个大概了解，具体如何实现的还得看put和take方法。</p>
 </li>
@@ -692,6 +692,17 @@
       </tags>
   </entry>
   <entry>
+    <title>k8s学习--实践</title>
+    <url>/2020/02/08/k8s%E5%AD%A6%E4%B9%A0--%E5%AE%9E%E8%B7%B5/</url>
+    <content><![CDATA[<p>本文记录一些对于k8s的学习。</p>
+<a id="more"></a>
+
+]]></content>
+      <tags>
+        <tag>k8s</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>k8s学习--基础概念</title>
     <url>/2020/02/08/k8s%E5%AD%A6%E4%B9%A0--%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/</url>
     <content><![CDATA[<p>本文记录一些对于k8s的学习。</p>
@@ -771,17 +782,6 @@
 <blockquote>
 <p>摘自《Kuberetes权威指南》</p>
 </blockquote>
-]]></content>
-      <tags>
-        <tag>k8s</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>k8s学习--实践</title>
-    <url>/2020/02/08/k8s%E5%AD%A6%E4%B9%A0--%E5%AE%9E%E8%B7%B5/</url>
-    <content><![CDATA[<p>本文记录一些对于k8s的学习。</p>
-<a id="more"></a>
-
 ]]></content>
       <tags>
         <tag>k8s</tag>
