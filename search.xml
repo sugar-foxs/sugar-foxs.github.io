@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>ConcurrentHashMap1.8原理解读</title>
+    <url>/2020/04/06/ConcurrentHashMap1.8/</url>
+    <content><![CDATA[<p>本文通过对ConcurrentHashMap1.8版本的代码进行解读来了解其原理。</p>
+<a id="more"></a>
+<h1 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h1><ul>
+<li>待写… 可先参考<a href="https://crossoverjie.top/2018/07/23/java-senior/ConcurrentHashMap/" target="_blank" rel="noopener">HashMap? ConcurrentHashMap? 相信看完这篇没人能难住你！</a> ,但是该篇文章中关于ConcurrentHashMap1.8死循环的内容持怀疑态度。<h2 id="put"><a href="#put" class="headerlink" title="put"></a>put</h2><h2 id="get"><a href="#get" class="headerlink" title="get"></a>get</h2></li>
+</ul>
+<h2 id="size"><a href="#size" class="headerlink" title="size"></a>size</h2><ul>
+<li>今天在学习LongAdder的时候，突然发现ConcurrentHashMap中获取size的方法和LongAdder获取值的方法竟然是一样的。OMG… 详情可参考<a href="/2020/04/05/java%E5%B9%B6%E5%8F%91-LongAdder/" title="java并发-LongAdder">java并发-LongAdder</a></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>JDK命令行工具记录</title>
     <url>/2020/04/06/JDK%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7%E8%AE%B0%E5%BD%95/</url>
     <content><![CDATA[<p>本文主要记录JDK命令行工具的使用。</p>
@@ -35,22 +51,6 @@
 <li>jinfo -flag [+|-]name pid :开启或者关闭对应名称的参数。</li>
 </ul>
 </li>
-</ul>
-]]></content>
-      <tags>
-        <tag>java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ConcurrentHashMap1.8原理解读</title>
-    <url>/2020/04/06/ConcurrentHashMap1.8/</url>
-    <content><![CDATA[<p>本文通过对ConcurrentHashMap1.8版本的代码进行解读来了解其原理。</p>
-<a id="more"></a>
-<h1 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h1><ul>
-<li>待写… 可先参考<a href="https://crossoverjie.top/2018/07/23/java-senior/ConcurrentHashMap/" target="_blank" rel="noopener">HashMap? ConcurrentHashMap? 相信看完这篇没人能难住你！</a> ,但是该篇文章中关于ConcurrentHashMap1.8死循环的内容持怀疑态度。<h2 id="put"><a href="#put" class="headerlink" title="put"></a>put</h2><h2 id="get"><a href="#get" class="headerlink" title="get"></a>get</h2></li>
-</ul>
-<h2 id="size"><a href="#size" class="headerlink" title="size"></a>size</h2><ul>
-<li>今天在学习LongAdder的时候，突然发现ConcurrentHashMap中获取size的方法和LongAdder获取值的方法竟然是一样的。OMG… 详情可参考<a href="/2020/04/05/java%E5%B9%B6%E5%8F%91-LongAdder/" title="java并发-LongAdder">java并发-LongAdder</a></li>
 </ul>
 ]]></content>
       <tags>
@@ -413,7 +413,32 @@
 <li>git blame [filename]</li>
 <li>如果你用的是idea,右击编辑框左边栏，可以选择annotate,显示作者。</li>
 </ul>
-<h2 id=""><a href="#" class="headerlink" title=""></a></h2>]]></content>
+<h2 id="git-cherry-pick-commit-id"><a href="#git-cherry-pick-commit-id" class="headerlink" title="git cherry-pick [commit id]"></a>git cherry-pick [commit id]</h2><ul>
+<li>选择某一个分支中的一个或几个commit应用到另一个分支上。</li>
+<li>假设需要将a分支的commit（commit id假设为A）应用到分支B上，你需要在a分支上使用git log拿到commit id，然后checkout到b分支上，使用cherry-pick到b分支，如果有冲突，解决掉就行。</li>
+</ul>
+<h2 id="git-tag"><a href="#git-tag" class="headerlink" title="git tag"></a>git tag</h2><ul>
+<li>打标签是每次发布版本时都需要做的事</li>
+<li>git tag <name> <ul>
+<li>示例： git tag v1.0 ，表示标签名是v1.0,看到标签能够很清楚知道当前commit之前是哪个版本的。</li>
+</ul>
+</li>
+<li>git tag <name> <commit id><ul>
+<li>上一个命令默认是对本地最新的commit打标签，如果需要对历史指定commit打标签，需要使用命令</li>
+</ul>
+</li>
+<li>git tag -a <name> -m <message> <commit id><ul>
+<li>创建带有说明的标签，用-a指定标签名，-m指定说明文字,可以写此次版本增加了哪些功能</li>
+</ul>
+</li>
+<li>git tag 可以查看所有标签</li>
+<li>git show <tagname> 看出某个标签的具体信息</li>
+<li>git push –tags<ul>
+<li>将本地的所有tags推到远程</li>
+</ul>
+</li>
+</ul>
+]]></content>
       <tags>
         <tag>git</tag>
       </tags>
@@ -693,15 +718,6 @@
       </tags>
   </entry>
   <entry>
-    <title>linux命令记录</title>
-    <url>/2020/02/08/linux%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<p>本文是对于linux命令的记录。</p>
-<a id="more"></a>]]></content>
-      <tags>
-        <tag>linux</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>k8s学习--实践</title>
     <url>/2020/02/08/k8s%E5%AD%A6%E4%B9%A0--%E5%AE%9E%E8%B7%B5/</url>
     <content><![CDATA[<p>本文记录一些对于k8s的学习。</p>
@@ -795,6 +811,15 @@
 ]]></content>
       <tags>
         <tag>k8s</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>linux命令记录</title>
+    <url>/2020/02/08/linux%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<p>本文是对于linux命令的记录。</p>
+<a id="more"></a>]]></content>
+      <tags>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -2041,8 +2066,8 @@
 <h2 id="mysql事务隔离级别"><a href="#mysql事务隔离级别" class="headerlink" title="mysql事务隔离级别"></a>mysql事务隔离级别</h2><p>见</p>
 ]]></content>
       <tags>
-        <tag>java</tag>
         <tag>spring</tag>
+        <tag>java</tag>
       </tags>
   </entry>
   <entry>
@@ -2368,8 +2393,8 @@
 </ul>
 ]]></content>
       <tags>
-        <tag>java</tag>
         <tag>spring</tag>
+        <tag>java</tag>
       </tags>
   </entry>
   <entry>
