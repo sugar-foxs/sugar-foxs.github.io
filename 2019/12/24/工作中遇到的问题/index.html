@@ -46,21 +46,21 @@
   };
 </script>
 
-  <meta name="description" content="问题描述:在一个事务中查询一个之前创建的数据行为空，查mysql这个数据行是存在的。">
+  <meta name="description" content="本文主要记录和分享一些工作中遇到的问题。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="工作中遇到的spring事务传播问题">
-<meta property="og:url" content="http://yoursite.com/2019/12/24/%E5%B7%A5%E4%BD%9C%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E7%9A%84%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:title" content="工作中遇到的问题">
+<meta property="og:url" content="http://yoursite.com/2019/12/24/%E5%B7%A5%E4%BD%9C%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/index.html">
 <meta property="og:site_name" content="sugar_foxs&#39;s blog">
-<meta property="og:description" content="问题描述:在一个事务中查询一个之前创建的数据行为空，查mysql这个数据行是存在的。">
+<meta property="og:description" content="本文主要记录和分享一些工作中遇到的问题。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2019-12-23T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-04-06T06:56:19.058Z">
+<meta property="article:modified_time" content="2020-04-14T05:55:32.822Z">
 <meta property="article:author" content="sugar-foxs">
-<meta property="article:tag" content="spring">
 <meta property="article:tag" content="java">
+<meta property="article:tag" content="spring">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/2019/12/24/%E5%B7%A5%E4%BD%9C%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E7%9A%84%E9%97%AE%E9%A2%98/">
+<link rel="canonical" href="http://yoursite.com/2019/12/24/%E5%B7%A5%E4%BD%9C%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/">
 
 
 <script id="page-configurations">
@@ -72,7 +72,7 @@
   };
 </script>
 
-  <title>工作中遇到的spring事务传播问题 | sugar_foxs's blog</title>
+  <title>工作中遇到的问题 | sugar_foxs's blog</title>
   
 
 
@@ -210,7 +210,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/24/%E5%B7%A5%E4%BD%9C%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E7%9A%84%E9%97%AE%E9%A2%98/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/24/%E5%B7%A5%E4%BD%9C%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpeg">
@@ -223,7 +223,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          工作中遇到的spring事务传播问题
+          工作中遇到的问题
         </h1>
 
         <div class="post-meta">
@@ -240,7 +240,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-06 14:56:19" itemprop="dateModified" datetime="2020-04-06T14:56:19+08:00">2020-04-06</time>
+                <time title="修改时间：2020-04-14 13:55:32" itemprop="dateModified" datetime="2020-04-14T13:55:32+08:00">2020-04-14</time>
               </span>
 
           
@@ -261,10 +261,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <blockquote>
+        <p>本文主要记录和分享一些工作中遇到的问题。</p>
+<a id="more"></a>
+
+<h1 id="spring事务传播的问题"><a href="#spring事务传播的问题" class="headerlink" title="spring事务传播的问题"></a>spring事务传播的问题</h1><blockquote>
 <p>问题描述:在一个事务中查询一个之前创建的数据行为空，查mysql这个数据行是存在的。</p>
 </blockquote>
-<a id="more"></a>
 <ul>
 <li>经debug之后知道创建数据行的操作调用的新的类里的方法，该方法新起了一个REQUIRES_NEW事务。因为REQUIRES_NEW新建的事务是独立于当前事务的，又因为数据库默认隔离级别是可重复读，所以在当前事务查询REQUIRES_NEW新建的独立事务中新建的数据行，是看不到变化的。所以查询结果是null。</li>
 <li>解决方法：需要查询的新建数据行的方法也在一个REQUIRES_NEW事务中，这样能保证查询到数据。</li>
@@ -274,6 +276,10 @@
 </blockquote>
 <h2 id="spring事务传播机制"><a href="#spring事务传播机制" class="headerlink" title="spring事务传播机制"></a>spring事务传播机制</h2><p>见<a href="/2019/12/24/spring%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E6%9C%BA%E5%88%B6/" title="spring事务传播机制">spring事务传播机制</a></p>
 <h2 id="mysql事务隔离级别"><a href="#mysql事务隔离级别" class="headerlink" title="mysql事务隔离级别"></a>mysql事务隔离级别</h2><p>见</p>
+<h1 id="java-stream-toMap报重复键问题"><a href="#java-stream-toMap报重复键问题" class="headerlink" title="java-stream-toMap报重复键问题"></a>java-stream-toMap报重复键问题</h1><ul>
+<li>问题描述：java stream API的toMap方法，当遇到重复键时，会报Duplicate key错误。</li>
+<li>解决方法：在toMap方法中增加一个BinaryOperator作为第三个参数，表示遇到重复键时，进行哪种操作，可以选择旧值或者新值，也可以对旧值和新值进行一些转换作为最终的值。</li>
+</ul>
 
     </div>
 
@@ -284,8 +290,8 @@
       <footer class="post-footer">
           
           <div class="post-tags">
-              <a href="/tags/spring/" rel="tag"><i class="fa fa-tag"></i> spring</a>
               <a href="/tags/java/" rel="tag"><i class="fa fa-tag"></i> java</a>
+              <a href="/tags/spring/" rel="tag"><i class="fa fa-tag"></i> spring</a>
           </div>
 
         
@@ -360,7 +366,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#spring事务传播机制"><span class="nav-number">1.</span> <span class="nav-text">spring事务传播机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mysql事务隔离级别"><span class="nav-number">2.</span> <span class="nav-text">mysql事务隔离级别</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#spring事务传播的问题"><span class="nav-number">1.</span> <span class="nav-text">spring事务传播的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#spring事务传播机制"><span class="nav-number">1.1.</span> <span class="nav-text">spring事务传播机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mysql事务隔离级别"><span class="nav-number">1.2.</span> <span class="nav-text">mysql事务隔离级别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#java-stream-toMap报重复键问题"><span class="nav-number">2.</span> <span class="nav-text">java-stream-toMap报重复键问题</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -517,7 +523,7 @@
       quicklink({
         timeout: 3000,
         priority: true,
-        ignores: [uri => uri.includes('#'),uri => uri == 'http://yoursite.com/2019/12/24/%E5%B7%A5%E4%BD%9C%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E4%BA%8B%E5%8A%A1%E4%BC%A0%E6%92%AD%E7%9A%84%E9%97%AE%E9%A2%98/',]
+        ignores: [uri => uri.includes('#'),uri => uri == 'http://yoursite.com/2019/12/24/%E5%B7%A5%E4%BD%9C%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/',]
       });
       });
   </script>
