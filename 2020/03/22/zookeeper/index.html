@@ -54,7 +54,7 @@
 <meta property="og:description" content="本文是关于zookepper学习的记录。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-03-21T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-04-09T14:22:26.437Z">
+<meta property="article:modified_time" content="2020-04-19T09:29:25.414Z">
 <meta property="article:author" content="sugar-foxs">
 <meta property="article:tag" content="分布式">
 <meta name="twitter:card" content="summary">
@@ -239,7 +239,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-09 22:22:26" itemprop="dateModified" datetime="2020-04-09T22:22:26+08:00">2020-04-09</time>
+                <time title="修改时间：2020-04-19 17:29:25" itemprop="dateModified" datetime="2020-04-19T17:29:25+08:00">2020-04-19</time>
               </span>
 
           
@@ -363,7 +363,7 @@
 </li>
 </ul>
 <h3 id="系统模型"><a href="#系统模型" class="headerlink" title="系统模型"></a>系统模型</h3><h4 id="数据模型"><a href="#数据模型" class="headerlink" title="数据模型"></a>数据模型</h4><ul>
-<li>zk的试图视图结构和Unix的文件系统很类似，使用了数据节点的概念，称之为znode。znode是zk中数据的最小单元，每个znode都可以保存数据，同时还可以挂载子节点，因此形成了一棵数据节点组成的树。</li>
+<li>zk的视图结构和Unix的文件系统很类似，使用了数据节点的概念，称之为znode。znode是zk中数据的最小单元，每个znode都可以保存数据，同时还可以挂载子节点，因此形成了一棵数据节点组成的树。</li>
 <li>事务ID：在zk中，事务是指能够改变zk状态的操作，一般包括节点的创建和删除，节点内容的更新和客户端会话创建与失效等。对于每一个事务操作，zk都会分配一个全局单调递增的唯一的事务id，称之为ZXID。</li>
 <li>类似于RDBMS中的事务ID，用于标识一次更新操作的Proposal ID。为了保证顺序性，该zxid必须单调递增。因此ZooKeeper使用一个64位的数来表示，高32位是Leader的epoch，从1开始，每次选出新的Leader，epoch加一。低32位为该epoch内的序号，每次epoch变化，都将低32位的序号重置。这样保证了zxid的全局递增性。</li>
 </ul>
