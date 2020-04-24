@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      mysql事务隔离级别
+title:      mysql学习
 subtitle:   
 date:       2020-01-11
 author:     sugar-foxs
@@ -10,9 +10,15 @@ tags:
     - mysql
 ---
 
-本篇介绍mysql InnodDB引擎的事务隔离级别。
+本篇介绍mysql。
 
 <!-- more -->
+
+# MyISAM和InnoDB的区别
+1. MyISAM只支持表锁，InnoDB支持表锁和行锁。
+2. MyISAM 强调的是性能，每次查询具有原子性，其执行速度比InnoDB类型更快，但是不提供事务支持。InnoDB支持事务，外部键等高级数据库功能。 具有事务、回滚和崩溃修复能力。
+3. MyISAM不支持外键，而InnoDB支持外键。
+4. InnoDB支持MVVC多版本控制。应对高并发事务，MVCC比单纯的加锁更高效;MVCC只在**读已提交**和**可重复读**两个隔离级别下工作;MVCC可以使用乐观锁和悲观锁来实现;各数据库中MVCC实现并不统一。
 
 # 事务隔离级别
 - mysql的InnodDB引擎有4种隔离级别：未提交读、已提交读、可重复读、串行化。隔离级别是为了定义各个事务之间是否会有影响，有什么影响。

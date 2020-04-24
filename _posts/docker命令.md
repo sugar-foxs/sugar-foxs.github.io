@@ -71,7 +71,7 @@ tags:
 ## docker rm -f 容器id
 - 删除容器
 
-## dcoker network ls 
+## docker network ls 
 - 查看网络模式
 - 在你创建容器的时候，不指定--network默认是bridge。
 

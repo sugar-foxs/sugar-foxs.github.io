@@ -1,18 +1,19 @@
 ---
 layout:     post
-title:      LongAdder
+title:      java并发-LongAdder
 subtitle:   
 date:       2020-04-05
 author:     sugar-foxs
 catalog: 	true
 tags:
     - java
+    - 并发编程
 ---
 
 本文是关于LongAdder的原理学习。
-<!-- more -->
 
-> 由于AtomicLong在高并发下CAS会大概率的进行重试而导致性能不佳，Doug Lea大神又增加了LongAdder类来处理这种情况，下面我们来看看LongAdder是如何来解决高并发下的性能问题的。
+> 由于AtomicLong在高并发下CAS会大概率的进行重试而导致性能不佳，Doug Lea大神在java1.8又增加了LongAdder类来处理这种情况，下面我们来看看LongAdder是如何来解决高并发下的性能问题的。
+<!-- more -->
 
 # LongAdder
 - 先看下LongAdder的定义和基础属性
@@ -180,4 +181,4 @@ public long sum() {
         - 如果cell不为空，会尝试进行cas操作，成功则返回，如果不成功，判断数组大小是否大于CPU核数或者cells被其他线程更改过。
             - 如果数组大小小于核数，且拿到了锁，便开始进行扩容，扩大至之前的2倍。之后再重新随机选择一个cell进行操作。
             - 如果数组大小大于核数或者cells被其他线程更改过，此时没必要扩容，直接再重新随机选择一个cell进行操作。
-- 和AtomicLong比较，LongAdder通过在高并发时将对单一变量的CAS操作分散为对cells中多个元素的CAS操作，取值时进行求和，并发较低时仅对base变量进行CAS操作，与AtomicLong类原理相同。
+- 和AtomicLong比较，LongAdder通过在高并发时将对单一变量的CAS操作分散为对cells中多个元素的CAS操作，取值时进行求和，但是因为增加了数组，使用了更多的空间。并发较低时仅对base变量进行CAS操作，与AtomicLong类原理相同。

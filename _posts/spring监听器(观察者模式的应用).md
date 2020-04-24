@@ -6,7 +6,6 @@ date:       2020-03-15
 author:     sugar-foxs
 catalog: 	true
 tags:
-    - java
     - spring
 ---
 

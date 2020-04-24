@@ -7,7 +7,6 @@ author:     sugar-foxs
 catalog: 	true
 tags:
     - mybatis
-    - spring
 ---
 
 本文主要看下mybatis的配置文件配置了哪些东西，做了什么工作。

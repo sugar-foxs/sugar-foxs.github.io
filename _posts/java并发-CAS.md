@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      CAS
+title:      java并发-CAS
 subtitle:   
 date:       2020-01-11
 author:     sugar-foxs

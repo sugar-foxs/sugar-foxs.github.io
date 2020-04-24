@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      java锁
+title:      java并发-锁
 subtitle:   
 date:       2020-01-11
 author:     sugar-foxs

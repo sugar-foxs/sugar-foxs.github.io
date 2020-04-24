@@ -6,7 +6,6 @@ date:       2020-01-18
 author:     sugar-foxs
 catalog: 	true
 tags: java
-categories: learn
 ---
 
 本文主要介绍java获取set的交集，差集，并集的不同方式。

@@ -7,7 +7,6 @@ author:     sugar-foxs
 catalog: 	true
 tags:
     - mybatis
-    - spring
 ---
 
 本文主要介绍mybatis拦截器分页的实现。
