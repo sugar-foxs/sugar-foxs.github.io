@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>kafka</title>
+    <url>/2020/04/24/kafka/</url>
+    <content><![CDATA[<h1 id="kafka"><a href="#kafka" class="headerlink" title="kafka"></a>kafka</h1><h2 id="producer"><a href="#producer" class="headerlink" title="producer"></a>producer</h2><h2 id="consumer"><a href="#consumer" class="headerlink" title="consumer"></a>consumer</h2><h2 id="压缩"><a href="#压缩" class="headerlink" title="压缩"></a>压缩</h2><h2 id="投票机制"><a href="#投票机制" class="headerlink" title="投票机制"></a>投票机制</h2><ul>
+<li>Kafka 动态维护了一个同步状态的备份的集合，简称ISR ，在这个集合中的节点都是和leader保持高度一致的，只有这个集合的成员才有资格被选举为 leader，一条消息必须被这个集合所有节点读取并追加到日志中了，这条消息才能视为提交。这个ISR集合发生变化会在ZooKeeper持久化，正因为如此，这个集合中的任何一个节点都有资格被选为leader 。这对于Kafka使用模型中，有很多分区和并确保主从关系是很重要的。因为ISR模型和f+1副本，一个Kafka topic冗余f个节点故障而不会丢失任何已经提交的消息。</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>kafka</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>JDK命令行工具记录</title>
     <url>/2020/04/06/JDK%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7%E8%AE%B0%E5%BD%95/</url>
     <content><![CDATA[<p>本文主要记录JDK命令行工具的使用。</p>
@@ -326,6 +337,10 @@
 <h1 id="为什么最好使用奇数台服务器构成ZooKeeper集群？"><a href="#为什么最好使用奇数台服务器构成ZooKeeper集群？" class="headerlink" title="为什么最好使用奇数台服务器构成ZooKeeper集群？"></a>为什么最好使用奇数台服务器构成ZooKeeper集群？</h1><blockquote>
 <p>zookeeper容错是指，当宕掉几个zookeeper服务器之后，剩下的个数必须大于宕掉的个数的话整个zookeeper才依然可用。假如我们的集群中有n台zookeeper服务器，那么也就是剩下的服务数必须大于n/2。比如假如我们有3台，那么最大允许宕掉1台zookeeper服务器，如果我们有4台的的时候也同样只允许宕掉1台。所以肯定选择3台较于4台是更优的选择。</p>
 </blockquote>
+<h1 id="为什么zk没有脑裂问题"><a href="#为什么zk没有脑裂问题" class="headerlink" title="为什么zk没有脑裂问题"></a>为什么zk没有脑裂问题</h1><h2 id="脑裂"><a href="#脑裂" class="headerlink" title="脑裂"></a>脑裂</h2><ul>
+<li>举例子说明：有6台服务器组成的集群，两个机房分别部署了3台，当机房之间网路断开之后，机房内分别选举了自己的leader，导致出现了两个leader。这就是脑裂现象。<h2 id="zk如何避免的"><a href="#zk如何避免的" class="headerlink" title="zk如何避免的"></a>zk如何避免的</h2></li>
+<li>zk设置了过半机制，只有在获得一半以上的服务器的选票才会成为leader。比如之前说的6台服务器，需要获得4个选票才能成为leader，所以不会同时出现两个leader。</li>
+</ul>
 ]]></content>
       <tags>
         <tag>分布式</tag>

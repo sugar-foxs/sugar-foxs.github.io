@@ -54,7 +54,7 @@
 <meta property="og:description" content="本文是关于zookepper学习的记录。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-03-21T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-04-19T09:29:25.414Z">
+<meta property="article:modified_time" content="2020-04-24T07:11:05.534Z">
 <meta property="article:author" content="sugar-foxs">
 <meta property="article:tag" content="分布式">
 <meta name="twitter:card" content="summary">
@@ -138,11 +138,6 @@
         <li class="menu-item menu-item-home">
 
     <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
-
-  </li>
-        <li class="menu-item menu-item-about">
-
-    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
 
   </li>
         <li class="menu-item menu-item-tags">
@@ -239,7 +234,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-19 17:29:25" itemprop="dateModified" datetime="2020-04-19T17:29:25+08:00">2020-04-19</time>
+                <time title="修改时间：2020-04-24 15:11:05" itemprop="dateModified" datetime="2020-04-24T15:11:05+08:00">2020-04-24</time>
               </span>
 
           
@@ -390,6 +385,10 @@
 <h1 id="为什么最好使用奇数台服务器构成ZooKeeper集群？"><a href="#为什么最好使用奇数台服务器构成ZooKeeper集群？" class="headerlink" title="为什么最好使用奇数台服务器构成ZooKeeper集群？"></a>为什么最好使用奇数台服务器构成ZooKeeper集群？</h1><blockquote>
 <p>zookeeper容错是指，当宕掉几个zookeeper服务器之后，剩下的个数必须大于宕掉的个数的话整个zookeeper才依然可用。假如我们的集群中有n台zookeeper服务器，那么也就是剩下的服务数必须大于n/2。比如假如我们有3台，那么最大允许宕掉1台zookeeper服务器，如果我们有4台的的时候也同样只允许宕掉1台。所以肯定选择3台较于4台是更优的选择。</p>
 </blockquote>
+<h1 id="为什么zk没有脑裂问题"><a href="#为什么zk没有脑裂问题" class="headerlink" title="为什么zk没有脑裂问题"></a>为什么zk没有脑裂问题</h1><h2 id="脑裂"><a href="#脑裂" class="headerlink" title="脑裂"></a>脑裂</h2><ul>
+<li>举例子说明：有6台服务器组成的集群，两个机房分别部署了3台，当机房之间网路断开之后，机房内分别选举了自己的leader，导致出现了两个leader。这就是脑裂现象。<h2 id="zk如何避免的"><a href="#zk如何避免的" class="headerlink" title="zk如何避免的"></a>zk如何避免的</h2></li>
+<li>zk设置了过半机制，只有在获得一半以上的服务器的选票才会成为leader。比如之前说的6台服务器，需要获得4个选票才能成为leader，所以不会同时出现两个leader。</li>
+</ul>
 
     </div>
 
@@ -475,7 +474,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Paxos协议"><span class="nav-number">1.</span> <span class="nav-text">Paxos协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZAB协议"><span class="nav-number">2.</span> <span class="nav-text">ZAB协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZooKeeper"><span class="nav-number">3.</span> <span class="nav-text">ZooKeeper</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#服务器角色"><span class="nav-number">3.1.</span> <span class="nav-text">服务器角色</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Leader"><span class="nav-number">3.1.1.</span> <span class="nav-text">Leader</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Follower"><span class="nav-number">3.1.2.</span> <span class="nav-text">Follower</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Observer"><span class="nav-number">3.1.3.</span> <span class="nav-text">Observer</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务器状态"><span class="nav-number">3.2.</span> <span class="nav-text">服务器状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#羊群效应"><span class="nav-number">3.3.</span> <span class="nav-text">羊群效应</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zookeeper应用场景"><span class="nav-number">3.4.</span> <span class="nav-text">zookeeper应用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据发布与订阅（配置中心）"><span class="nav-number">3.4.1.</span> <span class="nav-text">数据发布与订阅（配置中心）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#负载均衡"><span class="nav-number">3.4.2.</span> <span class="nav-text">负载均衡</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#命名服务"><span class="nav-number">3.4.3.</span> <span class="nav-text">命名服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分布式协调与通知"><span class="nav-number">3.4.4.</span> <span class="nav-text">分布式协调与通知</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#集群管理"><span class="nav-number">3.4.5.</span> <span class="nav-text">集群管理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#master选举"><span class="nav-number">3.4.6.</span> <span class="nav-text">master选举</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分布式锁"><span class="nav-number">3.4.7.</span> <span class="nav-text">分布式锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分布式队列"><span class="nav-number">3.4.8.</span> <span class="nav-text">分布式队列</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#系统模型"><span class="nav-number">3.5.</span> <span class="nav-text">系统模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据模型"><span class="nav-number">3.5.1.</span> <span class="nav-text">数据模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#节点特性"><span class="nav-number">3.5.2.</span> <span class="nav-text">节点特性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#版本"><span class="nav-number">3.5.3.</span> <span class="nav-text">版本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Watcher"><span class="nav-number">3.5.4.</span> <span class="nav-text">Watcher</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ACL"><span class="nav-number">3.5.5.</span> <span class="nav-text">ACL</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#为什么最好使用奇数台服务器构成ZooKeeper集群？"><span class="nav-number"></span> <span class="nav-text">为什么最好使用奇数台服务器构成ZooKeeper集群？</span></a></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Paxos协议"><span class="nav-number">1.</span> <span class="nav-text">Paxos协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZAB协议"><span class="nav-number">2.</span> <span class="nav-text">ZAB协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZooKeeper"><span class="nav-number">3.</span> <span class="nav-text">ZooKeeper</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#服务器角色"><span class="nav-number">3.1.</span> <span class="nav-text">服务器角色</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Leader"><span class="nav-number">3.1.1.</span> <span class="nav-text">Leader</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Follower"><span class="nav-number">3.1.2.</span> <span class="nav-text">Follower</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Observer"><span class="nav-number">3.1.3.</span> <span class="nav-text">Observer</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务器状态"><span class="nav-number">3.2.</span> <span class="nav-text">服务器状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#羊群效应"><span class="nav-number">3.3.</span> <span class="nav-text">羊群效应</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zookeeper应用场景"><span class="nav-number">3.4.</span> <span class="nav-text">zookeeper应用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据发布与订阅（配置中心）"><span class="nav-number">3.4.1.</span> <span class="nav-text">数据发布与订阅（配置中心）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#负载均衡"><span class="nav-number">3.4.2.</span> <span class="nav-text">负载均衡</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#命名服务"><span class="nav-number">3.4.3.</span> <span class="nav-text">命名服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分布式协调与通知"><span class="nav-number">3.4.4.</span> <span class="nav-text">分布式协调与通知</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#集群管理"><span class="nav-number">3.4.5.</span> <span class="nav-text">集群管理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#master选举"><span class="nav-number">3.4.6.</span> <span class="nav-text">master选举</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分布式锁"><span class="nav-number">3.4.7.</span> <span class="nav-text">分布式锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分布式队列"><span class="nav-number">3.4.8.</span> <span class="nav-text">分布式队列</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#系统模型"><span class="nav-number">3.5.</span> <span class="nav-text">系统模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据模型"><span class="nav-number">3.5.1.</span> <span class="nav-text">数据模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#节点特性"><span class="nav-number">3.5.2.</span> <span class="nav-text">节点特性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#版本"><span class="nav-number">3.5.3.</span> <span class="nav-text">版本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Watcher"><span class="nav-number">3.5.4.</span> <span class="nav-text">Watcher</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ACL"><span class="nav-number">3.5.5.</span> <span class="nav-text">ACL</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#为什么最好使用奇数台服务器构成ZooKeeper集群？"><span class="nav-number"></span> <span class="nav-text">为什么最好使用奇数台服务器构成ZooKeeper集群？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#为什么zk没有脑裂问题"><span class="nav-number"></span> <span class="nav-text">为什么zk没有脑裂问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#脑裂"><span class="nav-number">1.</span> <span class="nav-text">脑裂</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#zk如何避免的"><span class="nav-number">2.</span> <span class="nav-text">zk如何避免的</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -491,14 +490,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-count">44</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
