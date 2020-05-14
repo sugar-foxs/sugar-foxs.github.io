@@ -3,7 +3,9 @@
   <entry>
     <title>kafka</title>
     <url>/2020/04/24/kafka/</url>
-    <content><![CDATA[<h1 id="kafka"><a href="#kafka" class="headerlink" title="kafka"></a>kafka</h1><h2 id="producer"><a href="#producer" class="headerlink" title="producer"></a>producer</h2><h2 id="consumer"><a href="#consumer" class="headerlink" title="consumer"></a>consumer</h2><h2 id="压缩"><a href="#压缩" class="headerlink" title="压缩"></a>压缩</h2><h2 id="投票机制"><a href="#投票机制" class="headerlink" title="投票机制"></a>投票机制</h2><ul>
+    <content><![CDATA[<p>本文是关于kafka的原理学习。</p>
+<a id="more"></a>
+<h1 id="kafka"><a href="#kafka" class="headerlink" title="kafka"></a>kafka</h1><h2 id="producer"><a href="#producer" class="headerlink" title="producer"></a>producer</h2><h2 id="consumer"><a href="#consumer" class="headerlink" title="consumer"></a>consumer</h2><h2 id="压缩"><a href="#压缩" class="headerlink" title="压缩"></a>压缩</h2><h2 id="投票机制"><a href="#投票机制" class="headerlink" title="投票机制"></a>投票机制</h2><ul>
 <li>Kafka 动态维护了一个同步状态的备份的集合，简称ISR ，在这个集合中的节点都是和leader保持高度一致的，只有这个集合的成员才有资格被选举为 leader，一条消息必须被这个集合所有节点读取并追加到日志中了，这条消息才能视为提交。这个ISR集合发生变化会在ZooKeeper持久化，正因为如此，这个集合中的任何一个节点都有资格被选为leader 。这对于Kafka使用模型中，有很多分区和并确保主从关系是很重要的。因为ISR模型和f+1副本，一个Kafka topic冗余f个节点故障而不会丢失任何已经提交的消息。</li>
 </ul>
 ]]></content>
