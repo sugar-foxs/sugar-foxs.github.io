@@ -835,61 +835,6 @@
       </tags>
   </entry>
   <entry>
-    <title>linux命令入门</title>
-    <url>/2020/02/08/linux%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<p>本文是对于linux命令的学习。</p>
-<a id="more"></a>
-
-<h1 id="查看文件夹大小"><a href="#查看文件夹大小" class="headerlink" title="查看文件夹大小"></a>查看文件夹大小</h1><ul>
-<li>du -h –max-depth=1 <ul>
-<li>h:以K，M，G为单位，提高信息的可读性，不加h默认是以byte为单位</li>
-<li>目录层数限制为1</li>
-</ul>
-</li>
-</ul>
-<h1 id="查看当前目录各文件大小"><a href="#查看当前目录各文件大小" class="headerlink" title="查看当前目录各文件大小"></a>查看当前目录各文件大小</h1><ul>
-<li>ls -lh <ul>
-<li>以K，M，G为单位</li>
-</ul>
-</li>
-</ul>
-<h1 id="显示目前在Linux系统上的文件系统的磁盘使用情况统计"><a href="#显示目前在Linux系统上的文件系统的磁盘使用情况统计" class="headerlink" title="显示目前在Linux系统上的文件系统的磁盘使用情况统计"></a>显示目前在Linux系统上的文件系统的磁盘使用情况统计</h1><ul>
-<li>df -h</li>
-</ul>
-<h1 id="计算文件字数命令"><a href="#计算文件字数命令" class="headerlink" title="计算文件字数命令"></a>计算文件字数命令</h1><ul>
-<li>wc filename ：将返回文件的行数、字数，以及字节数。</li>
-</ul>
-<h1 id="不同后缀文件的解压缩命令"><a href="#不同后缀文件的解压缩命令" class="headerlink" title="不同后缀文件的解压缩命令"></a>不同后缀文件的解压缩命令</h1><h2 id="tar"><a href="#tar" class="headerlink" title="tar"></a>tar</h2><ul>
-<li>解压：tar -xzvf xxx.tar.gz</li>
-<li>压缩：tar –czvf xxx.tar.gz *<blockquote>
-<p>-z:对应gz  </p>
-</blockquote>
-</li>
-<li>x: 解压 –extract的简写，从备份中还原文件  </li>
-<li>c: 压缩 –create的简写，创建新的备份文件  </li>
-<li>v：显示所有过程</li>
-<li>f: 使用档案名字，切记，这个参数是最后一个参数，后面只能接档案名</li>
-</ul>
-<h1 id="a-sh"><a href="#a-sh" class="headerlink" title=". ./a.sh"></a>. ./a.sh</h1><ul>
-<li>. ./a.sh  第一个.代表source,所以相当于source ./a.sh</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>k8s学习--实践</title>
-    <url>/2020/02/08/k8s%E5%AD%A6%E4%B9%A0--%E5%AE%9E%E8%B7%B5/</url>
-    <content><![CDATA[<p>本文记录一些对于k8s的学习。</p>
-<a id="more"></a>
-
-]]></content>
-      <tags>
-        <tag>k8s</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>k8s学习--基础概念</title>
     <url>/2020/02/08/k8s%E5%AD%A6%E4%B9%A0--%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/</url>
     <content><![CDATA[<p>本文记录一些对于k8s的学习。</p>
@@ -972,6 +917,65 @@
 ]]></content>
       <tags>
         <tag>k8s</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>k8s学习--实践</title>
+    <url>/2020/02/08/k8s%E5%AD%A6%E4%B9%A0--%E5%AE%9E%E8%B7%B5/</url>
+    <content><![CDATA[<p>本文记录一些对于k8s的学习。</p>
+<a id="more"></a>
+
+]]></content>
+      <tags>
+        <tag>k8s</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>linux命令入门</title>
+    <url>/2020/02/08/linux%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<p>本文是对于linux命令的学习。</p>
+<a id="more"></a>
+
+<h1 id="查看文件夹大小"><a href="#查看文件夹大小" class="headerlink" title="查看文件夹大小"></a>查看文件夹大小</h1><ul>
+<li>du -h –max-depth=1 <ul>
+<li>h:以K，M，G为单位，提高信息的可读性，不加h默认是以byte为单位</li>
+<li>目录层数限制为1</li>
+</ul>
+</li>
+</ul>
+<h1 id="查看当前目录各文件大小"><a href="#查看当前目录各文件大小" class="headerlink" title="查看当前目录各文件大小"></a>查看当前目录各文件大小</h1><ul>
+<li>ls -lh <ul>
+<li>以K，M，G为单位</li>
+</ul>
+</li>
+</ul>
+<h1 id="显示目前在Linux系统上的文件系统的磁盘使用情况统计"><a href="#显示目前在Linux系统上的文件系统的磁盘使用情况统计" class="headerlink" title="显示目前在Linux系统上的文件系统的磁盘使用情况统计"></a>显示目前在Linux系统上的文件系统的磁盘使用情况统计</h1><ul>
+<li>df :显示文件系统的磁盘使用情况统计</li>
+<li>df -h ：-h选项，通过它可以产生可读的格式df命令的输出</li>
+</ul>
+<h1 id="计算文件字数命令"><a href="#计算文件字数命令" class="headerlink" title="计算文件字数命令"></a>计算文件字数命令</h1><ul>
+<li>wc filename ：将返回文件的行数、字数，以及字节数。</li>
+<li>wc -l : 只显示行数</li>
+<li>wc -w : 只显示字数</li>
+<li>wc -c : 只显示Byte数</li>
+</ul>
+<h1 id="不同后缀文件的解压缩命令"><a href="#不同后缀文件的解压缩命令" class="headerlink" title="不同后缀文件的解压缩命令"></a>不同后缀文件的解压缩命令</h1><h2 id="tar"><a href="#tar" class="headerlink" title="tar"></a>tar</h2><ul>
+<li>解压：tar -xzvf xxx.tar.gz</li>
+<li>压缩：tar –czvf xxx.tar.gz *<blockquote>
+<p>-z:对应gz  </p>
+</blockquote>
+</li>
+<li>x: 解压 –extract的简写，从备份中还原文件  </li>
+<li>c: 压缩 –create的简写，创建新的备份文件  </li>
+<li>v：显示所有过程</li>
+<li>f: 使用档案名字，切记，这个参数是最后一个参数，后面只能接档案名</li>
+</ul>
+<h1 id="a-sh"><a href="#a-sh" class="headerlink" title=". ./a.sh"></a>. ./a.sh</h1><ul>
+<li>. ./a.sh  第一个.代表source,所以相当于source ./a.sh</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
