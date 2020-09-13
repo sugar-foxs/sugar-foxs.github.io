@@ -1,64 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>shell快速入门</title>
-    <url>/2020/09/12/shell%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/</url>
-    <content><![CDATA[<p>本文是对shell的快速入门。</p>
-<a id="more"></a>
-
-<h1 id="tr"><a href="#tr" class="headerlink" title="tr"></a>tr</h1><ul>
-<li>tr [OPTION]… SET1 [SET2]<ul>
-<li>OPTION:-s,-t,-d,-c</li>
-</ul>
-</li>
-</ul>
-<h2 id="tr-s-替换重复的字符"><a href="#tr-s-替换重复的字符" class="headerlink" title="tr -s 替换重复的字符"></a>tr -s 替换重复的字符</h2><ol>
-<li>echo “aaabbbaacccfdc” | tr -s [abcdf]<ul>
-<li>返回abacfdc</li>
-</ul>
-</li>
-<li>删除空白行</li>
-</ol>
-<ul>
-<li>tr -s [“\n”]</li>
-<li><img src="http://ww1.sinaimg.cn/large/dbf344a4gy1ginzjdyhlwj212c0eumz7.jpg" alt="1599902157734.jpg"></li>
-</ul>
-<h2 id="tr-d-删除字符"><a href="#tr-d-删除字符" class="headerlink" title="tr -d 删除字符"></a>tr -d 删除字符</h2><ul>
-<li>echo “a13HJ14fdaADff” | tr -d “[a-z][A-Z]”<ul>
-<li>返回1314</li>
-</ul>
-</li>
-</ul>
-<h2 id="tr-t-字符替换"><a href="#tr-t-字符替换" class="headerlink" title="tr -t 字符替换"></a>tr -t 字符替换</h2><ul>
-<li><p>echo “a1314fdasf” | tr -t [afd] [AFD]</p>
-<ul>
-<li>返回A1314FDsF</li>
-</ul>
-</li>
-<li><p>实现大小写转换</p>
-<ul>
-<li>echo “Hello World I Love You” |tr -t [a-z] [A-Z]</li>
-<li>echo “HELLO WORLD I LOVE YOU” |tr -t [A-Z] [a-z]</li>
-<li>使用字符集转换</li>
-<li>echo “Hello World I Love You” |tr -t [:lower:] [:upper:]</li>
-<li>echo “HELLO WORLD I LOVE YOU” |tr -t [:upper:] [:lower:]</li>
-</ul>
-</li>
-<li><p>字符集</p>
-</li>
-</ul>
-<h2 id="tr-c-字符补集替换"><a href="#tr-c-字符补集替换" class="headerlink" title="tr -c 字符补集替换"></a>tr -c 字符补集替换</h2><ul>
-<li>tr -c “[a-z][A-Z]” “#”<ul>
-<li>除大小字母以外的所有的字符都替换为#</li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>shell</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>etcd命令</title>
     <url>/2020/09/06/etcd%E5%91%BD%E4%BB%A4/</url>
     <content><![CDATA[<p>本文主要介绍etcdctl命令。</p>
@@ -972,6 +914,53 @@
 </ul>
 <h1 id="a-sh"><a href="#a-sh" class="headerlink" title=". ./a.sh"></a>. ./a.sh</h1><ul>
 <li>. ./a.sh  第一个.代表source,所以相当于source ./a.sh</li>
+</ul>
+<h1 id="tr"><a href="#tr" class="headerlink" title="tr"></a>tr</h1><ul>
+<li>tr [OPTION]… SET1 [SET2]<ul>
+<li>OPTION:-s,-t,-d,-c</li>
+</ul>
+</li>
+</ul>
+<h2 id="tr-s-替换重复的字符"><a href="#tr-s-替换重复的字符" class="headerlink" title="tr -s 替换重复的字符"></a>tr -s 替换重复的字符</h2><ol>
+<li>echo “aaabbbaacccfdc” | tr -s [abcdf]<ul>
+<li>返回abacfdc</li>
+</ul>
+</li>
+<li>删除空白行</li>
+</ol>
+<ul>
+<li>tr -s [“\n”]</li>
+<li><img src="http://ww1.sinaimg.cn/large/dbf344a4gy1ginzjdyhlwj212c0eumz7.jpg" alt="1599902157734.jpg"></li>
+</ul>
+<h2 id="tr-d-删除字符"><a href="#tr-d-删除字符" class="headerlink" title="tr -d 删除字符"></a>tr -d 删除字符</h2><ul>
+<li>echo “a13HJ14fdaADff” | tr -d “[a-z][A-Z]”<ul>
+<li>返回1314</li>
+</ul>
+</li>
+</ul>
+<h2 id="tr-t-字符替换"><a href="#tr-t-字符替换" class="headerlink" title="tr -t 字符替换"></a>tr -t 字符替换</h2><ul>
+<li><p>echo “a1314fdasf” | tr -t [afd] [AFD]</p>
+<ul>
+<li>返回A1314FDsF</li>
+</ul>
+</li>
+<li><p>实现大小写转换</p>
+<ul>
+<li>echo “Hello World I Love You” |tr -t [a-z] [A-Z]</li>
+<li>echo “HELLO WORLD I LOVE YOU” |tr -t [A-Z] [a-z]</li>
+<li>使用字符集转换</li>
+<li>echo “Hello World I Love You” |tr -t [:lower:] [:upper:]</li>
+<li>echo “HELLO WORLD I LOVE YOU” |tr -t [:upper:] [:lower:]</li>
+</ul>
+</li>
+<li><p>字符集</p>
+</li>
+</ul>
+<h2 id="tr-c-字符补集替换"><a href="#tr-c-字符补集替换" class="headerlink" title="tr -c 字符补集替换"></a>tr -c 字符补集替换</h2><ul>
+<li>tr -c “[a-z][A-Z]” “#”<ul>
+<li>除大小字母以外的所有的字符都替换为#</li>
+</ul>
+</li>
 </ul>
 ]]></content>
       <tags>
