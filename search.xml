@@ -1,6 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>shell快速入门</title>
+    <url>/2020/09/12/shell%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/</url>
+    <content><![CDATA[<p>本文是对shell的快速入门。</p>
+<a id="more"></a>
+
+<h1 id="tr"><a href="#tr" class="headerlink" title="tr"></a>tr</h1><ul>
+<li>tr [OPTION]… SET1 [SET2]<ul>
+<li>OPTION:-s,-t,-d,-c</li>
+</ul>
+</li>
+</ul>
+<h2 id="tr-s-替换重复的字符"><a href="#tr-s-替换重复的字符" class="headerlink" title="tr -s 替换重复的字符"></a>tr -s 替换重复的字符</h2><ol>
+<li>echo “aaabbbaacccfdc” | tr -s [abcdf]<ul>
+<li>返回abacfdc</li>
+</ul>
+</li>
+<li>删除空白行</li>
+</ol>
+<ul>
+<li>tr -s [“\n”]</li>
+<li><img src="http://ww1.sinaimg.cn/large/dbf344a4gy1ginzjdyhlwj212c0eumz7.jpg" alt="1599902157734.jpg"></li>
+</ul>
+<h2 id="tr-d-删除字符"><a href="#tr-d-删除字符" class="headerlink" title="tr -d 删除字符"></a>tr -d 删除字符</h2><ul>
+<li>echo “a13HJ14fdaADff” | tr -d “[a-z][A-Z]”<ul>
+<li>返回1314</li>
+</ul>
+</li>
+</ul>
+<h2 id="tr-t-字符替换"><a href="#tr-t-字符替换" class="headerlink" title="tr -t 字符替换"></a>tr -t 字符替换</h2><ul>
+<li><p>echo “a1314fdasf” | tr -t [afd] [AFD]</p>
+<ul>
+<li>返回A1314FDsF</li>
+</ul>
+</li>
+<li><p>实现大小写转换</p>
+<ul>
+<li>echo “Hello World I Love You” |tr -t [a-z] [A-Z]</li>
+<li>echo “HELLO WORLD I LOVE YOU” |tr -t [A-Z] [a-z]</li>
+<li>使用字符集转换</li>
+<li>echo “Hello World I Love You” |tr -t [:lower:] [:upper:]</li>
+<li>echo “HELLO WORLD I LOVE YOU” |tr -t [:upper:] [:lower:]</li>
+</ul>
+</li>
+<li><p>字符集</p>
+</li>
+</ul>
+<h2 id="tr-c-字符补集替换"><a href="#tr-c-字符补集替换" class="headerlink" title="tr -c 字符补集替换"></a>tr -c 字符补集替换</h2><ul>
+<li>tr -c “[a-z][A-Z]” “#”<ul>
+<li>除大小字母以外的所有的字符都替换为#</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>etcd命令</title>
+    <url>/2020/09/06/etcd%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<p>本文主要介绍etcdctl命令。</p>
+<a id="more"></a>
+<h1 id="mac安装etcd"><a href="#mac安装etcd" class="headerlink" title="mac安装etcd"></a>mac安装etcd</h1><ul>
+<li>brew install etcd</li>
+<li>默认etcdctl APIVERSION是2，通过设置export ETCDCTL_API=3，设置APIversion为3</li>
+<li>执行etcd命令启动本地etcd服务</li>
+</ul>
+<ol>
+<li><p>指定etcd集群<br>etcdctl –endpoints=$ENDPOINTS member list</p>
+</li>
+<li><p>向etcd增加key-value<br>etcdctl –endpoints=$ENDPOINTS put foo “Hello World!”</p>
+</li>
+<li><p>查询<br>etcdctl –endpoints=$ENDPOINTS get foo</p>
+</li>
+</ol>
+<ul>
+<li>输出格式可指定<br>etcdctl –endpoints=$ENDPOINTS –write-out=”json” get foo</li>
+<li>基于前缀查询，具有相同前缀的key都会被找到<br>etcdctl –endpoints=$ENDPOINTS get fo –prefix</li>
+</ul>
+<ol start="4">
+<li>删除</li>
+</ol>
+<ul>
+<li>删除key为foo的键值对<br>etcdctl –endpoints=$ENDPOINTS del foo</li>
+<li>带有前缀fo的key都被删除<br>etcdctl –endpoints=$ENDPOINTS del fo –prefix</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>etcd</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>kafka</title>
     <url>/2020/04/24/kafka/</url>
     <content><![CDATA[<p>本文是关于kafka的原理学习。</p>
@@ -11,6 +103,22 @@
 ]]></content>
       <tags>
         <tag>kafka</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ConcurrentHashMap1.8原理解读</title>
+    <url>/2020/04/06/ConcurrentHashMap1.8/</url>
+    <content><![CDATA[<p>本文通过对ConcurrentHashMap1.8版本的代码进行解读来了解其原理。</p>
+<a id="more"></a>
+<h1 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h1><ul>
+<li>待写… 可先参考<a href="https://crossoverjie.top/2018/07/23/java-senior/ConcurrentHashMap/" target="_blank" rel="noopener">HashMap? ConcurrentHashMap? 相信看完这篇没人能难住你！</a> ,但是该篇文章中关于ConcurrentHashMap1.8死循环的内容持怀疑态度。<h2 id="put"><a href="#put" class="headerlink" title="put"></a>put</h2><h2 id="get"><a href="#get" class="headerlink" title="get"></a>get</h2></li>
+</ul>
+<h2 id="size"><a href="#size" class="headerlink" title="size"></a>size</h2><ul>
+<li>今天在学习LongAdder的时候，突然发现ConcurrentHashMap中获取size的方法和LongAdder获取值的方法竟然是一样的。OMG… 详情可参考<a href="/2020/04/05/java%E5%B9%B6%E5%8F%91-LongAdder/" title="java并发-LongAdder">java并发-LongAdder</a></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>java</tag>
       </tags>
   </entry>
   <entry>
@@ -48,22 +156,6 @@
 <li>jinfo -flag [+|-]name pid :开启或者关闭对应名称的参数。</li>
 </ul>
 </li>
-</ul>
-]]></content>
-      <tags>
-        <tag>java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ConcurrentHashMap1.8原理解读</title>
-    <url>/2020/04/06/ConcurrentHashMap1.8/</url>
-    <content><![CDATA[<p>本文通过对ConcurrentHashMap1.8版本的代码进行解读来了解其原理。</p>
-<a id="more"></a>
-<h1 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h1><ul>
-<li>待写… 可先参考<a href="https://crossoverjie.top/2018/07/23/java-senior/ConcurrentHashMap/" target="_blank" rel="noopener">HashMap? ConcurrentHashMap? 相信看完这篇没人能难住你！</a> ,但是该篇文章中关于ConcurrentHashMap1.8死循环的内容持怀疑态度。<h2 id="put"><a href="#put" class="headerlink" title="put"></a>put</h2><h2 id="get"><a href="#get" class="headerlink" title="get"></a>get</h2></li>
-</ul>
-<h2 id="size"><a href="#size" class="headerlink" title="size"></a>size</h2><ul>
-<li>今天在学习LongAdder的时候，突然发现ConcurrentHashMap中获取size的方法和LongAdder获取值的方法竟然是一样的。OMG… 详情可参考<a href="/2020/04/05/java%E5%B9%B6%E5%8F%91-LongAdder/" title="java并发-LongAdder">java并发-LongAdder</a></li>
 </ul>
 ]]></content>
       <tags>
@@ -735,9 +827,17 @@
       </tags>
   </entry>
   <entry>
-    <title>linux命令记录</title>
+    <title>https</title>
+    <url>/2020/02/08/https/</url>
+    <content><![CDATA[]]></content>
+      <tags>
+        <tag>http</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>linux命令入门</title>
     <url>/2020/02/08/linux%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<p>本文是对于linux命令的记录。</p>
+    <content><![CDATA[<p>本文是对于linux命令的学习。</p>
 <a id="more"></a>
 
 <h1 id="查看文件夹大小"><a href="#查看文件夹大小" class="headerlink" title="查看文件夹大小"></a>查看文件夹大小</h1><ul>
@@ -769,6 +869,9 @@
 <li>c: 压缩 –create的简写，创建新的备份文件  </li>
 <li>v：显示所有过程</li>
 <li>f: 使用档案名字，切记，这个参数是最后一个参数，后面只能接档案名</li>
+</ul>
+<h1 id="a-sh"><a href="#a-sh" class="headerlink" title=". ./a.sh"></a>. ./a.sh</h1><ul>
+<li>. ./a.sh  第一个.代表source,所以相当于source ./a.sh</li>
 </ul>
 ]]></content>
       <tags>
@@ -1528,72 +1631,6 @@
       </tags>
   </entry>
   <entry>
-    <title>spring的@schedule注解调度任务原理</title>
-    <url>/2020/01/06/spring%E7%9A%84@schedule%E6%B3%A8%E8%A7%A3%E8%B0%83%E5%BA%A6%E4%BB%BB%E5%8A%A1%E5%8E%9F%E7%90%86/</url>
-    <content><![CDATA[<p>本篇文章主要阅读源码看看@schdule注解是如何工作的。</p>
-<a id="more"></a>
-
-<blockquote>
-<p>问题写在前面：</p>
-<ul>
-<li>schedule注解的任务是何时实例化成任务的</li>
-<li>调度任务如何调度的</li>
-</ul>
-</blockquote>
-<h1 id="schedule注解"><a href="#schedule注解" class="headerlink" title="schedule注解"></a>schedule注解</h1><ul>
-<li><p>首先看下@schedule注解：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Target</span>(&#123;ElementType.METHOD, ElementType.ANNOTATION_TYPE&#125;)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="comment">// Schedules注解可以包含多个Scheduled，即多个调度任务</span></span><br><span class="line"><span class="meta">@Repeatable</span>(Schedules<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line"><span class="class"><span class="title">public</span> @<span class="title">interface</span> <span class="title">Scheduled</span> </span>&#123;</span><br><span class="line">	<span class="comment">// corn 表达式</span></span><br><span class="line">	<span class="function">String <span class="title">cron</span><span class="params">()</span> <span class="keyword">default</span> ""</span>;</span><br><span class="line">	<span class="comment">//时区，默认服务器本地时区</span></span><br><span class="line">	<span class="function">String <span class="title">zone</span><span class="params">()</span> <span class="keyword">default</span> ""</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 一次任务调用结束和下一次调用开始之间的间隔</span></span><br><span class="line">	<span class="function"><span class="keyword">long</span> <span class="title">fixedDelay</span><span class="params">()</span> <span class="keyword">default</span> -1</span>;</span><br><span class="line">	<span class="comment">// 上一个的string格式</span></span><br><span class="line">	<span class="function">String <span class="title">fixedDelayString</span><span class="params">()</span> <span class="keyword">default</span> ""</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 两次任务执行开始之间的间隔</span></span><br><span class="line">	<span class="function"><span class="keyword">long</span> <span class="title">fixedRate</span><span class="params">()</span> <span class="keyword">default</span> -1</span>;</span><br><span class="line">	<span class="comment">// 上一个的string格式</span></span><br><span class="line">	<span class="function">String <span class="title">fixedRateString</span><span class="params">()</span> <span class="keyword">default</span> ""</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 初始延迟</span></span><br><span class="line">	<span class="function"><span class="keyword">long</span> <span class="title">initialDelay</span><span class="params">()</span> <span class="keyword">default</span> -1</span>;</span><br><span class="line">	<span class="comment">// 上一个的string格式</span></span><br><span class="line">	<span class="function">String <span class="title">initialDelayString</span><span class="params">()</span> <span class="keyword">default</span> ""</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>通过查看这个注解里的方法的调用方，可以看到是在ScheduledAnnotationBeanPostProcessor里的processScheduled方法调用的。</p>
-</li>
-</ul>
-<h1 id="ScheduledAnnotationBeanPostProcessor"><a href="#ScheduledAnnotationBeanPostProcessor" class="headerlink" title="ScheduledAnnotationBeanPostProcessor"></a>ScheduledAnnotationBeanPostProcessor</h1><ul>
-<li>ScheduledAnnotationBeanPostProcessor也被初始配置成了bean。</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@Role</span>(BeanDefinition.ROLE_INFRASTRUCTURE)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SchedulingConfiguration</span> </span>&#123;</span><br><span class="line">	<span class="meta">@Bean</span>(name = TaskManagementConfigUtils.SCHEDULED_ANNOTATION_PROCESSOR_BEAN_NAME)</span><br><span class="line">	<span class="meta">@Role</span>(BeanDefinition.ROLE_INFRASTRUCTURE)</span><br><span class="line">	<span class="function"><span class="keyword">public</span> ScheduledAnnotationBeanPostProcessor <span class="title">scheduledAnnotationProcessor</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> ScheduledAnnotationBeanPostProcessor();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>ScheduledAnnotationBeanPostProcessor实例中包含了ScheduledTaskRegistrar实例，这个实例中有线程池TaskScheduler，后面会讲到线程池是如何设置的。</li>
-</ul>
-<h2 id="processScheduled方法"><a href="#processScheduled方法" class="headerlink" title="processScheduled方法"></a>processScheduled方法</h2><ul>
-<li><p>该方法负责解析schedule注解里参数并生成调度任务</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">processScheduled</span><span class="params">(Scheduled scheduled, Method method, Object bean)</span> </span>&#123;</span><br><span class="line">    Method invocableMethod = AopUtils.selectInvocableMethod(method, bean.getClass());</span><br><span class="line">    Runnable runnable = <span class="keyword">new</span> ScheduledMethodRunnable(bean, invocableMethod);</span><br><span class="line">    <span class="keyword">boolean</span> processedSchedule = <span class="keyword">false</span>;</span><br><span class="line">    String errorMessage =</span><br><span class="line">            <span class="string">"Exactly one of the 'cron', 'fixedDelay(String)', or 'fixedRate(String)' attributes is required"</span>;</span><br><span class="line">    Set&lt;ScheduledTask&gt; tasks = <span class="keyword">new</span> LinkedHashSet&lt;&gt;(<span class="number">4</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 取出初始延迟参数</span></span><br><span class="line">    <span class="keyword">long</span> initialDelay = scheduled.initialDelay();</span><br><span class="line">    String initialDelayString = scheduled.initialDelayString();</span><br><span class="line">    <span class="keyword">if</span> (StringUtils.hasText(initialDelayString)) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.embeddedValueResolver != <span class="keyword">null</span>) &#123;</span><br><span class="line">            initialDelayString = <span class="keyword">this</span>.embeddedValueResolver.resolveStringValue(initialDelayString);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.hasLength(initialDelayString)) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                initialDelay = parseDelayAsLong(initialDelayString);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 解析cron表达式，生成CronTask任务</span></span><br><span class="line">    String cron = scheduled.cron();</span><br><span class="line">    <span class="keyword">if</span> (StringUtils.hasText(cron)) &#123;</span><br><span class="line">        String zone = scheduled.zone();</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.embeddedValueResolver != <span class="keyword">null</span>) &#123;</span><br><span class="line">            cron = <span class="keyword">this</span>.embeddedValueResolver.resolveStringValue(cron);</span><br><span class="line">            zone = <span class="keyword">this</span>.embeddedValueResolver.resolveStringValue(zone);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.hasLength(cron)) &#123;</span><br><span class="line">            Assert.isTrue(initialDelay == -<span class="number">1</span>, <span class="string">"'initialDelay' not supported for cron triggers"</span>);</span><br><span class="line">            processedSchedule = <span class="keyword">true</span>;</span><br><span class="line">            TimeZone timeZone;</span><br><span class="line">            <span class="keyword">if</span> (StringUtils.hasText(zone)) &#123;</span><br><span class="line">                timeZone = StringUtils.parseTimeZoneString(zone);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                timeZone = TimeZone.getDefault();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 任务注册到registrar中</span></span><br><span class="line">            tasks.add(<span class="keyword">this</span>.registrar.scheduleCronTask(<span class="keyword">new</span> CronTask(runnable, <span class="keyword">new</span> CronTrigger(cron, timeZone))));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 初始延迟&lt;0的都设置为0</span></span><br><span class="line">    <span class="keyword">if</span> (initialDelay &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        initialDelay = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 解析fixed delay，生成FixedDelayTask任务</span></span><br><span class="line">    <span class="keyword">long</span> fixedDelay = scheduled.fixedDelay();</span><br><span class="line">    <span class="keyword">if</span> (fixedDelay &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">        Assert.isTrue(!processedSchedule, errorMessage);</span><br><span class="line">        processedSchedule = <span class="keyword">true</span>;</span><br><span class="line">        <span class="comment">// 任务注册到registrar中</span></span><br><span class="line">        tasks.add(<span class="keyword">this</span>.registrar.scheduleFixedDelayTask(<span class="keyword">new</span> FixedDelayTask(runnable, fixedDelay, initialDelay)));</span><br><span class="line">    &#125;</span><br><span class="line">    String fixedDelayString = scheduled.fixedDelayString();</span><br><span class="line">    <span class="keyword">if</span> (StringUtils.hasText(fixedDelayString)) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.embeddedValueResolver != <span class="keyword">null</span>) &#123;</span><br><span class="line">            fixedDelayString = <span class="keyword">this</span>.embeddedValueResolver.resolveStringValue(fixedDelayString);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.hasLength(fixedDelayString)) &#123;</span><br><span class="line">            Assert.isTrue(!processedSchedule, errorMessage);</span><br><span class="line">            processedSchedule = <span class="keyword">true</span>;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                fixedDelay = parseDelayAsLong(fixedDelayString);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 任务注册到registrar中</span></span><br><span class="line">            tasks.add(<span class="keyword">this</span>.registrar.scheduleFixedDelayTask(<span class="keyword">new</span> FixedDelayTask(runnable, fixedDelay, initialDelay)));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 解析fixed rate,生成FixedRateTask任务</span></span><br><span class="line">    <span class="keyword">long</span> fixedRate = scheduled.fixedRate();</span><br><span class="line">    <span class="keyword">if</span> (fixedRate &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">        Assert.isTrue(!processedSchedule, errorMessage);</span><br><span class="line">        processedSchedule = <span class="keyword">true</span>;</span><br><span class="line">        <span class="comment">// 任务注册到registrar中</span></span><br><span class="line">        tasks.add(<span class="keyword">this</span>.registrar.scheduleFixedRateTask(<span class="keyword">new</span> FixedRateTask(runnable, fixedRate, initialDelay)));</span><br><span class="line">    &#125;</span><br><span class="line">    String fixedRateString = scheduled.fixedRateString();</span><br><span class="line">    <span class="keyword">if</span> (StringUtils.hasText(fixedRateString)) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.embeddedValueResolver != <span class="keyword">null</span>) &#123;</span><br><span class="line">            fixedRateString = <span class="keyword">this</span>.embeddedValueResolver.resolveStringValue(fixedRateString);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.hasLength(fixedRateString)) &#123;</span><br><span class="line">            Assert.isTrue(!processedSchedule, errorMessage);</span><br><span class="line">            processedSchedule = <span class="keyword">true</span>;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                fixedRate = parseDelayAsLong(fixedRateString);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 任务注册到registrar中</span></span><br><span class="line">            tasks.add(<span class="keyword">this</span>.registrar.scheduleFixedRateTask(<span class="keyword">new</span> FixedRateTask(runnable, fixedRate, initialDelay)));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">synchronized</span> (<span class="keyword">this</span>.scheduledTasks) &#123;</span><br><span class="line">        Set&lt;ScheduledTask&gt; registeredTasks = <span class="keyword">this</span>.scheduledTasks.get(bean);</span><br><span class="line">        <span class="keyword">if</span> (registeredTasks == <span class="keyword">null</span>) &#123;</span><br><span class="line">            registeredTasks = <span class="keyword">new</span> LinkedHashSet&lt;&gt;(<span class="number">4</span>);</span><br><span class="line">            <span class="keyword">this</span>.scheduledTasks.put(bean, registeredTasks);</span><br><span class="line">        &#125;</span><br><span class="line">        registeredTasks.addAll(tasks);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>processScheduled方法负责解析schedule注解的参数，生成相应的调度任务，存入ScheduledTaskRegistrar实例中。</p>
-</li>
-<li><p>解析生成的任务都放入了线程池中执行，执行任务的逻辑在下面的scheduleTasks方法里。</p>
-</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">scheduleTasks</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.taskScheduler == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">this</span>.localExecutor = Executors.newSingleThreadScheduledExecutor();</span><br><span class="line">        <span class="keyword">this</span>.taskScheduler = <span class="keyword">new</span> ConcurrentTaskScheduler(<span class="keyword">this</span>.localExecutor);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.triggerTasks != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (TriggerTask task : <span class="keyword">this</span>.triggerTasks) &#123;</span><br><span class="line">            <span class="comment">// 调度triggerTask</span></span><br><span class="line">            addScheduledTask(scheduleTriggerTask(task));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.cronTasks != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (CronTask task : <span class="keyword">this</span>.cronTasks) &#123;</span><br><span class="line">            <span class="comment">// 调度CronTask</span></span><br><span class="line">            addScheduledTask(scheduleCronTask(task));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.fixedRateTasks != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (IntervalTask task : <span class="keyword">this</span>.fixedRateTasks) &#123;</span><br><span class="line">            <span class="comment">// 调度FixedRateTask</span></span><br><span class="line">            addScheduledTask(scheduleFixedRateTask(task));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.fixedDelayTasks != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (IntervalTask task : <span class="keyword">this</span>.fixedDelayTasks) &#123;</span><br><span class="line">            <span class="comment">// 调度FixedDelayTask</span></span><br><span class="line">            addScheduledTask(scheduleFixedDelayTask(task));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>使用TaskScheduler调度各种调度任务，并将返回结果future封装在ScheduleTask中，可以看到最底层的线程池其实就是ScheduledThreadPoolExecutor。见另一篇</p>
-</li>
-<li><p>此方法是在afterPropertiesSet方法中调用的，从下面的代码可以看到afterPropertiesSet是在ScheduledAnnotationBeanPostProcessor类的onApplicationEvent方法中调用的，而onApplicationEvent则是重写了ApplicationListener接口的方法。后面会说这个ApplicationListener。</p>
-</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onApplicationEvent</span><span class="params">(ContextRefreshedEvent event)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (event.getApplicationContext() == <span class="keyword">this</span>.applicationContext) &#123;</span><br><span class="line">        finishRegistration();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">finishRegistration</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.scheduler != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">this</span>.registrar.setScheduler(<span class="keyword">this</span>.scheduler);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.beanFactory <span class="keyword">instanceof</span> ListableBeanFactory) &#123;</span><br><span class="line">        Map&lt;String, SchedulingConfigurer&gt; beans =</span><br><span class="line">                ((ListableBeanFactory) <span class="keyword">this</span>.beanFactory).getBeansOfType(SchedulingConfigurer<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        List&lt;SchedulingConfigurer&gt; configurers = <span class="keyword">new</span> ArrayList&lt;&gt;(beans.values());</span><br><span class="line">        AnnotationAwareOrderComparator.sort(configurers);</span><br><span class="line">        <span class="keyword">for</span> (SchedulingConfigurer configurer : configurers) &#123;</span><br><span class="line">            configurer.configureTasks(<span class="keyword">this</span>.registrar);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.registrar.hasTasks() &amp;&amp; <span class="keyword">this</span>.registrar.getScheduler() == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">this</span>.registrar.setTaskScheduler(resolveSchedulerBean(beanFactory, TaskScheduler<span class="class">.<span class="keyword">class</span>, <span class="title">false</span>))</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (NoUniqueBeanDefinitionException ex) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">this</span>.registrar.setTaskScheduler(resolveSchedulerBean(beanFactory, TaskScheduler<span class="class">.<span class="keyword">class</span>, <span class="title">true</span>))</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (NoSuchBeanDefinitionException ex) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">this</span>.registrar.setScheduler(resolveSchedulerBean(beanFactory, ScheduledExecutorService<span class="class">.<span class="keyword">class</span>, <span class="title">false</span>))</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">catch</span> (NoUniqueBeanDefinitionException ex2) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="keyword">this</span>.registrar.setScheduler(resolveSchedulerBean(beanFactory, ScheduledExecutorService<span class="class">.<span class="keyword">class</span>, <span class="title">true</span>))</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">this</span>.registrar.afterPropertiesSet();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>上面的finishRegistration方法主要负责通过by-type/by-name方式找到可用的线程池bean,并设置给ScheduledTaskRegistrar实例，用于调度任务。</p>
-</li>
-<li><p>但是还有个疑问onApplicationEvent是什么时候调用的。这时候就需要研究下ApplicationListener这个类。看<br>onApplicationEvent方法的参数是ContextRefreshedEvent，可以知道监听的是ContextRefreshedEvent事件。只要知道事件在何时发布就可以知道任务在什么时候会被调度了。</p>
-</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">finishRefresh</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    。。。</span><br><span class="line">    <span class="comment">// 发布事件</span></span><br><span class="line">    publishEvent(<span class="keyword">new</span> ContextRefreshedEvent(<span class="keyword">this</span>));</span><br><span class="line">    。。。</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>我们可以看到事件是在finishRefresh方法中发布的，往上还可以追溯到SpringApplication的run方法，这里就不贴代码了，所以是在web启动时，refresh最后阶段，广播了ContextRefreshedEvent事件。web启动的过程以后再总结。</li>
-</ul>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
-<li>schedule注解何时实例化任务的：有schedule注解的方法在其所在的类实例化成bean的时候已经被解析成Scheduled，解析Scheduled里的参数生成调度任务是在ScheduledAnnotationBeanPostProcessor初始化之后调用的。</li>
-<li>任务如何调度的：应用启动的最后阶段会发布ContextRefreshedEvent事件，作为监听了这个事件的bean(ScheduledAnnotationBeanPostProcessor)当接收到事件时，会获取可用线程池，设置在ScheduledTaskRegistrar实例中，ScheduledTaskRegistrar负责调度任务。</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>spring</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>redis</title>
     <url>/2020/01/06/redis/</url>
     <content><![CDATA[<p>本文主要介绍redis。</p>
@@ -1730,6 +1767,72 @@
 ]]></content>
       <tags>
         <tag>redis</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>spring的@schedule注解调度任务原理</title>
+    <url>/2020/01/06/spring%E7%9A%84@schedule%E6%B3%A8%E8%A7%A3%E8%B0%83%E5%BA%A6%E4%BB%BB%E5%8A%A1%E5%8E%9F%E7%90%86/</url>
+    <content><![CDATA[<p>本篇文章主要阅读源码看看@schdule注解是如何工作的。</p>
+<a id="more"></a>
+
+<blockquote>
+<p>问题写在前面：</p>
+<ul>
+<li>schedule注解的任务是何时实例化成任务的</li>
+<li>调度任务如何调度的</li>
+</ul>
+</blockquote>
+<h1 id="schedule注解"><a href="#schedule注解" class="headerlink" title="schedule注解"></a>schedule注解</h1><ul>
+<li><p>首先看下@schedule注解：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Target</span>(&#123;ElementType.METHOD, ElementType.ANNOTATION_TYPE&#125;)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="comment">// Schedules注解可以包含多个Scheduled，即多个调度任务</span></span><br><span class="line"><span class="meta">@Repeatable</span>(Schedules<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line"><span class="class"><span class="title">public</span> @<span class="title">interface</span> <span class="title">Scheduled</span> </span>&#123;</span><br><span class="line">	<span class="comment">// corn 表达式</span></span><br><span class="line">	<span class="function">String <span class="title">cron</span><span class="params">()</span> <span class="keyword">default</span> ""</span>;</span><br><span class="line">	<span class="comment">//时区，默认服务器本地时区</span></span><br><span class="line">	<span class="function">String <span class="title">zone</span><span class="params">()</span> <span class="keyword">default</span> ""</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 一次任务调用结束和下一次调用开始之间的间隔</span></span><br><span class="line">	<span class="function"><span class="keyword">long</span> <span class="title">fixedDelay</span><span class="params">()</span> <span class="keyword">default</span> -1</span>;</span><br><span class="line">	<span class="comment">// 上一个的string格式</span></span><br><span class="line">	<span class="function">String <span class="title">fixedDelayString</span><span class="params">()</span> <span class="keyword">default</span> ""</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 两次任务执行开始之间的间隔</span></span><br><span class="line">	<span class="function"><span class="keyword">long</span> <span class="title">fixedRate</span><span class="params">()</span> <span class="keyword">default</span> -1</span>;</span><br><span class="line">	<span class="comment">// 上一个的string格式</span></span><br><span class="line">	<span class="function">String <span class="title">fixedRateString</span><span class="params">()</span> <span class="keyword">default</span> ""</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 初始延迟</span></span><br><span class="line">	<span class="function"><span class="keyword">long</span> <span class="title">initialDelay</span><span class="params">()</span> <span class="keyword">default</span> -1</span>;</span><br><span class="line">	<span class="comment">// 上一个的string格式</span></span><br><span class="line">	<span class="function">String <span class="title">initialDelayString</span><span class="params">()</span> <span class="keyword">default</span> ""</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>通过查看这个注解里的方法的调用方，可以看到是在ScheduledAnnotationBeanPostProcessor里的processScheduled方法调用的。</p>
+</li>
+</ul>
+<h1 id="ScheduledAnnotationBeanPostProcessor"><a href="#ScheduledAnnotationBeanPostProcessor" class="headerlink" title="ScheduledAnnotationBeanPostProcessor"></a>ScheduledAnnotationBeanPostProcessor</h1><ul>
+<li>ScheduledAnnotationBeanPostProcessor也被初始配置成了bean。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@Role</span>(BeanDefinition.ROLE_INFRASTRUCTURE)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SchedulingConfiguration</span> </span>&#123;</span><br><span class="line">	<span class="meta">@Bean</span>(name = TaskManagementConfigUtils.SCHEDULED_ANNOTATION_PROCESSOR_BEAN_NAME)</span><br><span class="line">	<span class="meta">@Role</span>(BeanDefinition.ROLE_INFRASTRUCTURE)</span><br><span class="line">	<span class="function"><span class="keyword">public</span> ScheduledAnnotationBeanPostProcessor <span class="title">scheduledAnnotationProcessor</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> ScheduledAnnotationBeanPostProcessor();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>ScheduledAnnotationBeanPostProcessor实例中包含了ScheduledTaskRegistrar实例，这个实例中有线程池TaskScheduler，后面会讲到线程池是如何设置的。</li>
+</ul>
+<h2 id="processScheduled方法"><a href="#processScheduled方法" class="headerlink" title="processScheduled方法"></a>processScheduled方法</h2><ul>
+<li><p>该方法负责解析schedule注解里参数并生成调度任务</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">processScheduled</span><span class="params">(Scheduled scheduled, Method method, Object bean)</span> </span>&#123;</span><br><span class="line">    Method invocableMethod = AopUtils.selectInvocableMethod(method, bean.getClass());</span><br><span class="line">    Runnable runnable = <span class="keyword">new</span> ScheduledMethodRunnable(bean, invocableMethod);</span><br><span class="line">    <span class="keyword">boolean</span> processedSchedule = <span class="keyword">false</span>;</span><br><span class="line">    String errorMessage =</span><br><span class="line">            <span class="string">"Exactly one of the 'cron', 'fixedDelay(String)', or 'fixedRate(String)' attributes is required"</span>;</span><br><span class="line">    Set&lt;ScheduledTask&gt; tasks = <span class="keyword">new</span> LinkedHashSet&lt;&gt;(<span class="number">4</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 取出初始延迟参数</span></span><br><span class="line">    <span class="keyword">long</span> initialDelay = scheduled.initialDelay();</span><br><span class="line">    String initialDelayString = scheduled.initialDelayString();</span><br><span class="line">    <span class="keyword">if</span> (StringUtils.hasText(initialDelayString)) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.embeddedValueResolver != <span class="keyword">null</span>) &#123;</span><br><span class="line">            initialDelayString = <span class="keyword">this</span>.embeddedValueResolver.resolveStringValue(initialDelayString);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.hasLength(initialDelayString)) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                initialDelay = parseDelayAsLong(initialDelayString);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 解析cron表达式，生成CronTask任务</span></span><br><span class="line">    String cron = scheduled.cron();</span><br><span class="line">    <span class="keyword">if</span> (StringUtils.hasText(cron)) &#123;</span><br><span class="line">        String zone = scheduled.zone();</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.embeddedValueResolver != <span class="keyword">null</span>) &#123;</span><br><span class="line">            cron = <span class="keyword">this</span>.embeddedValueResolver.resolveStringValue(cron);</span><br><span class="line">            zone = <span class="keyword">this</span>.embeddedValueResolver.resolveStringValue(zone);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.hasLength(cron)) &#123;</span><br><span class="line">            Assert.isTrue(initialDelay == -<span class="number">1</span>, <span class="string">"'initialDelay' not supported for cron triggers"</span>);</span><br><span class="line">            processedSchedule = <span class="keyword">true</span>;</span><br><span class="line">            TimeZone timeZone;</span><br><span class="line">            <span class="keyword">if</span> (StringUtils.hasText(zone)) &#123;</span><br><span class="line">                timeZone = StringUtils.parseTimeZoneString(zone);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                timeZone = TimeZone.getDefault();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 任务注册到registrar中</span></span><br><span class="line">            tasks.add(<span class="keyword">this</span>.registrar.scheduleCronTask(<span class="keyword">new</span> CronTask(runnable, <span class="keyword">new</span> CronTrigger(cron, timeZone))));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 初始延迟&lt;0的都设置为0</span></span><br><span class="line">    <span class="keyword">if</span> (initialDelay &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        initialDelay = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 解析fixed delay，生成FixedDelayTask任务</span></span><br><span class="line">    <span class="keyword">long</span> fixedDelay = scheduled.fixedDelay();</span><br><span class="line">    <span class="keyword">if</span> (fixedDelay &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">        Assert.isTrue(!processedSchedule, errorMessage);</span><br><span class="line">        processedSchedule = <span class="keyword">true</span>;</span><br><span class="line">        <span class="comment">// 任务注册到registrar中</span></span><br><span class="line">        tasks.add(<span class="keyword">this</span>.registrar.scheduleFixedDelayTask(<span class="keyword">new</span> FixedDelayTask(runnable, fixedDelay, initialDelay)));</span><br><span class="line">    &#125;</span><br><span class="line">    String fixedDelayString = scheduled.fixedDelayString();</span><br><span class="line">    <span class="keyword">if</span> (StringUtils.hasText(fixedDelayString)) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.embeddedValueResolver != <span class="keyword">null</span>) &#123;</span><br><span class="line">            fixedDelayString = <span class="keyword">this</span>.embeddedValueResolver.resolveStringValue(fixedDelayString);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.hasLength(fixedDelayString)) &#123;</span><br><span class="line">            Assert.isTrue(!processedSchedule, errorMessage);</span><br><span class="line">            processedSchedule = <span class="keyword">true</span>;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                fixedDelay = parseDelayAsLong(fixedDelayString);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 任务注册到registrar中</span></span><br><span class="line">            tasks.add(<span class="keyword">this</span>.registrar.scheduleFixedDelayTask(<span class="keyword">new</span> FixedDelayTask(runnable, fixedDelay, initialDelay)));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 解析fixed rate,生成FixedRateTask任务</span></span><br><span class="line">    <span class="keyword">long</span> fixedRate = scheduled.fixedRate();</span><br><span class="line">    <span class="keyword">if</span> (fixedRate &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">        Assert.isTrue(!processedSchedule, errorMessage);</span><br><span class="line">        processedSchedule = <span class="keyword">true</span>;</span><br><span class="line">        <span class="comment">// 任务注册到registrar中</span></span><br><span class="line">        tasks.add(<span class="keyword">this</span>.registrar.scheduleFixedRateTask(<span class="keyword">new</span> FixedRateTask(runnable, fixedRate, initialDelay)));</span><br><span class="line">    &#125;</span><br><span class="line">    String fixedRateString = scheduled.fixedRateString();</span><br><span class="line">    <span class="keyword">if</span> (StringUtils.hasText(fixedRateString)) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.embeddedValueResolver != <span class="keyword">null</span>) &#123;</span><br><span class="line">            fixedRateString = <span class="keyword">this</span>.embeddedValueResolver.resolveStringValue(fixedRateString);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.hasLength(fixedRateString)) &#123;</span><br><span class="line">            Assert.isTrue(!processedSchedule, errorMessage);</span><br><span class="line">            processedSchedule = <span class="keyword">true</span>;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                fixedRate = parseDelayAsLong(fixedRateString);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 任务注册到registrar中</span></span><br><span class="line">            tasks.add(<span class="keyword">this</span>.registrar.scheduleFixedRateTask(<span class="keyword">new</span> FixedRateTask(runnable, fixedRate, initialDelay)));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">synchronized</span> (<span class="keyword">this</span>.scheduledTasks) &#123;</span><br><span class="line">        Set&lt;ScheduledTask&gt; registeredTasks = <span class="keyword">this</span>.scheduledTasks.get(bean);</span><br><span class="line">        <span class="keyword">if</span> (registeredTasks == <span class="keyword">null</span>) &#123;</span><br><span class="line">            registeredTasks = <span class="keyword">new</span> LinkedHashSet&lt;&gt;(<span class="number">4</span>);</span><br><span class="line">            <span class="keyword">this</span>.scheduledTasks.put(bean, registeredTasks);</span><br><span class="line">        &#125;</span><br><span class="line">        registeredTasks.addAll(tasks);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>processScheduled方法负责解析schedule注解的参数，生成相应的调度任务，存入ScheduledTaskRegistrar实例中。</p>
+</li>
+<li><p>解析生成的任务都放入了线程池中执行，执行任务的逻辑在下面的scheduleTasks方法里。</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">scheduleTasks</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.taskScheduler == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">this</span>.localExecutor = Executors.newSingleThreadScheduledExecutor();</span><br><span class="line">        <span class="keyword">this</span>.taskScheduler = <span class="keyword">new</span> ConcurrentTaskScheduler(<span class="keyword">this</span>.localExecutor);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.triggerTasks != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (TriggerTask task : <span class="keyword">this</span>.triggerTasks) &#123;</span><br><span class="line">            <span class="comment">// 调度triggerTask</span></span><br><span class="line">            addScheduledTask(scheduleTriggerTask(task));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.cronTasks != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (CronTask task : <span class="keyword">this</span>.cronTasks) &#123;</span><br><span class="line">            <span class="comment">// 调度CronTask</span></span><br><span class="line">            addScheduledTask(scheduleCronTask(task));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.fixedRateTasks != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (IntervalTask task : <span class="keyword">this</span>.fixedRateTasks) &#123;</span><br><span class="line">            <span class="comment">// 调度FixedRateTask</span></span><br><span class="line">            addScheduledTask(scheduleFixedRateTask(task));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.fixedDelayTasks != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (IntervalTask task : <span class="keyword">this</span>.fixedDelayTasks) &#123;</span><br><span class="line">            <span class="comment">// 调度FixedDelayTask</span></span><br><span class="line">            addScheduledTask(scheduleFixedDelayTask(task));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>使用TaskScheduler调度各种调度任务，并将返回结果future封装在ScheduleTask中，可以看到最底层的线程池其实就是ScheduledThreadPoolExecutor。见另一篇</p>
+</li>
+<li><p>此方法是在afterPropertiesSet方法中调用的，从下面的代码可以看到afterPropertiesSet是在ScheduledAnnotationBeanPostProcessor类的onApplicationEvent方法中调用的，而onApplicationEvent则是重写了ApplicationListener接口的方法。后面会说这个ApplicationListener。</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onApplicationEvent</span><span class="params">(ContextRefreshedEvent event)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (event.getApplicationContext() == <span class="keyword">this</span>.applicationContext) &#123;</span><br><span class="line">        finishRegistration();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">finishRegistration</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.scheduler != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">this</span>.registrar.setScheduler(<span class="keyword">this</span>.scheduler);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.beanFactory <span class="keyword">instanceof</span> ListableBeanFactory) &#123;</span><br><span class="line">        Map&lt;String, SchedulingConfigurer&gt; beans =</span><br><span class="line">                ((ListableBeanFactory) <span class="keyword">this</span>.beanFactory).getBeansOfType(SchedulingConfigurer<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        List&lt;SchedulingConfigurer&gt; configurers = <span class="keyword">new</span> ArrayList&lt;&gt;(beans.values());</span><br><span class="line">        AnnotationAwareOrderComparator.sort(configurers);</span><br><span class="line">        <span class="keyword">for</span> (SchedulingConfigurer configurer : configurers) &#123;</span><br><span class="line">            configurer.configureTasks(<span class="keyword">this</span>.registrar);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.registrar.hasTasks() &amp;&amp; <span class="keyword">this</span>.registrar.getScheduler() == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">this</span>.registrar.setTaskScheduler(resolveSchedulerBean(beanFactory, TaskScheduler<span class="class">.<span class="keyword">class</span>, <span class="title">false</span>))</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (NoUniqueBeanDefinitionException ex) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">this</span>.registrar.setTaskScheduler(resolveSchedulerBean(beanFactory, TaskScheduler<span class="class">.<span class="keyword">class</span>, <span class="title">true</span>))</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (NoSuchBeanDefinitionException ex) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">this</span>.registrar.setScheduler(resolveSchedulerBean(beanFactory, ScheduledExecutorService<span class="class">.<span class="keyword">class</span>, <span class="title">false</span>))</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">catch</span> (NoUniqueBeanDefinitionException ex2) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="keyword">this</span>.registrar.setScheduler(resolveSchedulerBean(beanFactory, ScheduledExecutorService<span class="class">.<span class="keyword">class</span>, <span class="title">true</span>))</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">this</span>.registrar.afterPropertiesSet();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>上面的finishRegistration方法主要负责通过by-type/by-name方式找到可用的线程池bean,并设置给ScheduledTaskRegistrar实例，用于调度任务。</p>
+</li>
+<li><p>但是还有个疑问onApplicationEvent是什么时候调用的。这时候就需要研究下ApplicationListener这个类。看<br>onApplicationEvent方法的参数是ContextRefreshedEvent，可以知道监听的是ContextRefreshedEvent事件。只要知道事件在何时发布就可以知道任务在什么时候会被调度了。</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">finishRefresh</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    。。。</span><br><span class="line">    <span class="comment">// 发布事件</span></span><br><span class="line">    publishEvent(<span class="keyword">new</span> ContextRefreshedEvent(<span class="keyword">this</span>));</span><br><span class="line">    。。。</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>我们可以看到事件是在finishRefresh方法中发布的，往上还可以追溯到SpringApplication的run方法，这里就不贴代码了，所以是在web启动时，refresh最后阶段，广播了ContextRefreshedEvent事件。web启动的过程以后再总结。</li>
+</ul>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
+<li>schedule注解何时实例化任务的：有schedule注解的方法在其所在的类实例化成bean的时候已经被解析成Scheduled，解析Scheduled里的参数生成调度任务是在ScheduledAnnotationBeanPostProcessor初始化之后调用的。</li>
+<li>任务如何调度的：应用启动的最后阶段会发布ContextRefreshedEvent事件，作为监听了这个事件的bean(ScheduledAnnotationBeanPostProcessor)当接收到事件时，会获取可用线程池，设置在ScheduledTaskRegistrar实例中，ScheduledTaskRegistrar负责调度任务。</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>spring</tag>
       </tags>
   </entry>
   <entry>
