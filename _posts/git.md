@@ -34,3 +34,7 @@ tags:
 - git show <tagname> 看出某个标签的具体信息
 - git push --tags
     - 将本地的所有tags推到远程
+
+## git reflog
+- 可以查看所有分支的所有操作记录（包括已经被删除的 commit 记录和 reset 的操作）
+- git reset --hard commitId
