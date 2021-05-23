@@ -46,15 +46,15 @@
   };
 </script>
 
-  <meta name="description" content="常见的一致性算法有Paxos、Raft等，Paxos协议是Leslie Lamport于1990年提出的一种基于消息传递、具有高度容错性的一致性算法，Paxos算法解决的主要问题是分布式系统内如何就某个值达成一致。但Paxos有两个明显的缺点：1，Paxos算法难以理解。2，没有提供构建现实系统的良好基础，也有很多工程化Paxos算法的尝试，但是它们对Paxos算法本身做了比较大的改动，彼此之间的">
+  <meta name="description" content="raft协议">
 <meta property="og:type" content="article">
 <meta property="og:title" content="raft协议">
 <meta property="og:url" content="http://yoursite.com/2021/05/10/raft%E5%8D%8F%E8%AE%AE/index.html">
 <meta property="og:site_name" content="sugar_foxs&#39;s blog">
-<meta property="og:description" content="常见的一致性算法有Paxos、Raft等，Paxos协议是Leslie Lamport于1990年提出的一种基于消息传递、具有高度容错性的一致性算法，Paxos算法解决的主要问题是分布式系统内如何就某个值达成一致。但Paxos有两个明显的缺点：1，Paxos算法难以理解。2，没有提供构建现实系统的良好基础，也有很多工程化Paxos算法的尝试，但是它们对Paxos算法本身做了比较大的改动，彼此之间的">
+<meta property="og:description" content="raft协议">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-05-09T16:00:00.000Z">
-<meta property="article:modified_time" content="2021-05-23T12:03:53.294Z">
+<meta property="article:modified_time" content="2021-05-23T12:29:49.784Z">
 <meta property="article:author" content="sugar-foxs">
 <meta property="article:tag" content="分布式">
 <meta property="article:tag" content="一致性协议">
@@ -235,7 +235,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-23 20:03:53" itemprop="dateModified" datetime="2021-05-23T20:03:53+08:00">2021-05-23</time>
+                <time title="修改时间：2021-05-23 20:29:49" itemprop="dateModified" datetime="2021-05-23T20:29:49+08:00">2021-05-23</time>
               </span>
 
           
@@ -256,7 +256,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>常见的一致性算法有Paxos、Raft等，Paxos协议是Leslie Lamport于1990年提出的一种基于消息传递、具有高度容错性的一致性算法，Paxos算法解决的主要问题是分布式系统内如何就某个值达成一致。但Paxos有两个明显的缺点：1，Paxos算法难以理解。2，没有提供构建现实系统的良好基础，也有很多工程化Paxos算法的尝试，但是它们对Paxos算法本身做了比较大的改动，彼此之间的实现差距都比较大，实现的功能和目的有所不同，同时与Paxos算法的描述有很多出入。<br>Raft算法是一种用于管理复制日志的一致性算法，其功能与Paxos算法相同类似，但其算法结构和Paxos不同，设计者将抑郁理解作为其目标之一，这使得Raft算法更易于构建实际的系统，大幅度减少了工程化的工作量，也方便开发者在此基础上进行扩展。</p>
+        <p>raft协议</p>
+<a id="more"></a>
+
+<p>常见的一致性算法有Paxos、Raft等，Paxos协议是Leslie Lamport于1990年提出的一种基于消息传递、具有高度容错性的一致性算法，Paxos算法解决的主要问题是分布式系统内如何就某个值达成一致。但Paxos有两个明显的缺点：1，Paxos算法难以理解。2，没有提供构建现实系统的良好基础，也有很多工程化Paxos算法的尝试，但是它们对Paxos算法本身做了比较大的改动，彼此之间的实现差距都比较大，实现的功能和目的有所不同，同时与Paxos算法的描述有很多出入。<br>Raft算法是一种用于管理复制日志的一致性算法，其功能与Paxos算法相同类似，但其算法结构和Paxos不同，设计者将抑郁理解作为其目标之一，这使得Raft算法更易于构建实际的系统，大幅度减少了工程化的工作量，也方便开发者在此基础上进行扩展。</p>
 <h1 id="Leader选举"><a href="#Leader选举" class="headerlink" title="Leader选举"></a>Leader选举</h1><p>Raft协议功能做模式是Leader-follower模式。每个节点都维护了一个状态机，状态机有3个状态：Leader、Follower、Candidate。在任意时刻，集群中的任意一个节点都处于这3个状态之一。下面介绍下每个状态的节点负责的主要工作。<br>Leader节点：Leader节点负责处理所以客户端的请求，当接收到客户端的写入请求时，Leader节点会在本地追加一条响应的日志，然后将其封装成消息发送到集群中其他的Follower节点。当Follower节点接受到该消息时会对其进行响应。如果集群中多数（超过半数）节点都已收到该请求对应的日志记录时，则Leader节点认为该条日志已提交（Committed），可以向客户端返回响应。Leader还会处理客户端的只读请求。Leader的另一项工作是定期向集群中的Follower节点发送心跳消息，这主要是为了防止集群中的其他Follower节点的选举计时器超时而触发新一轮选举。</p>
 <p>Follower节点：不会发生任何请求，它们只是简单的响应来自Leader或Candidate节点的请求；也不处理客户端的请求，而是将请求重定向给Leader节点处理。</p>
 <p>Candidate节点：由Follower节点转化而来。当Follower节点长时间没有收到Leader节点发送的心跳消息时，则该节点的选举计时器机会过期，同时会将自身状态转换成Candidate，发起新一轮选举。</p>
