@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Mist',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":true},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="在分布式系统中，单进程内的锁已然不能适用，为了防止分布式系统中的多个进程之间相互干扰，分布式锁应运而生。本文主要来学习下分布式锁。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分布式锁">
+<meta property="og:url" content="http://yoursite.com/2020/03/12/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/index.html">
+<meta property="og:site_name" content="sugar_foxs&#39;s blog">
+<meta property="og:description" content="在分布式系统中，单进程内的锁已然不能适用，为了防止分布式系统中的多个进程之间相互干扰，分布式锁应运而生。本文主要来学习下分布式锁。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-03-11T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-04-06T06:56:53.506Z">
+<meta property="article:author" content="sugar-foxs">
+<meta property="article:tag" content="分布式">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2020/03/12/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>分布式锁 | sugar_foxs's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">sugar_foxs's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">专注java开发</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/sugar-foxs" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/12/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="sugar-foxs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="sugar_foxs's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          分布式锁
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-12 00:00:00" itemprop="dateCreated datePublished" datetime="2020-03-12T00:00:00+08:00">2020-03-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-06 14:56:53" itemprop="dateModified" datetime="2020-04-06T14:56:53+08:00">2020-04-06</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在分布式系统中，单进程内的锁已然不能适用，为了防止分布式系统中的多个进程之间相互干扰，分布式锁应运而生。本文主要来学习下分布式锁。</p>
+<a id="more"></a>
+<h1 id="分布式锁的概念"><a href="#分布式锁的概念" class="headerlink" title="分布式锁的概念"></a>分布式锁的概念</h1><ul>
+<li>可以先想想我们在单进程内，多个线程操作同一个共享变量时出现的线程安全问题，我们是用来锁来解决。以此类推，在分布式环境下，多个进程之间无法约束访问同一个方法或者同一个资源，会导致安全问题，所以需要第三方进程来实现分布式锁。</li>
+<li>在分布式系统环境下，一个方法或同一个资源在同一时间只能被一个机器的一个线程执行。</li>
+<li>分布式锁只是一种思想，它的实现有很多方式。</li>
+</ul>
+<h1 id="分布式锁的实现"><a href="#分布式锁的实现" class="headerlink" title="分布式锁的实现"></a>分布式锁的实现</h1><h2 id="redis的setnx-命令"><a href="#redis的setnx-命令" class="headerlink" title="redis的setnx 命令"></a>redis的setnx 命令</h2><ul>
+<li>redis锁定的原理是利用setnx命令，能原子的完成加锁和设置过期时间，即只有在某个key不存在情况才能set成功该key，这样就达到了多个进程并发去set同一个key，只有一个进程能set成功。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RedisConfig</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger logger = LoggerFactory.getLogger(RedisConfig<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function">JedisPool <span class="title">getPool</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        JedisPoolConfig jedisPoolConfig = <span class="keyword">new</span> JedisPoolConfig();</span><br><span class="line">        String host = <span class="string">"127.0.0.1"</span>;</span><br><span class="line">        <span class="keyword">int</span> port = <span class="number">6379</span>;</span><br><span class="line">        JedisPool jedisPool = <span class="keyword">new</span> JedisPool(jedisPoolConfig, host, port, <span class="number">5000</span>, <span class="keyword">null</span>);</span><br><span class="line">        logger.info(<span class="string">"初始化JedisPool成功!host:&#123;&#125;,port:&#123;&#125; "</span>, host, port);</span><br><span class="line">        <span class="keyword">return</span> jedisPool;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RedisLock</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String lockKey = <span class="string">"redis_lock"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">long</span> internalLockLeaseTime = <span class="number">30000</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> SetParams params = SetParams.setParams().nx().px(internalLockLeaseTime);</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    JedisPool jedisPool;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 加锁</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> id</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">lock</span><span class="params">(String id)</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span> (Jedis jedis = jedisPool.getResource()) &#123;</span><br><span class="line">            Long start = System.currentTimeMillis();</span><br><span class="line">            <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">                <span class="comment">//SET命令返回OK ，则证明获取锁成功</span></span><br><span class="line">                String lock = jedis.set(lockKey, id, params);</span><br><span class="line">                <span class="keyword">if</span> (<span class="string">"OK"</span>.equals(lock)) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"获取锁成功"</span>);</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//否则循环等待，在timeout时间内仍未获取到锁，则获取失败</span></span><br><span class="line">                <span class="keyword">long</span> l = System.currentTimeMillis() - start;</span><br><span class="line">                <span class="keyword">if</span> (l &gt;= <span class="number">10000</span>) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"获取锁超时"</span>);</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    Thread.sleep(<span class="number">100</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 解锁</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> id</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">unlock</span><span class="params">(String id)</span></span>&#123;</span><br><span class="line">        Jedis jedis = jedisPool.getResource();</span><br><span class="line">        String script =</span><br><span class="line">                <span class="string">"if redis.call('get',KEYS[1]) == ARGV[1] then"</span> +</span><br><span class="line">                        <span class="string">"   return redis.call('del',KEYS[1]) "</span> +</span><br><span class="line">                        <span class="string">"else"</span> +</span><br><span class="line">                        <span class="string">"   return 0 "</span> +</span><br><span class="line">                        <span class="string">"end"</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Object result = jedis.eval(script, Collections.singletonList(lockKey),</span><br><span class="line">                    Collections.singletonList(id));</span><br><span class="line">            <span class="keyword">if</span>(<span class="string">"1"</span>.equals(result.toString()))&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            jedis.close();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@SpringBootTest</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DemoApplicationTests</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger logger = LoggerFactory.getLogger(DemoApplicationTests<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> RedisLock redisLock;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> count=<span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testRedisLock</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> clientCount =<span class="number">10</span>;</span><br><span class="line">        CountDownLatch countDownLatch = <span class="keyword">new</span> CountDownLatch(clientCount);</span><br><span class="line"></span><br><span class="line">        ExecutorService executorService = Executors.newFixedThreadPool(clientCount);</span><br><span class="line">        <span class="keyword">long</span> start = System.currentTimeMillis();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;clientCount;i++)&#123;</span><br><span class="line">            String id = UUID.randomUUID().toString();</span><br><span class="line"></span><br><span class="line">            executorService.execute(() -&gt; &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    redisLock.lock(id);</span><br><span class="line">                    count++;</span><br><span class="line">                &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">                    redisLock.unlock(id);</span><br><span class="line">                &#125;</span><br><span class="line">                countDownLatch.countDown();</span><br><span class="line">                System.out.println(countDownLatch.getCount());</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">        countDownLatch.await();</span><br><span class="line">        <span class="keyword">long</span> end = System.currentTimeMillis();</span><br><span class="line">        logger.info(<span class="string">"执行线程数:&#123;&#125;,总耗时:&#123;&#125;,count数为:&#123;&#125;"</span>,clientCount,end-start,count);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>这里这是针对单机redis实现的分布式锁，缺点很明显，一旦redis挂了，依赖他的服务都挂了，所以实际生产环境更需要redlock，java版本可以看下Redisson。</li>
+</ul>
+<h3 id="redlock算法"><a href="#redlock算法" class="headerlink" title="redlock算法"></a>redlock算法</h3><blockquote>
+<p>假设有N个Redis master节点，这些节点都是完全独立的，我们不用任何复制或者其他隐含的分布式协调算法。前面已经介绍了如何在单节点环境下安全地获取和释放锁。因此我们应当用这个方法在每个单节点里来获取和释放锁。我们需要在不同的计算机或者虚拟机上运行N个master节点来保证他们大多数情况下都不会同时宕机。</p>
+</blockquote>
+<ul>
+<li>假设有5个master节点，一个客户端需要做如下操作来获取锁：</li>
+</ul>
+<ol>
+<li><p>获取当前时间（单位是毫秒）。</p>
+</li>
+<li><p>轮流用相同的key和随机值在5个节点上请求锁，在这一步里，客户端在每个master上请求锁时，会有比总的锁释放时间小的多的超时时间。比如如果锁自动释放时间是10秒钟，那每个节点锁请求的超时时间设置为5-50毫秒的范围，这个可以防止一个客户端在某个宕机的master节点上阻塞过长时间，如果一个master节点不可用了，我们应该尽快尝试下一个master节点。</p>
+</li>
+<li><p>客户端计算第二步中获取锁所花的时间，只有当客户端在大多数master节点上成功获取了锁（在这里是3个），而且总共消耗的时间不超过锁释放时间，这个锁就认为是获取成功了。</p>
+</li>
+<li><p>如果锁获取成功了，那现在锁自动释放时间就是最初的锁释放时间减去之前获取锁所消耗的时间。</p>
+</li>
+<li><p>如果锁获取失败了，不管是因为获取成功的锁不超过一半（N/2+1)还是因为总消耗时间超过了锁释放时间，客户端都会到每个master节点上释放锁，即便是那些他认为没有获取成功的锁。</p>
+</li>
+</ol>
+<ul>
+<li>建议第二步中应该同时向N个Redis实例发出异步的获取锁请求。</li>
+</ul>
+<h2 id="zookeeper的顺序临时节点"><a href="#zookeeper的顺序临时节点" class="headerlink" title="zookeeper的顺序临时节点"></a>zookeeper的顺序临时节点</h2><ul>
+<li><p>zk节点有临时和持久之分，临时节点表示客户端和服务端断开连接后节点会自动删除，持久节点相反不会删除。</p>
+</li>
+<li><p>不管临时节点还是持久节点，都有顺序和非顺序的节点，顺序节点表示zk会给该节点进行顺序编号。</p>
+</li>
+<li><p>那临时顺序节点是如何实现分布式锁的呢？</p>
+<ul>
+<li>创建分布式锁首先会创建一个持久节点作为根节点。</li>
+<li>客户端想要获取锁，需要先在根节点下创建一个临时顺序节点，然后查看所有顺序节点，看自己是否是第一个，如果是第一个就拿到了锁，如果不是第一个，获取锁便失败，这时会对自己上一个顺序节点加监听器Watcher，当前一个节点对应的客户端主动释放了锁，或者客户端宕机，相应的临时顺序节点会被删除，这个删除操作会被通知下一个节点的客户端，客户端会重新去获取锁，如果发现自己是第一个节点，便拿到了锁。</li>
+</ul>
+</li>
+<li><p>示例代码</p>
+</li>
+<li><p>zk可以使用docker很快的搭建出来。可参考<a href="/2019/12/25/docker%E5%91%BD%E4%BB%A4/" title="docker命令">docker命令</a></p>
+</li>
+<li><p>使用了Curator开源框架的分布式锁实现。ZkClient作为获取zk客户端的类。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ZkClient</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> CuratorFramework <span class="title">build</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> String connectString = <span class="string">"127.0.0.1:2181"</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 重试策略，初始化每次重试之间需要等待的时间，基准等待时间为1秒。</span></span><br><span class="line">        RetryPolicy retryPolicy = <span class="keyword">new</span> ExponentialBackoffRetry(<span class="number">1000</span>, <span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 使用默认的会话时间（60秒）和连接超时时间（15秒）来创建 Zookeeper 客户端</span></span><br><span class="line">        <span class="keyword">return</span> CuratorFrameworkFactory.builder()</span><br><span class="line">                .connectString(connectString)</span><br><span class="line">                .connectionTimeoutMs(<span class="number">15</span> * <span class="number">1000</span>)</span><br><span class="line">                .sessionTimeoutMs(<span class="number">60</span> * <span class="number">100</span>)</span><br><span class="line">                .retryPolicy(retryPolicy)</span><br><span class="line">                .build();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>用两个线程各自开启zk客户端模拟多个进程。doSomeThing是一个需要加分布式锁的方法。使用睡眠模拟做的事情。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ZkLock</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> TestRunnable()).start();</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> TestRunnable()).start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">TestRunnable</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                doSomeThing();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">doSomeThing</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        CuratorFramework client = ZkClient.build();</span><br><span class="line">        client.start();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 根节点如果不存在会自动创建</span></span><br><span class="line">        <span class="keyword">final</span> String lockNode = <span class="string">"/test"</span>;</span><br><span class="line">        InterProcessMutex lock = <span class="keyword">new</span> InterProcessMutex(client, lockNode);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">boolean</span> get = <span class="keyword">false</span>;</span><br><span class="line">            <span class="keyword">while</span> (!get)&#123;</span><br><span class="line">                <span class="comment">// 获取锁加了超时时间，超时之后，临时节点会被删除</span></span><br><span class="line">                <span class="keyword">if</span> (lock.acquire(<span class="number">5</span>, TimeUnit.SECONDS)) &#123;</span><br><span class="line">                    Stat stat = client.checkExists().forPath(lockNode);</span><br><span class="line">                    <span class="keyword">if</span> (<span class="keyword">null</span> != stat)&#123;</span><br><span class="line">                        get = <span class="keyword">true</span>;</span><br><span class="line">                        System.out.println(Thread.currentThread()+<span class="string">"获取到了锁"</span>+System.currentTimeMillis());</span><br><span class="line">                        Thread.sleep(<span class="number">10000</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    System.out.println(Thread.currentThread()+<span class="string">"获取锁超时"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (lock.isAcquiredInThisProcess()) &#123;</span><br><span class="line">                lock.release();</span><br><span class="line">            &#125;</span><br><span class="line">            client.close();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>临时顺序节点是这样的,后面的编号按顺序排列，名字都是lock，这个lock name是curator框架默认的，这个用户也可以自己指定。lock前的一串字符串是curator生成的（这里的编号可用来生成分布式id）</p>
+<blockquote>
+<p><em>c</em>71fb74e3-a75b-47d1-aa90-f88c19e333e6-lock-0000000001<br><em>c</em>88cdcc5b-96d3-4810-8eac-5da5d9a35e3c-lock-0000000002</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="Memcached的add指令"><a href="#Memcached的add指令" class="headerlink" title="Memcached的add指令"></a>Memcached的add指令</h2><ul>
+<li>memcached带有add函数，利用add函数的特性即可实现分布式锁。add和set的区别在于：如果多线程并发set，则每个set都会成功，但最后存储的值以最后的set的线程为准。而add的话则相反，add会添加第一个到达的值，并返回true，后续的添加则都会返回false。利用该点即可很轻松地实现分布式锁。</li>
+<li>缺点：<ul>
+<li>memcached采用列入LRU置换策略，所以如果内存不够，可能导致缓存中的锁信息丢失。</li>
+<li>memcached无法持久化，一旦重启，将导致信息丢失。<h2 id="Chubby：粗粒度分布式锁服务，底层利用了-Paxos-一致性算法"><a href="#Chubby：粗粒度分布式锁服务，底层利用了-Paxos-一致性算法" class="headerlink" title="Chubby：粗粒度分布式锁服务，底层利用了 Paxos 一致性算法"></a>Chubby：粗粒度分布式锁服务，底层利用了 Paxos 一致性算法</h2></li>
+</ul>
+</li>
+<li>zookeepr是chubby的开源实现</li>
+</ul>
+<h2 id="数据库实现分布式锁"><a href="#数据库实现分布式锁" class="headerlink" title="数据库实现分布式锁"></a>数据库实现分布式锁</h2><ul>
+<li>数据库实现的分布式锁性能比较差，一般不建议使用</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag"><i class="fa fa-tag"></i> 分布式</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/03/09/mysql-%E9%97%AE%E9%A2%98/" rel="prev" title="mysql-问题">
+      <i class="fa fa-chevron-left"></i> mysql-问题
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/03/12/%E5%88%86%E5%B8%83%E5%BC%8Fsession/" rel="next" title="分布式session">
+      分布式session <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#分布式锁的概念"><span class="nav-number">1.</span> <span class="nav-text">分布式锁的概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分布式锁的实现"><span class="nav-number">2.</span> <span class="nav-text">分布式锁的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#redis的setnx-命令"><span class="nav-number">2.1.</span> <span class="nav-text">redis的setnx 命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#redlock算法"><span class="nav-number">2.1.1.</span> <span class="nav-text">redlock算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#zookeeper的顺序临时节点"><span class="nav-number">2.2.</span> <span class="nav-text">zookeeper的顺序临时节点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Memcached的add指令"><span class="nav-number">2.3.</span> <span class="nav-text">Memcached的add指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Chubby：粗粒度分布式锁服务，底层利用了-Paxos-一致性算法"><span class="nav-number">2.4.</span> <span class="nav-text">Chubby：粗粒度分布式锁服务，底层利用了 Paxos 一致性算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库实现分布式锁"><span class="nav-number">2.5.</span> <span class="nav-text">数据库实现分布式锁</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="sugar-foxs"
+      src="/images/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">sugar-foxs</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/sugar-foxs" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;sugar-foxs" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:chgu1209@126.com" title="E-Mail → mailto:chgu1209@126.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sugar-foxs</span>
+</div>
+  <div class="powered-by"><a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.7.0
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  <script src="//cdn.jsdelivr.net/npm/quicklink@1/dist/quicklink.umd.js"></script>
+  <script>
+      window.addEventListener('load', () => {
+      quicklink({
+        timeout: 3000,
+        priority: true,
+        ignores: [uri => uri.includes('#'),uri => uri == 'http://yoursite.com/2020/03/12/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/',]
+      });
+      });
+  </script>
+
+</body>
+</html>

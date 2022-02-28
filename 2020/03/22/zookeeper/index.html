@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Mist',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":true},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="本文是关于zookepper学习的记录。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="zookeeper学习">
+<meta property="og:url" content="http://yoursite.com/2020/03/22/zookeeper/index.html">
+<meta property="og:site_name" content="sugar_foxs&#39;s blog">
+<meta property="og:description" content="本文是关于zookepper学习的记录。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-03-21T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-04-24T07:11:05.534Z">
+<meta property="article:author" content="sugar-foxs">
+<meta property="article:tag" content="分布式">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2020/03/22/zookeeper/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>zookeeper学习 | sugar_foxs's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">sugar_foxs's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">专注java开发</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/sugar-foxs" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/22/zookeeper/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="sugar-foxs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="sugar_foxs's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          zookeeper学习
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-22 00:00:00" itemprop="dateCreated datePublished" datetime="2020-03-22T00:00:00+08:00">2020-03-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-24 15:11:05" itemprop="dateModified" datetime="2020-04-24T15:11:05+08:00">2020-04-24</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本文是关于zookepper学习的记录。</p>
+<a id="more"></a>
+
+<h2 id="Paxos协议"><a href="#Paxos协议" class="headerlink" title="Paxos协议"></a>Paxos协议</h2><p>需要解决的问题是：如何在一个可能发生机器宕机或者网络异常等情况的分布式系统中，快速且准确的在集群内部对某个数据的值达到一致。并且保证不论发生以上任何异常，都不会破坏整个系统的一致性。</p>
+<ul>
+<li>拜占庭将军问题：拜占庭帝国有很多军队，每个军队之间将军必须指定一致的行动计划，各个军队在地理上是分开的，只能依靠军队的通讯员进行通讯，但是通讯员可能会有叛徒，可以任意篡改消息，从而欺骗将军。</li>
+</ul>
+<p>在实际工程实践中，可以假设不存在拜占庭问题，即假设所有消息是完整的，是没有被篡改的。因为：</p>
+<ul>
+<li><p>大部分系统都是部署在同一个局域网内，因此消息被篡改的情况非常罕见。</p>
+</li>
+<li><p>由于硬件或者网络造成的消息不完整问题，可以使用校验算法避免。</p>
+<p>Paxos算法描述：Paxos小岛采用议会的形式通过法令，议员通过信使来进行消息的传递，值得注意的是，议员和信使都是兼职的，他们随时有可能离开议会厅，并且信使可能会重复的传递消息，也可能一去不复返，因此，议会协议要保证 这种情况下，法令仍然能正确的产生，并且不会出现冲突。</p>
+</li>
+</ul>
+<ul>
+<li>google chubby是Paxos的实现。</li>
+</ul>
+<h2 id="ZAB协议"><a href="#ZAB协议" class="headerlink" title="ZAB协议"></a>ZAB协议</h2><ul>
+<li><p>zookeeper是google chubby的开源实现，但是并没有直接用Paxos算法，而采用了ZAB的一致性协议。</p>
+</li>
+<li><p>ZAB协议是为分布式协调服务Zookeeper专门设计的一种支持崩溃恢复的原子广播协议。</p>
+</li>
+<li><p>ZAB协议的核心：所有事务请求必须由一个全局唯一的服务器来协调处理，这样的服务器被称为Leader服务器，而余下的其他服务器则成为Follower服务器。Leader服务器负责将一个客户端事务请求转换成一个事务Proosal,并将该Proposal分发给集群中其他的Follower服务器。之后Leader服务器需要等待所有Follower服务器的反馈，一旦超过半数的Follower服务器进行了正确的反馈后，那么Leader就会再次向所有的Follower服务器分发Commit消息，要求其将前一个Proposal进行提交。</p>
+</li>
+<li><p>ZAB协议包括两种基本的模式：崩溃恢复和消息广播。</p>
+</li>
+<li><p>消息广播<br>针对客户端的事务请求，Leader服务器会为其生成Proposal，并将其发送给集群中其他机器，然后再分别收集各自的选票，最后进行事务提交。ZAB协议在集群中过半Follower机器已经反馈ACK之后，就开始提交事务了，而不需要等待所有Follower都反馈。所以需要崩溃恢复来解决Leader服务器崩溃退出而导致的数据不一致的问题。在广播事务Proposal之前，Leader服务器会先为这个事务生成一个全局递增的唯一ID，称为事务ID。Leader服务器会为每个Follower分配一个队列，需要广播的事务放入对应的队列就可以发送出去。每个Follower接收到事务之后，首先会将其以事务日志的形式写入到本地磁盘中去，并且在成功写入之后反馈给Leader服务器一个ACK响应。当Leader服务器接收到过半Follower的ACK响应后，就会广播一个Commit消息给所有的Follower服务器，以通知其进行事务提交，同时Leader也进行事务提交。每一个Follower服务器接收到Commit消息后会进行事务提交。</p>
+</li>
+<li><p>崩溃恢复<br>消息广播在正常情况下运行非常良好，但是当Leader服务器出现崩溃，或者由于网络原因Leader服务器失去了与过半Follower的联系，便会进入崩溃恢复模式。即重新选举出一个Leader。 </p>
+<ul>
+<li>需要确保已经在Leader服务器上提交的事务，最终被所有服务器都提交。</li>
+<li>需要确保丢弃那些只在Leader服务器上被提出的事务。</li>
+</ul>
+</li>
+<li><p>Leader选举算法：让具有最高事务编号ZXID的机器成为Leader。可以保证新选举出来的Leader服务器一定具有所有已经提交的提案。</p>
+</li>
+<li><p>数据同步：Leader选举之后，在正式工作开始之前，Leader服务器首先会确认事务日志中所有的Proposal是否都被集群中过半的机器提交了，即是否完成数据同步。数据同步过程如下：</p>
+<ul>
+<li>Leader服务器为每个Follower准备一个队列，将没有被Follower提交的事务发送给Follower，并在每个事务消息之后紧接着一个Commit消息，表示该事务已经提交。等到Follwer将所有未同步的事务从leader上同步过来并应用到本地数据库中，Leader服务器就将该Follower加入到真正可用的Follower列表中。</li>
+<li>在处理一些需要被丢弃的事务时，是这样处理的：因为事务id能够区分Leader周期变化，能避免leader错误的使用相同的事务id创建不同的事务的情况，当包含了上一个leader周期ongoing尚未提交的事务的服务器启动时，首先它肯定无法成为leader，因为当前集群中一定包含一个Quorum集合，该集合中集群一定包含了更高epoch的事务。当这台机器加入到集群中时，leader服务器会根据自己服务器最后被提交的事务和Follower服务器的事务进行比较，让follower进行回退操作，回退到一个确实被集群中过半机器提交的最新事务。</li>
+</ul>
+</li>
+</ul>
+<h2 id="ZooKeeper"><a href="#ZooKeeper" class="headerlink" title="ZooKeeper"></a>ZooKeeper</h2><ul>
+<li>ZooKeeper致力于提供一个高性能、高可用，且具有严格的顺序访问控制能力的分布式协调服务。</li>
+</ul>
+<h3 id="服务器角色"><a href="#服务器角色" class="headerlink" title="服务器角色"></a>服务器角色</h3><ul>
+<li>ZooKeeper 集群中的所有机器通过一个 Leader 选举过程来选定一台称为 “Leader” 的机器，Leader既可以为客户端提供写服务又能提供读服务。除了Leader外，Follower 和 Observer 都只能提供读服务。<br>Follower 和 Observer 唯一的区别在于 Observer 机器不参与 Leader 的选举过程，也不参与写操作的“过半写成功”策略，因此 Observer 机器可以在不影响写性能的情况下提升集群的读性能。</li>
+</ul>
+<h4 id="Leader"><a href="#Leader" class="headerlink" title="Leader"></a>Leader</h4><ul>
+<li>使用责任链模式来处理每一个请求，请求处理链包含以下几个：<ul>
+<li>PreRequestProcessor: 请求预处理器。对于一些事务请求，会对其进行一些预处理，例如创建请求事务头、事务体，会话检查，ACL检查，版本检查等。</li>
+<li>ProposalRequestProcessor：事务投票处理器。对于非事务请求，会将请求交给CommitProcessor;对于事务请求，除了将请求交给Commitprocessor之外，还会根据请求类型创建对应的Proposal提议，并发送给所有的Follower，发起一次集群内的事务投票。同时，还会将事务请求交给SyncRequestProcessor进行事务日志的记录。</li>
+<li>SyncRequestProcessor：事务日志记录处理器。主要用来将事务请求记录到事务日志文件中去，同时还会触发zk进行事数据快照。</li>
+<li>AckRequestProcessor：主要负责在SyncRequestProcessor完成事务日志记录之后，向Proposal的投票收集器发送ack反馈，以通知投票收集器当前服务器已经完成了对改Proposal的事务日志记录。</li>
+<li>CommitProcessor：事务提交处理器。对于非事务请求，直接交给下一级处理器；对于事务请求，会等待集群内针对Proposal的投票直到该Proposal可被提交。</li>
+<li>ToBeCommitProcessor：该处理器中有一个ToBeApplied队列，用来储存可被提交的Proposal，将这些请求逐个交给FinalRequestProcessor处理。</li>
+<li>FinalRequestProcessor：主要用来进行客户端请求返回之前的收尾工作，包括创建客户端请求的响应；针对事务请求，还会将事务应用到内存数据库中。</li>
+</ul>
+</li>
+</ul>
+<h4 id="Follower"><a href="#Follower" class="headerlink" title="Follower"></a>Follower</h4><ul>
+<li>主要职责：<ul>
+<li>处理客户端非事务请求，转发事务请求给Leader。</li>
+<li>参与事务请求Proposal投票</li>
+<li>参与Leader选举</li>
+</ul>
+</li>
+</ul>
+<h4 id="Observer"><a href="#Observer" class="headerlink" title="Observer"></a>Observer</h4><ul>
+<li>除了不参与Proposal投票和Leader选举，其他功能和Follower一样。</li>
+</ul>
+<h3 id="服务器状态"><a href="#服务器状态" class="headerlink" title="服务器状态"></a>服务器状态</h3><ul>
+<li>LOOKING 不确定Leader状态。该状态下的服务器认为当前集群中没有Leader，会发起Leader选举。</li>
+<li>FOLLOWING 跟随者状态。表明当前服务器角色是Follower，并且它知道Leader是谁。</li>
+<li>LEADING 领导者状态。表明当前服务器角色是Leader，它会维护与Follower间的心跳。</li>
+<li>OBSERVING 观察者状态。表明当前服务器角色是Observer，与Folower唯一的不同在于不参与选举，也不参与集群写操作时的投票。</li>
+</ul>
+<h3 id="羊群效应"><a href="#羊群效应" class="headerlink" title="羊群效应"></a>羊群效应</h3><p>像这样，大量的client都会获得相同的事件通知，而只有很小的一部分client会对 事件通知有响应。我们这里，只有一个client将获得锁，但是所有的client都得到了通知。那么 这就像在网络公路上撒了把钉子，增加了ZooKeeper服务器的压力。</p>
+<h3 id="zookeeper应用场景"><a href="#zookeeper应用场景" class="headerlink" title="zookeeper应用场景"></a>zookeeper应用场景</h3><h4 id="数据发布与订阅（配置中心）"><a href="#数据发布与订阅（配置中心）" class="headerlink" title="数据发布与订阅（配置中心）"></a>数据发布与订阅（配置中心）</h4><ul>
+<li>客户端向zookeeper注册自己想要关注的节点，当节点数据发生变化时，服务端会向客户端发生watcher事件通知，客户端接收到通知，需要向服务端获取最新数据。</li>
+</ul>
+<h4 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h4><h4 id="命名服务"><a href="#命名服务" class="headerlink" title="命名服务"></a>命名服务</h4><ul>
+<li>全局性唯一id,使用顺序节点的特性。</li>
+<li>使用多个线程模拟多个客户端获取唯一id的逻辑。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">zkID</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String root = <span class="string">"/zk-id"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getId</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        CuratorFramework client = CuratorFrameworkFactory.newClient(<span class="string">"127.0.0.1:2181"</span>,</span><br><span class="line">                <span class="keyword">new</span> RetryNTimes(<span class="number">10</span>, <span class="number">5000</span>));</span><br><span class="line">        client.start();<span class="comment">// 连接</span></span><br><span class="line">        String name = client.create()</span><br><span class="line">                .withMode(CreateMode.PERSISTENT_SEQUENTIAL)</span><br><span class="line">                .withACL(ZooDefs.Ids.OPEN_ACL_UNSAFE)</span><br><span class="line">                .forPath(root + <span class="string">"/id"</span>);</span><br><span class="line">        <span class="keyword">return</span> name.substring(name.lastIndexOf(<span class="string">"/"</span>)+<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    System.out.println(getId());</span><br><span class="line">                &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    System.out.println(getId());</span><br><span class="line">                &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="分布式协调与通知"><a href="#分布式协调与通知" class="headerlink" title="分布式协调与通知"></a>分布式协调与通知</h4><h4 id="集群管理"><a href="#集群管理" class="headerlink" title="集群管理"></a>集群管理</h4><h4 id="master选举"><a href="#master选举" class="headerlink" title="master选举"></a>master选举</h4><ul>
+<li>使用curator客户端实现Master选举逻辑。用多个线程模拟多个应用，在”/root”持久节点下同时创建相同的临时节点，创建成功的线程作为master节点，创建失败的节点便监听root的子节点变更事件，即被创建的临时节点被删除时会通知不是master的节点去重新选举master。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SelectMaster</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Master()).start();</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Master()).start();</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>)&#123;&#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Master</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String root = <span class="string">"/root"</span>;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            CuratorFramework client = CuratorFrameworkFactory.newClient(<span class="string">"127.0.0.1:2181"</span>,</span><br><span class="line">                    <span class="keyword">new</span> RetryNTimes(<span class="number">10</span>, <span class="number">5000</span>));</span><br><span class="line">            client.start();<span class="comment">// 连接</span></span><br><span class="line">            createMasterNode(client);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">createMasterNode</span><span class="params">(CuratorFramework client)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                String name = client.create()</span><br><span class="line">                        .withMode(CreateMode.EPHEMERAL)</span><br><span class="line">                        .withACL(ZooDefs.Ids.OPEN_ACL_UNSAFE)</span><br><span class="line">                        .forPath(root + <span class="string">"/binding"</span>);</span><br><span class="line">                <span class="keyword">if</span> (!StringUtils.isEmpty(name)) &#123;</span><br><span class="line">                    System.out.println(name);</span><br><span class="line">                    System.out.println(<span class="string">"i am master."</span>+ Thread.currentThread().getName());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                System.out.println(<span class="string">"create failed. i am not master."</span> + Thread.currentThread().getName());</span><br><span class="line">            &#125;</span><br><span class="line">            watch(client);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">watch</span><span class="params">(CuratorFramework client)</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"注册子节点变更事件。"</span> + Thread.currentThread().getName());</span><br><span class="line">            <span class="comment">// 注册子节点变更监听</span></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                client.getChildren().usingWatcher((CuratorWatcher) event -&gt; &#123;</span><br><span class="line">                    System.out.println(<span class="string">"监控： "</span> + event);</span><br><span class="line">                    <span class="keyword">switch</span> (event.getType()) &#123;</span><br><span class="line">                        <span class="keyword">case</span> NodeChildrenChanged:</span><br><span class="line">                            createMasterNode(client);</span><br><span class="line">                            <span class="keyword">break</span>;</span><br><span class="line">                        <span class="keyword">default</span>:<span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;).forPath(root);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                System.out.println(<span class="string">"根节点不存在。注册监听事件失败。"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="分布式锁"><a href="#分布式锁" class="headerlink" title="分布式锁"></a>分布式锁</h4><h4 id="分布式队列"><a href="#分布式队列" class="headerlink" title="分布式队列"></a>分布式队列</h4><ul>
+<li>FIFO分布式队列，使用临时顺序节点实现。</li>
+<li>barrier：分布式屏障。<ul>
+<li>根节点设置数据为n,表示子节点个数达到n时，可以执行业务逻辑。</li>
+<li>所有客户端都会在根节点下创建一个临时节点，创建完节点之后，调用getData获取根节点的数据n,调用getChildren获取子节点个数，当个数达到n时，执行业务逻辑，否则继续监听根节点的子节点变更事件。</li>
+</ul>
+</li>
+</ul>
+<h3 id="系统模型"><a href="#系统模型" class="headerlink" title="系统模型"></a>系统模型</h3><h4 id="数据模型"><a href="#数据模型" class="headerlink" title="数据模型"></a>数据模型</h4><ul>
+<li>zk的视图结构和Unix的文件系统很类似，使用了数据节点的概念，称之为znode。znode是zk中数据的最小单元，每个znode都可以保存数据，同时还可以挂载子节点，因此形成了一棵数据节点组成的树。</li>
+<li>事务ID：在zk中，事务是指能够改变zk状态的操作，一般包括节点的创建和删除，节点内容的更新和客户端会话创建与失效等。对于每一个事务操作，zk都会分配一个全局单调递增的唯一的事务id，称之为ZXID。</li>
+<li>类似于RDBMS中的事务ID，用于标识一次更新操作的Proposal ID。为了保证顺序性，该zxid必须单调递增。因此ZooKeeper使用一个64位的数来表示，高32位是Leader的epoch，从1开始，每次选出新的Leader，epoch加一。低32位为该epoch内的序号，每次epoch变化，都将低32位的序号重置。这样保证了zxid的全局递增性。</li>
+</ul>
+<h4 id="节点特性"><a href="#节点特性" class="headerlink" title="节点特性"></a>节点特性</h4><ul>
+<li>节点分为持久节点，临时节点，顺序节点。可以组合成四种节点类型。</li>
+<li>一旦节点被标记上SEQUENTIAL属性，便成为有序节点，在这个节点被创建的时候，Zookeeper会自动在其节点名后面追加上一个整型数字，这个整型数字是一个由父节点维护的自增数字。</li>
+<li>节点状态信息：保存了Stat类的数据结构，包括事务ID，版本信息，子节点个数等。</li>
+</ul>
+<h4 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h4><ul>
+<li>每个数据节点具有3种版本信息：当前节点的数据内容的版本号version，当前节点的子节点的版本号cversion，当前节点的ACL变更的版本号aversion。</li>
+<li>version代表数据节点的变更次数，初始为0，表示没有变更。version是用来实现乐观锁的写入校验的。</li>
+</ul>
+<h4 id="Watcher"><a href="#Watcher" class="headerlink" title="Watcher"></a>Watcher</h4><ul>
+<li>watcher用来实现分布式的通知功能。客户端注册对不同事件的watcher，当事件发生时，服务端会通知监听了此事件的客户端。</li>
+<li>watcher被触发后就会失效，如果客户端还想监听，需要再次注册事件。</li>
+</ul>
+<h4 id="ACL"><a href="#ACL" class="headerlink" title="ACL"></a>ACL</h4><ul>
+<li>create：创建子节点的权限</li>
+<li>read：读取节点数据和子节点列表的权限</li>
+<li>write：更新节点数据的权限</li>
+<li>delete：删除子节点的权限</li>
+<li>admin:设置节点ACL的权限</li>
+</ul>
+<h1 id="为什么最好使用奇数台服务器构成ZooKeeper集群？"><a href="#为什么最好使用奇数台服务器构成ZooKeeper集群？" class="headerlink" title="为什么最好使用奇数台服务器构成ZooKeeper集群？"></a>为什么最好使用奇数台服务器构成ZooKeeper集群？</h1><blockquote>
+<p>zookeeper容错是指，当宕掉几个zookeeper服务器之后，剩下的个数必须大于宕掉的个数的话整个zookeeper才依然可用。假如我们的集群中有n台zookeeper服务器，那么也就是剩下的服务数必须大于n/2。比如假如我们有3台，那么最大允许宕掉1台zookeeper服务器，如果我们有4台的的时候也同样只允许宕掉1台。所以肯定选择3台较于4台是更优的选择。</p>
+</blockquote>
+<h1 id="为什么zk没有脑裂问题"><a href="#为什么zk没有脑裂问题" class="headerlink" title="为什么zk没有脑裂问题"></a>为什么zk没有脑裂问题</h1><h2 id="脑裂"><a href="#脑裂" class="headerlink" title="脑裂"></a>脑裂</h2><ul>
+<li>举例子说明：有6台服务器组成的集群，两个机房分别部署了3台，当机房之间网路断开之后，机房内分别选举了自己的leader，导致出现了两个leader。这就是脑裂现象。<h2 id="zk如何避免的"><a href="#zk如何避免的" class="headerlink" title="zk如何避免的"></a>zk如何避免的</h2></li>
+<li>zk设置了过半机制，只有在获得一半以上的服务器的选票才会成为leader。比如之前说的6台服务器，需要获得4个选票才能成为leader，所以不会同时出现两个leader。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag"><i class="fa fa-tag"></i> 分布式</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/03/15/java%E7%B1%BB%E5%8A%A0%E8%BD%BD/" rel="prev" title="java类加载">
+      <i class="fa fa-chevron-left"></i> java类加载
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/03/24/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E5%9C%A8%E5%B7%A5%E4%BD%9C%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/" rel="next" title="设计模式在工作中的应用">
+      设计模式在工作中的应用 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Paxos协议"><span class="nav-number">1.</span> <span class="nav-text">Paxos协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZAB协议"><span class="nav-number">2.</span> <span class="nav-text">ZAB协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZooKeeper"><span class="nav-number">3.</span> <span class="nav-text">ZooKeeper</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#服务器角色"><span class="nav-number">3.1.</span> <span class="nav-text">服务器角色</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Leader"><span class="nav-number">3.1.1.</span> <span class="nav-text">Leader</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Follower"><span class="nav-number">3.1.2.</span> <span class="nav-text">Follower</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Observer"><span class="nav-number">3.1.3.</span> <span class="nav-text">Observer</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务器状态"><span class="nav-number">3.2.</span> <span class="nav-text">服务器状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#羊群效应"><span class="nav-number">3.3.</span> <span class="nav-text">羊群效应</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zookeeper应用场景"><span class="nav-number">3.4.</span> <span class="nav-text">zookeeper应用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据发布与订阅（配置中心）"><span class="nav-number">3.4.1.</span> <span class="nav-text">数据发布与订阅（配置中心）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#负载均衡"><span class="nav-number">3.4.2.</span> <span class="nav-text">负载均衡</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#命名服务"><span class="nav-number">3.4.3.</span> <span class="nav-text">命名服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分布式协调与通知"><span class="nav-number">3.4.4.</span> <span class="nav-text">分布式协调与通知</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#集群管理"><span class="nav-number">3.4.5.</span> <span class="nav-text">集群管理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#master选举"><span class="nav-number">3.4.6.</span> <span class="nav-text">master选举</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分布式锁"><span class="nav-number">3.4.7.</span> <span class="nav-text">分布式锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分布式队列"><span class="nav-number">3.4.8.</span> <span class="nav-text">分布式队列</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#系统模型"><span class="nav-number">3.5.</span> <span class="nav-text">系统模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据模型"><span class="nav-number">3.5.1.</span> <span class="nav-text">数据模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#节点特性"><span class="nav-number">3.5.2.</span> <span class="nav-text">节点特性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#版本"><span class="nav-number">3.5.3.</span> <span class="nav-text">版本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Watcher"><span class="nav-number">3.5.4.</span> <span class="nav-text">Watcher</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ACL"><span class="nav-number">3.5.5.</span> <span class="nav-text">ACL</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#为什么最好使用奇数台服务器构成ZooKeeper集群？"><span class="nav-number"></span> <span class="nav-text">为什么最好使用奇数台服务器构成ZooKeeper集群？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#为什么zk没有脑裂问题"><span class="nav-number"></span> <span class="nav-text">为什么zk没有脑裂问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#脑裂"><span class="nav-number">1.</span> <span class="nav-text">脑裂</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#zk如何避免的"><span class="nav-number">2.</span> <span class="nav-text">zk如何避免的</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="sugar-foxs"
+      src="/images/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">sugar-foxs</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/sugar-foxs" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;sugar-foxs" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:chgu1209@126.com" title="E-Mail → mailto:chgu1209@126.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sugar-foxs</span>
+</div>
+  <div class="powered-by"><a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.7.0
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  <script src="//cdn.jsdelivr.net/npm/quicklink@1/dist/quicklink.umd.js"></script>
+  <script>
+      window.addEventListener('load', () => {
+      quicklink({
+        timeout: 3000,
+        priority: true,
+        ignores: [uri => uri.includes('#'),uri => uri == 'http://yoursite.com/2020/03/22/zookeeper/',]
+      });
+      });
+  </script>
+
+</body>
+</html>
