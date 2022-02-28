@@ -10,6 +10,7 @@ tags:
 ---
 
 docker如何实现资源的隔离，涉及cgroups、namespace和unionFS。
+<!-- more -->
 
 - cgroups
 CGroups 全称control groups，cgroups 是 Linux 内核提供的一种机制，这种机制可以根据特定的行为，把一系列系统任务及其子任务整合（或分隔）到按资源划分等级的不同组内，从而为系统资源管理提供一个统一的框架。用来限定一个进程的资源使用，由Linux内核支持，可以限制和隔离Linux进程组 (process groups) 所使用的物理资源 ，比如cpu，内存，磁盘和网络IO，是Linux container技术的物理基础。
